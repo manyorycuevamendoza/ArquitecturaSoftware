@@ -7,8 +7,7 @@ Arquitectura de Software — UTEC — 2026-II
 | Rol | Nombre |
 | --- | --- |
 | Integrante | Manyory Cueva |
-| Integrante | _(pendiente)_ |
-
+| Integrante | Jean Pier Angeles |
 ## Contenido del repositorio
 
 | Documento | Descripción |
