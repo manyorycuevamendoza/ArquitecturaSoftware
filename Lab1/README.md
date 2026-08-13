@@ -4,21 +4,22 @@ Arquitectura de Software — UTEC — 2026-II
 
 ## Equipo
 
-| Rol | Nombre |
-| --- | --- |
-| Integrante | Manyory Cueva |
-| Integrante | _(pendiente)_ |
+| Rol        | Nombre            |
+| ---------- | ----------------- |
+| Integrante | Manyory Cueva     |
+| Integrante | Gonzalo Rodriguez |
+| Integrante | integrante        |
 
 ## Contenido del repositorio
 
-| Documento | Descripción |
-| --- | --- |
+| Documento                              | Descripción                                                          |
+| -------------------------------------- | -------------------------------------------------------------------- |
 | [Definición del Problema](Problema.md) | Contexto, problemáticas críticas y metas de escalamiento/rendimiento |
-| [Usuarios y Clientes](Usuarios.md) | Usuarios directos, clientes y stakeholders |
-| [Personas](Personas/) | Un MD por usuario modelo (máx. 5) |
-| [Requerimientos](Requirements/) | Funcionales y No Funcionales |
-| [Agentes](Agents/) | Definición de agente por persona |
-| [Spec](Spec/) | Agente evaluador `Eval-Spec.MD` y prompts de evaluación |
+| [Usuarios y Clientes](Usuarios.md)     | Usuarios directos, clientes y stakeholders                           |
+| [Personas](Personas/)                  | Un MD por usuario modelo (máx. 5)                                    |
+| [Requerimientos](Requirements/)        | Funcionales y No Funcionales                                         |
+| [Agentes](Agents/)                     | Definición de agente por persona                                     |
+| [Spec](Spec/)                          | Agente evaluador `Eval-Spec.MD` y prompts de evaluación              |
 
 ## Estructura
 
