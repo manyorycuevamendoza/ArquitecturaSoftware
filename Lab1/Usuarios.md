@@ -15,8 +15,4 @@
 | EsSalud (institución) | Optimizar la gestión regional y nacional | [Elena](Personas/Elena.md) |
 | Paciente en UCI / familiar | Beneficiario crítico de la continuidad del cuidado | [Manuel](Personas/Manuel.md) |
 
-## Matriz de involucramiento
 
-| Actor | Influencia | Interés | Estrategia |
-| --- | --- | --- | --- |
-| _(pendiente)_ | | | |
