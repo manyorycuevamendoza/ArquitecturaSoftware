@@ -15,7 +15,7 @@ Formato de ID: `RNF-<atributo>-<n>`
 | --- | --- | --- |
 | RNF-DIS-01 | Disponibilidad del sistema | 99.9% |
 | RNF-DIS-02 | Tiempo de recuperación ante caída (RTO) | < 5 min |
-| RNF-DIS-03 | Pérdida máxima de datos (RPO) | _(pendiente)_ |
+| RNF-DIS-03 | Pérdida máxima de datos (RPO) | Cercano a 0 segundos (Garantizar que los diagnósticos estén disponibles en todo momento) |
 
 ## Escalabilidad
 
@@ -29,16 +29,16 @@ Formato de ID: `RNF-<atributo>-<n>`
 
 | ID | Requerimiento | Métrica objetivo |
 | --- | --- | --- |
-| RNF-SEG-01 | _(pendiente)_ | |
+| RNF-SEG-01 | Protección de datos de salud (UCI) | Cifrado de extremo a extremo para diagnósticos y datos sensibles de pacientes |
 
 ## Usabilidad
 
 | ID | Requerimiento | Métrica objetivo |
 | --- | --- | --- |
-| RNF-USA-01 | _(pendiente)_ | |
+| RNF-USA-01 | Facilidad de uso para personal rotativo | Curva de aprendizaje < 15 min debido a la alta rotación de médicos internistas |
 
 ## Observabilidad y mantenibilidad
 
 | ID | Requerimiento | Métrica objetivo |
 | --- | --- | --- |
-| RNF-OBS-01 | _(pendiente)_ | |
+| RNF-OBS-01 | Monitoreo de notificaciones críticas | Latencia de entrega < 2 segundos para notificaciones push de emergencia |
