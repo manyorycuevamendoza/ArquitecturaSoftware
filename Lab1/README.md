@@ -4,11 +4,10 @@ Arquitectura de Software — UTEC — 2026-II
 
 ## Equipo
 
-| Rol        | Nombre            |
-| ---------- | ----------------- |
-| Integrante | Manyory Cueva     |
-| Integrante | Gonzalo Rodriguez |
-| Integrante | integrante        |
+| Rol        | Nombre        |
+| ---------- | ------------- |
+| Integrante | Manyory Cueva |
+| Integrante | _(pendiente)_ |
 
 ## Contenido del repositorio
 
