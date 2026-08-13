@@ -6,7 +6,7 @@ Arquitectura de Software — UTEC — 2026-II
 
 | Rol | Nombre |
 | --- | --- |
-| Integrante | _(pendiente)_ |
+| Integrante | Manyory Cueva |
 | Integrante | _(pendiente)_ |
 
 ## Contenido del repositorio
