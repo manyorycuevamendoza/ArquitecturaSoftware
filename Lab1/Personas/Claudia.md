@@ -26,7 +26,7 @@ llegó ni a quién avisar después.
 3. Que la alerta escale automáticamente a un segundo responsable si nadie responde.
 4. Registrar signos y eventos a pie de cama sin volver a la estación de enfermería.
 
-## Frustraciones / Dolores
+## Frustraciones 
 1. Llama al médico de guardia y no sabe si el aviso se recibió; termina llamando por teléfono personal.
 2. No hay una regla clara de a quién escalar cuando el primer responsable no contesta.
 3. El rol de guardia cambia y el sistema sigue mostrando al médico del turno anterior.
