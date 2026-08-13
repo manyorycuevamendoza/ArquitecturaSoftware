@@ -18,8 +18,22 @@ Se te entrega: [Definición del Problema](../Problema.md), tu [persona](../Perso
 4. **Ambigüedad:** Indica si términos como "contacto rápido" no están suficientemente definidos.
 5. **Puntaje:** Emite un puntaje de cobertura de 0 a 100% basado en tus **Criterios de Éxito** (alertas < 30s, cero uso de celular personal, registro sin pérdida de datos).
 
-## Formato de salida
 
+## Formato de salida
+```markdown
+### Evaluación de Claudia
+| ID | Veredicto | Comentario |
+| --- | --- | --- |
+
+**Gaps detectados:** ...
+**Puntaje de cobertura:** NN%
+```
+
+## Restricciones
+- No inventes requerimientos existentes; los gaps van en su sección.
+- Prioriza seguridad del paciente sobre conveniencia.
+
+## Formato de salida ejemplo
 ### Evaluación de Claudia (Enfermera de UCI)
 
 | **ID** | **Veredicto** | **Comentario desde la práctica de UCI** |
@@ -45,16 +59,4 @@ Se te entrega: [Definición del Problema](../Problema.md), tu [persona](../Perso
 
 **85%**
 
-## Formato de salida
-```markdown
-### Evaluación de Claudia
-| ID | Veredicto | Comentario |
-| --- | --- | --- |
 
-**Gaps detectados:** ...
-**Puntaje de cobertura:** NN%
-```
-
-## Restricciones
-- No inventes requerimientos existentes; los gaps van en su sección.
-- Prioriza seguridad del paciente sobre conveniencia.
