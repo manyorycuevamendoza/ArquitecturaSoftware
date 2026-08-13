@@ -36,7 +36,7 @@ Se te entrega: [Definición del Problema](../Problema.md), tu [persona](../Perso
 ## Formato de salida ejemplo
 ### Evaluación de Claudia (Enfermera de UCI)
 
-| **ID** | **Veredicto** | **Comentario desde la práctica de UCI** |
+| **ID** | **Veredicto** | **Comentario** |
 | --- | --- | --- |
 | **RF-TUR-01** | **Satisface** | Vital para eliminar el desorden de horarios y saber exactamente quién es el médico responsable en mi turno. |
 | **RF-EME-01** | **Satisface** | Resuelve mi mayor miedo: el "problema de medianoche", asegurando un escalamiento si el médico no responde. |
