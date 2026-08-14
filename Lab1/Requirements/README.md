@@ -12,4 +12,4 @@
 - No funcionales: `RNF-<atributo>-<n>` (PER, DIS, CON, ESC, SEG, USA, OBS)
 
 Cada requerimiento debe ser **verificable** (métrica o criterio de aceptación explícito)
-y estar trazado a al menos una [persona](../Personas/).
+y tener un único rol responsable.
