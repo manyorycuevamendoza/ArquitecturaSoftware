@@ -141,3 +141,52 @@
 1. Crear una matriz rol–persona modelo–objetivo–requerimiento para completar la trazabilidad sin volver a asignar requisitos a personas individuales.
 2. Validar los criterios de aceptación con usuarios de cada rol y ejecutar las pruebas de carga, caída y desconexión definidas.
 3. Registrar los tres gaps como reglas de negocio antes del diseño detallado.
+
+## Iteración 4
+
+Corrige la lectura de la tabla de la iteración 3: cada requerimiento se atribuye ahora al **rol responsable** de ejecutarlo o administrarlo, y no a la persona modelo que se beneficia de él. Esto era especialmente confuso en el caso de Manuel, que es paciente/familiar y no opera el sistema. Los puntajes no cambian respecto de la iteración 3; solo cambia la forma de expresar la evidencia.
+
+### Cómo leer la tabla
+
+- **Persona / Tipo:** el usuario modelo evaluado y si opera el sistema o solo se beneficia de él.
+- **Rol responsable de los requerimientos citados:** quién ejecuta o administra la capacidad. Es el único vínculo válido entre un `RF`/`RNF` y un actor: una persona solo se asocia a un requerimiento cuando es responsable de él. Una persona beneficiaria no tiene requerimientos asociados y su celda queda como «No aplica».
+- **Necesidad de la persona que queda cubierta:** qué obtiene la persona modelo, descrito en términos de valor recibido y no de requerimientos que deba ejecutar.
+- **Gap residual:** lo que aún debe definirse y es atribuible a esa persona por ser responsable; «ninguno» o «no aplica» significa que el pendiente pertenece a otro rol y se registra en Gaps críticos.
+
+### Evaluaciones por persona
+
+| Persona | Tipo | Rol responsable de los requerimientos citados | Necesidad de la persona que queda cubierta | Cobertura | Gap residual |
+| --- | --- | --- | --- | --- | --- |
+| Pablo | Usuario directo | Médico internista — `RF-DIA-01/02`, `RF-NOT-01`, `RNF-PER-01/03` | Recibe el handoff completo y versionado del turno anterior, y solo las notificaciones de sus pacientes, con consulta en ≤ 1 s | 94% | Falta un catálogo clínico versionado de «cambio crítico» para `RF-NOT-01` |
+| Claudia | Usuario directo | Enfermera de UCI — `RF-EME-01`, `RF-CON-01`, `RNF-USA-02` | Crea la alerta crítica en ≤ 2 acciones, sabe que se escala automáticamente a los 90 s si nadie confirma y puede registrar a pie de cama sin conexión | 95% | Falta la política formal de resolución de conflictos de registros sin conexión (`RF-CON-01`) |
+| Roberto | Usuario directo | Administrador de red regional — `RF-TUR-01`, `RF-ADM-01`, `RF-ACC-01`, `RNF-DIS-01/02`, `RNF-SEG-01/02`, `RNF-OBS-02`, `RNF-ESC-01/02/03` | Configura sedes por lote, administra roles y accesos, y monitorea disponibilidad y escala desde un solo tablero | 94% | Ninguno propio; depende de validar los perfiles de carga nacionales con datos del piloto |
+| Elena | Cliente / stakeholder | Jefatura de gestión clínica — `RF-AUD-01`, `RF-REP-01` | Dispone de auditoría inalterable e indicadores comparables y exportables por sede, servicio y turno | 93% | Ninguno propio; requiere acordar la periodicidad de reporte institucional |
+| Manuel | Beneficiario (no opera el sistema) | No aplica — no es responsable de ningún requerimiento | Su información clínica pasa completa entre turnos, alguien responde siempre ante un deterioro nocturno, sus datos están protegidos y su familiar autorizado recibe un resumen del estado | 91% | No aplica — los pendientes que lo afectan pertenecen a los roles responsables y se listan en Gaps críticos |
+
+### Resultado Eval-Spec
+
+Sin cambios respecto de la iteración 3, dado que la corrección es de redacción y atribución, no de contenido de los requerimientos.
+
+| Dimensión | Puntaje | Peso | Ponderado |
+| --- | --- | --- | --- |
+| Cobertura de personas | 94% | 30% | 28.20% |
+| Cobertura de problemáticas críticas | 93% | 25% | 23.25% |
+| Verificabilidad | 96% | 15% | 14.40% |
+| Trazabilidad | 92% | 10% | 9.20% |
+| Metas de rendimiento y escalamiento | 91% | 15% | 13.65% |
+| No ambigüedad y no duplicación | 92% | 5% | 4.60% |
+
+**Puntaje global: 93.3%**
+**Veredicto:** Requerimientos listos para diseño arquitectónico.
+
+### Gaps críticos
+
+1. Definir y versionar el catálogo de eventos clínicos que activan una notificación crítica en `RF-NOT-01`.
+2. Definir la política de resolución y revisión clínica de conflictos de sincronización para `RF-CON-01`.
+3. Definir periodicidad, responsable y contenido mínimo del resumen compartido mediante `RF-FAM-01`.
+
+### Acciones aplicadas en esta iteración
+
+1. Se separó en la tabla el **rol responsable** de la **persona beneficiada**: una persona solo se asocia a un requerimiento cuando es responsable de ejecutarlo o administrarlo.
+2. Se retiró toda referencia a `RF`/`RNF` en la fila de Manuel, que es paciente/familiar y no opera el sistema; su cobertura se describe por el valor que recibe.
+3. Se explicitó el tipo de cada persona (usuario directo, cliente/stakeholder, beneficiario) y se añadió una guía de lectura de la tabla.
