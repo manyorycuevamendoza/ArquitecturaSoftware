@@ -102,7 +102,7 @@
 | Persona | Puntaje de cobertura | Evidencia y gap residual |
 | --- | --- | --- |
 | Pablo | 94% | El rol Médico internista es responsable de continuidad, notificaciones y rendimiento en `RF-DIA-01/02`, `RF-NOT-01` y `RNF-PER-01/03`. Falta un catálogo clínico versionado de «cambio crítico». |
-| Claudia | 95% | El rol Enfermera de UCI es responsable de alerta, escalamiento y modo degradado en `RF-EME-01/02`, `RF-CON-01` y `RNF-USA-02`. Falta resolver formalmente conflictos de registros offline. |
+| Claudia | 95% | El rol Enfermera de UCI es responsable de la alerta, el aviso a otro responsable y el funcionamiento sin conexión en `RF-EME-01/02`, `RF-CON-01` y `RNF-USA-02`. Falta resolver formalmente conflictos de registros sin conexión. |
 | Roberto | 94% | El rol Administrador de red regional concentra turnos, plantillas, acceso, disponibilidad, seguridad, monitoreo y escala en `RF-TUR-01`, `RF-ADM-01`, `RF-ACC-01` y los RNF asociados. |
 | Elena | 93% | El rol Jefatura de gestión clínica es responsable de auditoría y reportes en `RF-AUD-01` y `RF-REP-01`, con indicadores comparables y exportables. |
 | Manuel | 91% | `RF-DIA-01/02`, `RF-EME-02`, `RF-ACC-01`, `RNF-SEG-01` y `RF-FAM-01` cubren continuidad, respuesta, privacidad e información autorizada. Falta acordar la periodicidad del resumen familiar. |
@@ -124,11 +124,11 @@
 ### Justificación del resultado Eval-Spec
 
 - **Cobertura de personas (94%):** los requisitos asignan la responsabilidad funcional al rol que opera o administra la capacidad: Administrador de red regional (`RF-TUR-01`, `RF-ADM-01`, `RF-ACC-01`), Médico internista (`RF-DIA-01/02`, `RF-NOT-01`), Enfermera de UCI (`RF-EME-01/02`, `RF-CON-01`), Jefatura de gestión clínica (`RF-AUD-01`, `RF-REP-01`) y familiar autorizado mediante `RF-FAM-01`.
-- **Problemáticas críticas (93%):** la rotación está cubierta por el handoff obligatorio y versionado (`RF-DIA-01/02`); el problema de medianoche por alerta en dos acciones y escalamiento a 90 s (`RF-EME-01/02`); y las actualizaciones oportunas por destinatarios autorizados y entrega < 2 s (`RF-NOT-01`, `RNF-OBS-01`).
+- **Problemáticas críticas (93%):** la rotación está cubierta por el handoff obligatorio y versionado (`RF-DIA-01/02`); el problema de medianoche por alerta en dos acciones y aviso a otro responsable a los 90 s (`RF-EME-01/02`); y las actualizaciones oportunas por destinatarios autorizados y entrega < 2 s (`RF-NOT-01`, `RNF-OBS-01`).
 - **Verificabilidad (96%):** los RF incluyen criterios de aceptación y los RNF establecen percentiles, umbrales, frecuencia y perfiles de carga, por ejemplo `RNF-DIS-01/02/03`, `RNF-ESC-01/02/03` y `RNF-USA-01/02`.
 - **Trazabilidad (92%):** cada requisito vigente tiene un único rol responsable y la matriz de `ReqFunc.md` lo conecta con una problemática. `RF-AUD-01` y `RF-REP-01` entregan evidencia por sede, usuario y periodo. Falta una matriz explícita que conecte formalmente rol, persona modelo y objetivo de persona.
 - **Metas de rendimiento y escalamiento (91%):** `RNF-PER-01/02/03`, `RNF-DIS-01/02/03`, `RNF-OBS-01` y `RNF-ESC-01/02/03` definen metas comprobables. Los perfiles nacionales aún deben validarse con datos reales del piloto.
-- **No ambigüedad y no duplicación (92%):** la asignación de un rol responsable elimina la ambigüedad de propiedad; los tiempos de alerta, RPO y usabilidad tienen umbrales explícitos. Persisten reglas de negocio pendientes para eventos críticos, conflictos offline y comunicación familiar.
+- **No ambigüedad y no duplicación (92%):** la asignación de un rol responsable elimina la ambigüedad de propiedad; los tiempos de alerta, RPO y usabilidad tienen umbrales explícitos. Persisten reglas de negocio pendientes para eventos críticos, conflictos sin conexión y comunicación familiar.
 
 ### Gaps críticos
 

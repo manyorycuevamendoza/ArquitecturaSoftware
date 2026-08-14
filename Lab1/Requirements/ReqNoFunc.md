@@ -10,14 +10,14 @@ Formato de ID: `RNF-<atributo>-<n>`. Todos los porcentajes y tiempos se medirán
 | RNF-PER-02 | Configuración de aplicación | El percentil 95 de aplicar una plantilla de sede será < 5 s por sede, sin contar la carga inicial del archivo de lote. | Administrador de red regional |
 | RNF-PER-03 | Consulta de información clínica | El percentil 95 de abrir el último handoff y su historial autorizado será ≤ 1 s. | Médico internista |
 
-## Disponibilidad, recuperación y conectividad
+## Disponibilidad, recuperación y funcionamiento sin conexión
 
 | ID | Requerimiento | Métrica y condición de verificación | Rol responsable |
 | --- | --- | --- | --- |
 | RNF-DIS-01 | Disponibilidad del sistema | Disponibilidad mensual ≥ 99.9% para consulta, registro de handoff y creación de alertas, medida por región y excluyendo solo mantenimientos anunciados con al menos 7 días de anticipación. | Administrador de red regional |
 | RNF-DIS-02 | Recuperación ante caída (RTO) | El servicio clínico prioritario se recuperará en < 5 min desde una caída total simulada, verificado mediante simulacro trimestral. | Administrador de red regional |
 | RNF-DIS-03 | Pérdida máxima de datos (RPO) | RPO = 0 s para handoffs, diagnósticos, turnos y alertas confirmados por el sistema. Los registros offline deben cumplir `RF-CON-01` y no se consideran confirmados hasta sincronizarse. | Administrador de red regional |
-| RNF-CON-01 | Operación degradada | Una sede sin conexión debe conservar la capacidad local de registrar eventos durante al menos 30 min y mostrar que el dato está pendiente de sincronización. | Enfermera de UCI |
+| RNF-CON-01 | Funcionamiento sin conexión | Una sede sin conexión debe conservar la capacidad local de registrar eventos durante al menos 30 min y mostrar que el dato está pendiente de sincronización. | Enfermera de UCI |
 
 ## Escalabilidad
 
