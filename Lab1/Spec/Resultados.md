@@ -44,6 +44,53 @@
 5. Definir administración masiva y reglas regionales, tableros y reportes por sede; completar las metas de escala con perfiles de carga, concurrencia y datos verificables.
 
 ### Acciones aplicadas tras la iteración
-1. Se ejecutó la primera evaluación consolidada a partir de `Eval-Spec.md`, las cinco personas y los requerimientos vigentes; no se modificaron requerimientos en esta iteración.
-2. Para la siguiente iteración, convertir los cinco gaps críticos en RF/RNF con IDs y criterios de aceptación medibles.
-3. Añadir una matriz de trazabilidad que relacione cada requerimiento con la problemática, las personas, sus objetivos y una prueba de aceptación.
+1. Se agregó handoff estructurado y versionado en `RF-DIA-01/02`.
+2. Se especificó la alerta crítica, acuse y escalamiento medible en `RF-EME-01/02`, `RF-NOT-01/02` y `RNF-OBS-01`.
+3. Se agregaron modo degradado, control de acceso, reportes regionales, comunicación al familiar y métricas de escala verificables.
+
+## Iteración 2
+
+### Evaluaciones por persona
+
+| Persona | Puntaje de cobertura | Evidencia y gap residual |
+| --- | --- | --- |
+| Pablo | 94% | El handoff completo/versionado (`RF-DIA-01/02`), alertas focalizadas (`RF-NOT-01`) y tiempos de consulta (`RNF-PER-01/03`) cubren su inicio de turno. Resta definir una taxonomía clínica detallada de «cambio crítico». |
+| Claudia | 95% | Alerta en dos acciones y ≤ 30 s (`RF-EME-01`, `RNF-USA-02`), confirmación/escalamiento a 90 s (`RF-EME-02`) y modo degradado (`RF-CON-01`) cubren su escenario nocturno. |
+| Roberto | 92% | Plantillas por lote (`RF-ADM-01`), acceso administrado (`RF-ACC-01`), tablero (`RF-REP-01`, `RNF-OBS-02`) y perfiles de capacidad (`RNF-ESC-01/02/03`) son verificables. Resta definir la política de resolución de conflictos de sincronización. |
+| Elena | 94% | Auditoría de acciones y accesos (`RF-AUD-01`), indicadores comparables (`RF-REP-01`) y simulacros de RTO (`RNF-DIS-02`) entregan evidencia para gestión y cumplimiento. |
+| Manuel | 91% | Continuidad clínica (`RF-DIA-01/02`), escalamiento (`RF-EME-02`), control de acceso (`RF-ACC-01`, `RNF-SEG-01`) y resumen autorizado (`RF-FAM-01`) cubren sus necesidades. Resta acordar periodicidad y contenido del reporte familiar. |
+
+### Resultado Eval-Spec
+
+| Dimensión | Puntaje | Peso | Ponderado |
+| --- | --- | --- | --- |
+| Cobertura de personas | 93% | 30% | 27.90% |
+| Cobertura de problemáticas críticas | 93% | 25% | 23.25% |
+| Verificabilidad | 96% | 15% | 14.40% |
+| Trazabilidad | 94% | 10% | 9.40% |
+| Metas de rendimiento y escalamiento | 91% | 15% | 13.65% |
+| No ambigüedad y no duplicación | 90% | 5% | 4.50% |
+
+**Puntaje global: 93.1%**
+**Veredicto:** Requerimientos listos para diseño arquitectónico.
+
+### Justificación del resultado Eval-Spec
+
+- **Cobertura de personas (93%):** las cinco personas tienen objetivos críticos cubiertos: continuidad y alertas focalizadas para Pablo (`RF-DIA-01/02`, `RF-NOT-01`); operación y escalamiento para Claudia (`RF-EME-01/02`, `RF-CON-01`); administración y observabilidad para Roberto (`RF-ADM-01`, `RF-REP-01`, `RNF-OBS-02`); evidencia para Elena (`RF-AUD-01`, `RF-REP-01`); y continuidad, privacidad e información autorizada para Manuel (`RF-ACC-01`, `RF-FAM-01`).
+- **Problemáticas críticas (93%):** la rotación tiene contenido obligatorio e historial (`RF-DIA-01/02`); el problema de medianoche establece dos acciones, entrega, acuse y escalamiento a los 90 s (`RF-EME-01/02`); las actualizaciones se dirigen a destinatarios pertinentes y su entrega se mide en `RNF-OBS-01`. `RF-CON-01` cubre la caída de conectividad.
+- **Verificabilidad (96%):** cada RF nuevo indica una condición comprobable y los RNF definen percentil, umbral, alcance o frecuencia de prueba. Los únicos aspectos pendientes son acordar el catálogo de cambios clínicos críticos y la política de conflicto offline.
+- **Trazabilidad (94%):** `RF-AUD-01` registra actor, acción, objeto, fecha/hora, sede y resultado; la matriz de `ReqFunc.md` vincula problemáticas con RF; `RF-REP-01` convierte los registros en indicadores por sede, servicio y turno.
+- **Metas de rendimiento y escalamiento (91%):** `RNF-PER-01/02/03`, `RNF-DIS-01/02/03`, `RNF-OBS-01` y `RNF-ESC-01/02/03` indican umbrales y perfil de carga. Falta validar estos volúmenes con datos reales del piloto antes de comprometer la capacidad nacional.
+- **No ambigüedad y no duplicación (90%):** se sustituyeron expresiones vagas por condiciones medibles, incluidos RPO = 0 (`RNF-DIS-03`) y escalamiento a 90 s (`RF-EME-02`). Persisten dos decisiones de negocio por concretar: catálogo de eventos críticos y periodicidad del resumen familiar.
+
+### Gaps críticos
+
+1. Acordar y versionar el catálogo clínico de eventos que se clasifican como críticos en `RF-NOT-01`.
+2. Definir la política de resolución y revisión clínica de conflictos si dos registros offline modifican el mismo dato.
+3. Acordar la periodicidad, responsable y contenido mínimo del resumen para el familiar de `RF-FAM-01`.
+
+### Acciones recomendadas
+
+1. Validar los criterios de aceptación con personal clínico, TI regional y representantes de familiares antes de diseñar.
+2. Ejecutar pruebas de carga y simulacros de caída que evidencien los RNF definidos.
+3. Incorporar las tres decisiones pendientes como reglas de negocio versionadas durante el diseño detallado.
