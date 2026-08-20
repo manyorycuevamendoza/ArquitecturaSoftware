@@ -2,218 +2,196 @@
 
 ## Decisión
 
-Se selecciona una **arquitectura distribuida de microservicios orientada a eventos, desplegada por
-regiones y con un nodo local por hospital (offline-first)**.
+Se selecciona una **arquitectura 3-tier (tres capas)** para la plataforma de gestión de UCI.
 
-La arquitectura combina tres decisiones complementarias:
+La solución se divide en:
 
-1. **Microservicios por capacidad de negocio:** turnos, continuidad clínica, emergencias,
-   notificaciones, acceso, auditoría, reportes y configuración pueden evolucionar y escalar de forma
-   independiente.
-2. **Comunicación orientada a eventos:** los cambios clínicos, alertas y modificaciones de turnos se
-   publican como eventos para informar a varios destinatarios sin acoplar todos los servicios.
-3. **Procesamiento local por hospital:** un nodo local conserva las funciones clínicas prioritarias
-   cuando se pierde la conexión regional y sincroniza los registros cuando esta regresa.
+1. **Capa de presentación:** una sola plataforma con vistas y permisos adaptados para médicos, enfermeras, administradores y responsables de gestión.
+2. **Capa de lógica de negocio:** reglas de turnos, handoff, emergencias, notificaciones, permisos, auditoría y reportes.
+3. **Capa de datos:** una base de datos lógica central que conserva la información clínica y operativa de forma consistente.
 
-No se propone crear un microservicio por cada entidad. Los límites deben corresponder a capacidades
-de negocio con necesidades diferentes de disponibilidad, seguridad o escalamiento.
+Esta arquitectura ofrece la separación necesaria sin introducir microservicios, múltiples bases de datos ni una cola general de eventos que complique innecesariamente el sistema.
 
-## Justificación
+## Por qué 3-tier es la opción adecuada
 
-Esta arquitectura es adecuada porque el sistema debe:
+El caso presenta varios tipos de usuarios, pero todos trabajan sobre un mismo proceso integrado de atención UCI: turnos, continuidad clínica y emergencias. No existen áreas de negocio suficientemente independientes que necesiten desplegarse y almacenar sus datos por separado.
 
-- mantener disponibles el handoff y las alertas aunque falle un componente o una sede pierda Internet;
-- entregar alertas críticas en menos de 2 segundos y avisar a responsables alternos a los 90 segundos;
-- crecer desde 1,000 hasta 10,000,000 de hospitales sin escalar todos los módulos por igual;
-- conservar una bitácora inalterable de acciones y accesos clínicos;
-- procesar notificaciones para varios destinatarios sin bloquear el registro clínico;
-- aislar una falla regional para que no detenga todas las UCI;
-- desplegar cambios de manera gradual sin interrumpir el servicio clínico.
+3-tier permite:
 
-Un monolito facilitaría el desarrollo inicial, pero concentraría el impacto de las fallas y obligaría a
-escalar conjuntamente módulos con cargas muy distintas. Una arquitectura de microservicios únicamente
-síncrona tampoco resolvería bien las notificaciones múltiples, la auditoría ni la desconexión de las
-sedes. Por ello se incorpora comunicación asíncrona y capacidad local.
+- mantener una única fuente de información para diagnósticos, handoffs, turnos y alertas;
+- aplicar las reglas clínicas y de seguridad en un solo nivel de negocio;
+- evitar inconsistencias entre bases de datos distribuidas;
+- procesar una emergencia mediante una ruta directa, sin esperar detrás de eventos informativos;
+- desplegar y operar una solución más sencilla para el piloto;
+- escalar los servidores de aplicación sin dividir prematuramente el sistema;
+- probar la lógica de negocio sin depender de la interfaz de usuario.
 
 ## Vista general
 
 ```mermaid
-flowchart LR
-    subgraph Hospital[Hospital / UCI]
-        UI[Aplicación clínica]
-        EDGE[Nodo local]
-        LOCAL[(Almacenamiento local cifrado)]
-        UI --> EDGE
-        EDGE --> LOCAL
+flowchart TB
+    subgraph Presentacion[Capa de presentación]
+        APP[Plataforma UCI<br/>Vistas según el rol]
     end
 
-    subgraph Region[Plataforma regional]
-        API[API Gateway]
-        IAM[Identidad y acceso]
-        TUR[Turnos]
-        CLI[Continuidad clínica]
-        EME[Emergencias]
-        NOT[Notificaciones]
-        ADM[Configuración regional]
-        AUD[Auditoría]
-        REP[Reportes]
-        BUS[(Bus de eventos)]
+    subgraph Negocio[Capa de lógica de negocio]
+        API[Aplicación / API central]
+        TUR[Módulo de turnos]
+        CLI[Módulo de continuidad clínica]
+        EME[Módulo de emergencias]
+        NOT[Módulo de notificaciones]
+        SEG[Módulo de acceso y seguridad]
+        AUD[Módulo de auditoría y reportes]
 
-        API --> IAM
         API --> TUR
         API --> CLI
         API --> EME
-        API --> ADM
-        TUR --> BUS
-        CLI --> BUS
-        EME --> BUS
-        BUS --> NOT
-        BUS --> AUD
-        BUS --> REP
+        API --> NOT
+        API --> SEG
+        API --> AUD
     end
 
-    EDGE <-->|Sincronización segura| API
-    NOT --> PUSH[Canal de notificaciones]
-    ADM --> EDGE
+    subgraph Datos[Capa de datos]
+        DB[(Base de datos central)]
+        RES[(Réplicas y respaldos)]
+        DB --> RES
+    end
+
+    APP --> API
+    TUR --> DB
+    CLI --> DB
+    EME --> DB
+    NOT --> DB
+    SEG --> DB
+    AUD --> DB
+    NOT --> PUSH[Notificación directa prioritaria]
 ```
 
-## Componentes y responsabilidades
+## Responsabilidades por capa
 
-| Componente | Responsabilidad principal | Requerimientos relacionados |
+### Capa de presentación
+
+- La misma plataforma muestra pacientes, handoffs, turnos, alertas, administración o reportes según el rol autenticado.
+- Permite crear una alerta crítica en un máximo de dos acciones.
+- Guarda temporalmente signos y eventos en el dispositivo cuando no existe conexión.
+- Informa si un dato está guardado, pendiente de sincronización o confirmado.
+- No decide destinatarios ni ejecuta el escalamiento de emergencias.
+
+### Capa de lógica de negocio
+
+- Valida turnos y rechaza solapamientos.
+- Exige los campos obligatorios del handoff y conserva sus versiones.
+- Determina el médico responsable y los responsables alternos.
+- Registra la alerta antes de enviarla y controla el plazo de 90 segundos.
+- Envía las alertas críticas por una ruta de ejecución prioritaria.
+- Autoriza el acceso según rol, turno y relación asistencial.
+- Produce la auditoría y los indicadores institucionales.
+- Recibe y valida los registros creados sin conexión.
+
+Los módulos pertenecen a la misma aplicación y pueden compartir una transacción cuando una operación crítica lo requiera. La separación es lógica, no implica servicios independientes.
+
+### Capa de datos
+
+- Mantiene una base de datos lógica central como fuente oficial.
+- Relaciona pacientes, turnos, handoffs, alertas, usuarios y auditoría.
+- Aplica transacciones para evitar estados parciales.
+- Conserva versiones y evita sobrescrituras silenciosas.
+- Utiliza réplicas, respaldos y recuperación para cumplir disponibilidad y RTO.
+- Puede particionar datos por región o sede al crecer sin cambiar a microservicios.
+
+## Tratamiento de alertas críticas
+
+Las alertas de emergencia **no se colocan en una cola FIFO compartida** con reportes, cambios informativos u otras tareas. Una emergencia no debe convertirse en el octavo elemento detrás de eventos menos importantes.
+
+El flujo será directo:
+
+1. La enfermera registra la alerta mediante la API.
+2. La capa de negocio valida al paciente y consulta el turno vigente.
+3. La alerta se guarda en la misma operación con estado `creada`.
+4. El módulo de notificaciones inicia inmediatamente el envío al responsable.
+5. Un temporizador controlado por la capa de negocio verifica la confirmación.
+6. Si nadie confirma en 90 segundos, se avisa directamente al alterno y al jefe de guardia.
+7. Cada cambio de estado se guarda para auditoría y seguimiento.
+
+Las alertas críticas tienen recursos de ejecución reservados, prioridad superior y límites de tiempo. Los reportes y tareas administrativas se ejecutan con menor prioridad y nunca deben bloquear este flujo.
+
+## Funcionamiento sin conexión
+
+La arquitectura continúa siendo 3-tier aunque la plataforma utilizada desde la tablet junto al paciente conserve temporalmente datos locales:
+
+1. La capa de presentación guarda el registro cifrado con identificador, autor y hora.
+2. La interfaz muestra que está pendiente de sincronización.
+3. Al regresar la conexión, la aplicación lo envía a la capa de negocio.
+4. La lógica valida duplicados y conflictos antes de escribir en la base central.
+5. Ante un conflicto clínico, se conservan las versiones y se solicita revisión autorizada.
+
+El almacenamiento temporal del dispositivo no es una segunda base de datos institucional ni una fuente oficial; solo permite continuar el trabajo durante la desconexión exigida por `RF-CON-01`.
+
+## Relación con los requerimientos
+
+| Necesidad | Solución en 3-tier | Requerimientos |
 | --- | --- | --- |
-| API Gateway | Punto de entrada, validación inicial, límites de consumo y enrutamiento regional | `RNF-SEG-01`, `RNF-ESC-01/02/03` |
-| Identidad y acceso | Autenticación, roles, relación asistencial, segundo factor y vigencia de sesiones | `RF-ACC-01`, `RNF-SEG-01/02` |
-| Servicio de turnos | Asignaciones, detección de cruces y responsables vigentes y alternos | `RF-TUR-01` |
-| Servicio de continuidad clínica | Handoffs, diagnóstico vigente, versiones, prioridades y pendientes | `RF-DIA-01/02`, `RNF-PER-03` |
-| Servicio de emergencias | Creación, estado y temporizador de aviso a responsables alternos | `RF-EME-01/02`, `RF-NOT-02` |
-| Servicio de notificaciones | Selección de destinatarios y entrega por canales disponibles | `RF-NOT-01/02`, `RNF-OBS-01` |
-| Nodo local hospitalario | Registro local cifrado, consulta clínica prioritaria y sincronización | `RF-CON-01`, `RNF-CON-01` |
-| Configuración regional | Plantillas, parámetros, reglas y activación de sedes por lote | `RF-ADM-01`, `RNF-PER-02` |
-| Auditoría | Registro inalterable de acciones, accesos y resultados | `RF-AUD-01` |
-| Reportes | Indicadores por sede, servicio, turno y periodo | `RF-REP-01`, `RNF-OBS-02` |
-| Bus de eventos | Distribución confiable de cambios clínicos, turnos y alertas | `RF-NOT-01`, `RNF-OBS-01`, `RNF-ESC-01/02/03` |
-
-Cada servicio es propietario de sus datos. Ningún servicio modifica directamente la base de datos de
-otro; la coordinación ocurre mediante APIs y eventos versionados.
-
-## Flujos críticos
-
-### Cambio de turno
-
-1. El médico registra el handoff en el servicio de continuidad clínica.
-2. El servicio valida los campos obligatorios, guarda una nueva versión y publica el evento
-   `HandoffRegistrado`.
-3. Auditoría conserva la evidencia y reportes actualiza sus indicadores.
-4. El equipo entrante consulta el último handoff y su historial desde una vista ordenada por prioridad.
-
-La información que ya exista en la historia clínica debe reutilizarse mediante una integración, en
-lugar de exigir que el médico la escriba nuevamente. Cada acción o resultado pendiente debe tener
-responsable, estado y vencimiento.
-
-### Emergencia nocturna
-
-1. La enfermera crea una alerta desde la aplicación clínica en un máximo de dos acciones.
-2. Emergencias consulta en Turnos al responsable vigente, guarda la alerta y publica
-   `AlertaCriticaCreada`.
-3. Notificaciones entrega el aviso y publica los cambios de estado: entregada, leída o respondida.
-4. Si no existe confirmación en 90 segundos, Emergencias publica `AlertaEscalada` para avisar al
-   alterno y al jefe de guardia.
-5. Auditoría registra cada intento y Reportes calcula los tiempos correspondientes.
-
-El temporizador de escalamiento pertenece al servicio de emergencias y no al dispositivo de la
-enfermera, para que continúe funcionando si la aplicación se cierra.
-
-### Pérdida de conexión
-
-1. El nodo local cambia visiblemente el estado de la aplicación a «sin conexión».
-2. Los signos y eventos se guardan cifrados con identificador único, autor y hora original.
-3. Al regresar la conexión, el nodo envía las operaciones pendientes de forma idempotente para evitar
-   duplicados.
-4. Si el mismo dato fue modificado local y regionalmente, el sistema no sobrescribe silenciosamente:
-   conserva ambas versiones y solicita revisión a un rol clínico autorizado.
-
-## Datos y consistencia
-
-- **Consistencia fuerte:** asignación de turnos, permisos, creación de alertas y registro de una versión
-  de handoff dentro del servicio propietario.
-- **Consistencia eventual:** tableros, reportes, auditoría derivada y distribución de notificaciones.
-- **Entrega de eventos:** patrón de salida transaccional para no guardar un cambio sin publicar su
-  evento asociado.
-- **Duplicados:** consumidores idempotentes e identificadores únicos por operación.
-- **Trazabilidad:** eventos con sede, paciente, actor, fecha, versión y correlación del flujo.
-- **Conflictos sin conexión:** conservación de versiones y revisión clínica; no se aplica automáticamente
-  «el último cambio gana» a información clínica.
+| Turnos sin cruces | Validación central en la capa de negocio | `RF-TUR-01` |
+| Handoff completo y versionado | Módulo clínico y transacciones sobre la base central | `RF-DIA-01/02`, `RNF-PER-03` |
+| Emergencia inmediata | Ruta directa y prioritaria en la capa de negocio | `RF-EME-01/02`, `RNF-OBS-01` |
+| Notificaciones focalizadas | Selección central del destinatario según paciente y turno | `RF-NOT-01/02` |
+| Trabajo sin conexión | Almacenamiento temporal en presentación y sincronización validada | `RF-CON-01`, `RNF-CON-01` |
+| Seguridad | Autorización central y protección de datos | `RF-ACC-01`, `RNF-SEG-01/02` |
+| Auditoría y reportes | Registro central consistente y consultas institucionales | `RF-AUD-01`, `RF-REP-01` |
+| Disponibilidad y recuperación | Varias instancias de aplicación, réplica y respaldo de datos | `RNF-DIS-01/02/03` |
+| Crecimiento | Escalamiento horizontal de la capa de negocio y partición de datos | `RNF-ESC-01/02/03` |
 
 ## Disponibilidad y escalamiento
 
-- Despliegue regional en varias zonas de disponibilidad para evitar un único punto de falla.
-- Réplicas y escalamiento independiente para emergencias, notificaciones y consultas clínicas.
-- Particionamiento por región y sede para distribuir carga y limitar el impacto de una falla.
-- Nodo local capaz de mantener las funciones prioritarias durante al menos 30 minutos sin conexión.
-- Reintentos con espera incremental, límites de tiempo y aislamiento temporal de dependencias fallidas.
-- Despliegues graduales con verificación de salud y reversión automática, sin detener todas las sedes.
-- Pruebas periódicas de carga, recuperación regional y pérdida de conectividad bajo los perfiles de
-  `RNF-ESC-01/02/03`.
+3-tier no significa que exista un único servidor físico. La misma aplicación puede ejecutarse en varias instancias detrás de un balanceador de carga.
 
-La meta de 10 millones de hospitales debe validarse con datos reales del piloto. La arquitectura
-permite distribuir la carga, pero no sustituye las pruebas de capacidad exigidas por los RNF.
+- La capa de presentación puede distribuirse como aplicación web y móvil.
+- La capa de negocio se replica horizontalmente y mantiene las sesiones fuera de cada instancia.
+- La base de datos utiliza alta disponibilidad, réplicas de lectura y respaldos verificados.
+- Los datos pueden particionarse por región o sede si el volumen lo exige.
+- Los despliegues se realizan gradualmente entre instancias para mantener el servicio disponible.
+- La capacidad debe comprobarse con las pruebas de `RNF-ESC-01/02/03`.
 
-## Seguridad y privacidad
+La meta de diez millones de hospitales debe validarse con datos reales. Si las pruebas futuras demuestran que una capacidad concreta necesita independencia, podrá separarse posteriormente; no es necesario asumir esa complejidad en el piloto.
 
-- Cifrado en tránsito y en reposo, incluido el almacenamiento del nodo local.
-- Acceso de mínimo privilegio por rol, turno y relación asistencial vigente.
-- Segundo factor para cuentas administrativas.
-- Auditoría de lecturas, modificaciones, intentos denegados y sincronizaciones.
-- Datos del paciente separados por sede y región, con acceso entre regiones solo cuando exista una
-  autorización explícita.
-- Resúmenes familiares generados por personal autorizado, con contenido limitado, lenguaje
-  comprensible y registro de cada publicación y consulta.
+## Seguridad
 
-## Observabilidad
-
-La plataforma debe correlacionar una operación desde el dispositivo hasta el servicio y el evento
-resultante. Los tableros deben mostrar disponibilidad, latencia, errores, colas pendientes, estado de
-sincronización y alertas sin confirmar por sede, región, servicio y dependencia externa.
-
-Los incidentes deben incluir impacto clínico, sedes afectadas y prioridad. Los indicadores de gestión
-deben admitir umbrales y alertas tempranas cuando una sede se desvíe de las metas acordadas.
+- Autenticación y autorización centralizadas en la capa de negocio.
+- Acceso de mínimo privilegio según rol, turno y relación asistencial.
+- Segundo factor para administradores.
+- Cifrado en tránsito, en reposo y en el almacenamiento temporal del dispositivo.
+- Auditoría de lecturas, cambios, intentos denegados y sincronizaciones.
+- Consultas parametrizadas y validación de todas las entradas.
 
 ## Riesgos y mitigaciones
 
 | Riesgo | Mitigación |
 | --- | --- |
-| Mayor complejidad operativa que un monolito | Mantener pocos servicios alineados con capacidades de negocio, automatizar despliegues y definir responsables claros |
-| Eventos duplicados o fuera de orden | Consumidores idempotentes, versión por agregado y claves de partición por paciente o alerta |
-| Información temporalmente distinta entre servicios | Definir qué servicio es la fuente oficial y mostrar el estado de sincronización |
-| Conflictos de datos creados sin conexión | Conservar versiones, impedir sobrescritura silenciosa y solicitar revisión clínica |
-| Caída del bus de eventos | Persistir eventos pendientes, usar reintentos controlados y operar localmente las funciones prioritarias |
-| Crecimiento prematuro del número de servicios | Dividir un servicio solo cuando exista una necesidad comprobada de escala, disponibilidad o autonomía |
+| La aplicación central se vuelve demasiado grande | Mantener módulos internos con responsabilidades e interfaces claras |
+| Una tarea administrativa consume recursos clínicos | Reservar capacidad y prioridad para alertas y operaciones clínicas |
+| La base de datos se convierte en cuello de botella | Índices, réplicas de lectura, partición por sede o región y pruebas de carga |
+| Una caída afecta a varias funciones | Varias instancias, aislamiento interno, control de fallos y recuperación probada |
+| Conflictos después de trabajar sin conexión | Identificadores únicos, control de versiones y revisión clínica |
 
-## Alternativas consideradas
+## Comparación de las cuatro opciones
 
-| Alternativa | Decisión | Motivo |
-| --- | --- | --- |
-| Monolito en capas | No seleccionada | Simplifica el inicio, pero concentra fallos y obliga a escalar conjuntamente cargas clínicas, reportes y notificaciones |
-| Monolito modular | No seleccionada como arquitectura final | Puede servir para un prototipo, pero las metas iniciales y nacionales requieren aislamiento regional y escalamiento independiente |
-| Microservicios solo con llamadas síncronas | No seleccionada | Aumenta el acoplamiento y propaga fallos durante alertas, auditoría y reportes |
-| Arquitectura totalmente centralizada | No seleccionada | No mantiene el registro clínico cuando una sede pierde conectividad |
-| Microservicios orientados a eventos con nodo local | **Seleccionada** | Equilibra escalamiento, aislamiento de fallos, tiempo real, trazabilidad y continuidad sin conexión |
+| Arquitectura | Evaluación para este caso |
+| --- | --- |
+| **3-tier** | **Seleccionada.** Separa interfaz, negocio y datos sin distribuir innecesariamente las reglas ni la información clínica. |
+| Hexagonal | Útil para aislar la lógica de tecnologías externas, pero por sí sola no define el despliegue, la disponibilidad ni la separación física del sistema solicitada en este análisis. |
+| Event-driven | No seleccionada como arquitectura principal porque una cola general añade complejidad y puede retrasar una emergencia si no existe priorización estricta. |
+| Microservicios | No seleccionada porque no hay capacidades de negocio con autonomía suficiente que justifiquen múltiples despliegues y bases de datos. |
 
-## Decisiones pendientes antes de implementar
+## Decisiones pendientes
 
-La arquitectura define la estructura de la solución, pero todavía deben acordarse estas reglas de
-negocio identificadas en la quinta evaluación:
+Antes de implementar todavía deben definirse:
 
-1. Catálogo versionado de eventos clínicos críticos.
-2. Responsable y vencimiento de resultados y acciones pendientes.
-3. Política completa de revisión de conflictos creados sin conexión.
-4. Periodicidad y umbrales de los reportes institucionales.
-5. Responsable, frecuencia y contenido mínimo del resumen para el familiar autorizado.
+1. Catálogo de eventos clínicos considerados críticos.
+2. Responsable y vencimiento de las acciones pendientes del handoff.
+3. Política de revisión de conflictos generados sin conexión.
+4. Periodicidad de los reportes institucionales.
+5. Contenido mínimo y responsable del resumen familiar.
 
 ## Conclusión
 
-La arquitectura seleccionada permite que cada hospital continúe con las funciones clínicas
-prioritarias durante una desconexión, que las emergencias se procesen sin depender de un flujo
-síncrono largo y que la plataforma escale por región y capacidad. Su complejidad adicional se
-justifica por la criticidad de la UCI, las metas de disponibilidad y el crecimiento esperado, siempre
-que se mantengan límites de servicio claros y se validen las capacidades mediante pruebas.
+La arquitectura **3-tier** resuelve el caso con menor complejidad y una fuente de datos consistente. La capa de presentación atiende a los distintos usuarios, la capa de negocio concentra las reglas de UCI y la capa de datos conserva la trazabilidad. Las emergencias utilizan un camino directo y prioritario, sin depender de una cola general, mientras que la replicación de la aplicación y de los datos permite mejorar disponibilidad y capacidad sin introducir microservicios prematuramente.
