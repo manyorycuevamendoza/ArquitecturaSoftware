@@ -30,6 +30,12 @@ extender el piloto a más regiones depende de indicadores comparables entre sede
 2. Los indicadores llegan con semanas de retraso, cuando el problema ya escaló.
 3. No hay evidencia auditable de quién accedió a qué información clínica y cuándo.
 4. Los incidentes de disponibilidad se reportan de forma anecdótica, sin métrica de RTO real.
+5. Debe solicitar datos a varias áreas antes de preparar cada comité directivo.
+6. No puede separar los resultados por sede, servicio y turno para identificar la causa de un incumplimiento.
+7. Los reportes manuales contienen datos incompletos o definiciones distintas para un mismo indicador.
+8. Carece de alertas tempranas cuando una sede se desvía de las metas del piloto.
+9. No puede verificar si los handoffs se realizaron a tiempo y con la información obligatoria.
+10. Le resulta difícil demostrar que una mejora se mantiene en el tiempo y justifica ampliar el piloto.
 
 ## Escenario clave
 Fin del primer trimestre del piloto. Elena abre el tablero regional antes del comité directivo: ve

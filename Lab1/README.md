@@ -20,6 +20,7 @@ Arquitectura de Software — UTEC — 2026-II
 | [Requerimientos](Requirements/)        | Funcionales y No Funcionales                                         |
 | [Agentes](Agents/)                     | Definición de agente por persona                                     |
 | [Spec](Spec/)                          | Agente evaluador `Eval-Spec.MD` y prompts de evaluación              |
+| [Arquitectura seleccionada](Arquitectura.md) | Decisión arquitectónica, justificación, componentes y riesgos  |
 
 ## Estructura
 
@@ -28,6 +29,7 @@ Lab1/
 ├── README.md              # Este archivo (índice)
 ├── Problema.md            # Definición del problema
 ├── Usuarios.md            # Usuarios / Clientes
+├── Arquitectura.md        # Arquitectura seleccionada y justificada
 ├── Personas/
 │   ├── README.md
 │   ├── Pablo.md           # Médico Internista
@@ -60,3 +62,4 @@ Lab1/
 4. Crear agente por persona → `Agents/`
 5. Definir requerimientos → `Requirements/`
 6. Evaluar requerimientos con cada agente → `Spec/`
+7. Seleccionar y justificar la arquitectura → `Arquitectura.md`

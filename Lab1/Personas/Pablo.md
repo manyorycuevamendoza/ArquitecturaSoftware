@@ -32,6 +32,11 @@ notas dispersas, así que pierde los primeros 30–40 minutos del turno pregunta
 3. La aplicación tarda en abrir y en cargar el listado, justo cuando tiene menos tiempo.
 4. Recibe notificaciones de pacientes que no son suyos y termina ignorándolas todas.
 5. Cuando el sistema se cae, no hay forma de saber qué información quedó sin registrar.
+6. Debe revisar varias fuentes para reconstruir cambios de medicación, resultados y decisiones recientes.
+7. Duplica información al completar el handoff y luego actualizar la historia clínica.
+8. Los resultados pendientes no tienen un responsable visible y pueden quedar sin seguimiento.
+9. Al rotar de sede encuentra flujos y criterios de registro diferentes.
+10. No puede priorizar rápidamente a los pacientes más críticos al comenzar la ronda.
 
 ## Escenario clave
 Pablo llega a las 7:00 a.m. a una sede en la que no estuvo la semana anterior. Abre la aplicación en su

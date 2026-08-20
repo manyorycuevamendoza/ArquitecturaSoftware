@@ -29,9 +29,14 @@ la cantidad de incidentes que escalan hasta él.
 ## Frustraciones / Dolores
 1. Cada sede exige configuración manual: no escala más allá de unas decenas de hospitales.
 2. No tiene visibilidad de qué falló ni dónde cuando una UCI reporta que "el sistema está lento".
-3. Las sedes de distrito pierden conectividad y no hay comportamiento definido para modo degradado.
+3. Las sedes de distrito pierden conectividad y no está claro cómo debe funcionar el sistema cuando no hay conexión.
 4. Los despliegues obligan a coordinar ventanas con áreas clínicas que operan 24/7.
 5. La gestión de accesos crece sin control con la rotación de personal.
+6. Configurar roles, turnos y reglas de escalamiento por separado aumenta los errores entre sedes.
+7. No recibe alertas con suficiente contexto para priorizar los incidentes que afectan la atención clínica.
+8. Le cuesta identificar si una falla proviene de la red, la aplicación o una integración externa.
+9. No puede comprobar desde un único tablero el cumplimiento de disponibilidad y recuperación por región.
+10. La incorporación masiva de hospitales depende de tareas repetitivas que consumen al equipo de soporte.
 
 ## Escenario clave
 EsSalud incorpora 40 hospitales de distrito en una semana. Roberto carga la configuración desde una

@@ -32,6 +32,11 @@ llegó ni a quién avisar después.
 3. El rol de guardia cambia y el sistema sigue mostrando al médico del turno anterior.
 4. Exceso de notificaciones no críticas: se pierde la señal entre el ruido.
 5. En el turno noche la red del hospital es inestable y no sabe si lo que registró se guardó.
+6. Registrar signos vitales en una estación compartida la obliga a alejarse del paciente crítico.
+7. Los flujos con demasiados pasos son difíciles de completar mientras usa guantes o atiende una urgencia.
+8. La información del cambio de turno llega incompleta y debe confirmar datos con varios colegas.
+9. No puede distinguir con rapidez qué alertas siguen pendientes y cuáles ya están siendo atendidas.
+10. Los eventos registrados fuera de línea pueden duplicarse o quedar desactualizados al recuperar la conexión.
 
 ## Escenario clave
 2:40 a.m. El paciente de la cama 6 se desatura. Claudia marca la alerta crítica desde la tablet a pie

@@ -190,3 +190,57 @@ Sin cambios respecto de la iteración 3, dado que la corrección es de redacció
 1. Se separó en la tabla el **rol responsable** de la **persona beneficiada**: una persona solo se asocia a un requerimiento cuando es responsable de ejecutarlo o administrarlo.
 2. Se retiró toda referencia a `RF`/`RNF` en la fila de Manuel, que es paciente/familiar y no opera el sistema; su cobertura se describe por el valor que recibe.
 3. Se explicitó el tipo de cada persona (usuario directo, cliente/stakeholder, beneficiario) y se añadió una guía de lectura de la tabla.
+
+## Iteración 5
+
+Reevaluación ejecutada después de completar diez dolores por cada persona. Se conserva el criterio de
+la iteración 4: los requerimientos se atribuyen al rol que los ejecuta o administra; las personas
+beneficiarias se evalúan por el valor que reciben, sin tratarlas como operadoras del sistema.
+
+### Evaluaciones por persona
+
+| Persona | Tipo | Cobertura | Evidencia de cobertura | Gaps revelados por los dolores adicionales |
+| --- | --- | --- | --- | --- |
+| Pablo | Usuario directo | 86% | El handoff estructurado y versionado (`RF-DIA-01/02`), las notificaciones focalizadas (`RF-NOT-01`) y la consulta en ≤ 1 s (`RNF-PER-01/03`) reducen la reconstrucción manual del turno. | No se evita registrar la misma información en el handoff y en la historia clínica; los pendientes no tienen responsable y vencimiento explícitos; no se exige un flujo clínico uniforme entre sedes ni que la lista se ordene por criticidad. |
+| Claudia | Usuario directo | 93% | La alerta en ≤ 2 acciones (`RF-EME-01`, `RNF-USA-02`), sus estados (`RF-NOT-02`), el aviso automático a los 90 s (`RF-EME-02`) y el registro sin conexión (`RF-CON-01`, `RNF-CON-01`) cubren casi todo el trabajo nocturno. | El límite de dos acciones solo aplica a la alerta, no al registro habitual a pie de cama; falta resolver qué registro prevalece cuando una sincronización entra en conflicto con información actualizada. |
+| Roberto | Usuario directo | 84% | Las plantillas por lote (`RF-ADM-01`), la gestión de accesos (`RF-ACC-01`), el monitoreo por sede y región (`RNF-OBS-02`) y los perfiles de escala (`RNF-ESC-01/02/03`) reducen la operación manual. | No se exige despliegue sin interrupción; el monitoreo no localiza la falla por componente o dependencia; las alertas operativas no incluyen impacto clínico para priorización y la rotación masiva de accesos no tiene una operación por lote verificable. |
+| Elena | Cliente / stakeholder | 89% | La bitácora exportable (`RF-AUD-01`) y los indicadores por sede, servicio, turno y periodo (`RF-REP-01`) permiten consolidar evidencia comparable de handoffs, alertas, disponibilidad y RTO. | No hay alertas tempranas al desviarse una sede de sus metas, comparación explícita de tendencias entre periodos ni periodicidad definida para el reporte institucional. |
+| Manuel | Beneficiario (no opera el sistema) | 84% | El equipo clínico conserva antecedentes, alergias, decisiones y pendientes mediante `RF-DIA-01/02`; identifica y avisa a responsables mediante `RF-TUR-01` y `RF-EME-02`; protege el acceso con `RF-ACC-01` y `RNF-SEG-01`; y puede compartir un resumen autorizado mediante `RF-FAM-01`. | El resumen familiar no tiene periodicidad ni responsable, no exige lenguaje comprensible ni un mínimo de eventos nocturnos y el handoff no incluye explícitamente preferencias o decisiones anticipadas del paciente. |
+
+### Resultado Eval-Spec
+
+| Dimensión | Puntaje | Peso | Ponderado |
+| --- | --- | --- | --- |
+| Cobertura de personas | 87% | 30% | 26.10% |
+| Cobertura de problemáticas críticas | 90% | 25% | 22.50% |
+| Verificabilidad | 96% | 15% | 14.40% |
+| Trazabilidad | 82% | 10% | 8.20% |
+| Metas de rendimiento y escalamiento | 91% | 15% | 13.65% |
+| No ambigüedad y no duplicación | 90% | 5% | 4.50% |
+
+**Puntaje global: 89.4%**
+**Veredicto:** Aceptable con correcciones menores; los nuevos dolores deben incorporarse antes de cerrar el diseño arquitectónico.
+
+### Justificación del resultado Eval-Spec
+
+- **Cobertura de personas (87%):** las capacidades críticas continúan cubiertas, pero los diez dolores de cada persona muestran necesidades no representadas. Pablo carece de reutilización de información clínica, asignación de pendientes y priorización visible; Roberto carece de despliegue sin interrupción y diagnóstico por componente; Elena no recibe alertas de desviación; y el resumen para el familiar autorizado de Manuel no garantiza oportunidad ni claridad. Claudia mantiene la cobertura más alta por `RF-EME-01/02`, `RF-NOT-02` y `RF-CON-01`.
+- **Problemáticas críticas (90%):** la rotación sigue cubierta por `RF-DIA-01/02`, aunque no se elimina la doble entrada ni se asigna cada pendiente; el problema de medianoche está bien definido en `RF-TUR-01` y `RF-EME-01/02`; y las actualizaciones oportunas se cubren mediante `RF-NOT-01/02` y `RNF-OBS-01`. Persiste el riesgo de inconsistencia cuando dos registros se sincronizan sobre el mismo dato.
+- **Verificabilidad (96%):** los requerimientos vigentes conservan umbrales y pruebas concretas. La alerta se mide en acciones y segundos (`RF-EME-01`), el escalamiento a los 90 s (`RF-EME-02`), la sincronización en ≤ 5 min (`RF-CON-01`) y el rendimiento y disponibilidad mediante `RNF-PER-01/02/03` y `RNF-DIS-01/02/03`. Los nuevos vacíos son principalmente requisitos inexistentes, no criterios actuales imposibles de probar.
+- **Trazabilidad (82%):** `ReqFunc.md` solo relaciona problemáticas generales con requerimientos. No existe una matriz que conecte los cincuenta dolores, objetivos y criterios de éxito con el rol responsable y los IDs aplicables; por ello varios dolores nuevos no tienen cobertura ni una decisión explícita de exclusión.
+- **Metas de rendimiento y escalamiento (91%):** no cambian las metas verificables de `RNF-PER-01/02/03`, `RNF-DIS-01/02/03` y `RNF-ESC-01/02/03`. Aún deben validarse con datos reales y no se especifica que los despliegues mantengan el servicio clínico disponible.
+- **No ambigüedad y no duplicación (90%):** los IDs vigentes no presentan solapamientos importantes y sus métricas son precisas. Siguen sin definirse el catálogo de cambios críticos de `RF-NOT-01`, la resolución de conflictos de `RF-CON-01` y el contenido y frecuencia de `RF-FAM-01`; además, `RF-DIA-01` no aclara cómo reutilizar datos de la historia clínica para evitar doble registro.
+
+### Gaps críticos
+
+1. Evitar la doble entrada entre handoff e historia clínica, asignar responsable y vencimiento a resultados o acciones pendientes, y mostrar los pacientes ordenados por prioridad para el rol Médico internista.
+2. Definir la política de resolución y revisión clínica de conflictos de sincronización y criterios de usabilidad para el registro habitual a pie de cama, no solo para crear alertas.
+3. Exigir despliegues sin interrupción del servicio, observabilidad por componente o dependencia, contexto de impacto clínico en incidentes y gestión masiva de accesos.
+4. Incorporar alertas por desviación de indicadores, comparación de tendencias y periodicidad del reporte institucional.
+5. Definir responsable, periodicidad, lenguaje comprensible y contenido mínimo del resumen familiar, incluyendo hechos relevantes del turno y preferencias o decisiones anticipadas del paciente.
+
+### Acciones recomendadas
+
+1. Ampliar los requerimientos de continuidad clínica con reutilización de datos, propietario de pendientes, vencimiento y orden visible por criticidad.
+2. Completar `RF-CON-01`, `RNF-OBS-02`, `RF-ACC-01` y los requisitos de disponibilidad con reglas verificables para conflictos, diagnóstico de componentes, operaciones masivas y despliegues sin interrupción.
+3. Completar `RF-REP-01` y `RF-FAM-01` con umbrales, periodicidad, responsables y contenido mínimo verificable.
+4. Crear una matriz dolor–objetivo–rol responsable–requerimiento–estado de cobertura y volver a ejecutar Eval-Spec después de actualizar los requisitos.

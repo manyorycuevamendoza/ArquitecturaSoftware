@@ -30,6 +30,12 @@ explicar antecedentes y alergias que ya habían informado.
 2. Información contradictoria entre turnos sobre el diagnóstico o el plan de tratamiento.
 3. No saber a quién dirigirse de noche ni si alguien está atendiendo el aviso de la enfermera.
 4. Temor a que la información clínica se pierda o quede expuesta.
+5. Recibir el reporte médico tarde o no recibirlo cuando cambia el profesional responsable.
+6. No saber quién está a cargo del paciente durante cada turno.
+7. Escuchar términos clínicos sin una explicación clara del estado y de los próximos pasos.
+8. Tener que consultar a varias personas para reconstruir lo ocurrido durante la noche.
+9. No poder confirmar si una decisión o indicación importante quedó registrada para el siguiente turno.
+10. Sentir incertidumbre sobre si el equipo conoce las decisiones previas y preferencias del paciente.
 
 ## Escenario clave
 Manuel se agrava a la 1:00 a.m. La enfermera escala la alerta y, al no haber respuesta en 90 segundos,
