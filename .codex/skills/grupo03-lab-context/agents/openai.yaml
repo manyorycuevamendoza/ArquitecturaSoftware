@@ -1,0 +1,4 @@
+interface:
+  display_name: "Grupo 03 Lab Context"
+  short_description: "Reutiliza aprendizajes verificados entre laboratorios"
+  default_prompt: "Usa $grupo03-lab-context para iniciar o revisar un laboratorio con los aprendizajes del grupo."
