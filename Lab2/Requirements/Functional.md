@@ -40,9 +40,12 @@
 
 | Persona need | Requirements |
 | --- | --- |
-| Pedro — distinguish preliminary from formal approval and see the current owner (`P1`, `P4`, `P10`) | `FR-RSK-01`, `FR-QUO-02`, `FR-OPS-01`, `FR-DEC-01` |
-| Pedro — understand payment count and complete cost (`P2`, `P3`) | `FR-QUO-01` |
-| Pedro — avoid re-entry and follow the full case (`P6`, `P8`, `P9`) | `FR-APP-02`, `FR-OPS-01`, `FR-OPS-04`, `FR-AUD-01` |
+| Pedro — know eligibility, formal approval, current owner and next step (`P1`, `P8`) | `FR-RSK-01`, `FR-QUO-02`, `FR-OPS-01`, `FR-DEC-01` |
+| Pedro — know what information is required (`P2`) | `FR-APP-01`, `FR-DOC-01` |
+| Pedro — understand complete cost and payment capacity (`P3`, `P4`) | `FR-QUO-01`, `FR-RSK-01` |
+| Pedro — understand review or rejection causes (`P5`) | `FR-RSK-01/02/03/04`, `FR-DEC-01` |
+| Pedro — avoid re-entry and understand quote acceptance (`P6`, `P7`) | `FR-APP-02`, `FR-QUO-02`, `FR-AUD-01` |
+| Pedro — know machinery availability before mobilization (`P9`, `P10`) | `FR-OPS-01`, `FR-OPS-04`, `FR-AUD-01` |
 | Carlos — receive one complete comparable case (`C1`, `C2`, `C3`, `C4`, `C6`) | `FR-APP-01/02`, `FR-QUO-01/02`, `FR-DOC-01` |
 | Carlos — apply external-risk checks in the correct order (`C5`, `C10`) | `FR-RSK-03/04`, `FR-DEC-01` |
 | Carlos — explain and trace the decision (`C5`, `C7`, `C9`) | `FR-RSK-01/02/04`, `FR-DEC-01`, `FR-AUD-01` |

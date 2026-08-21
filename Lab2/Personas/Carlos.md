@@ -27,16 +27,16 @@ Carlos reviews applications from companies of different sizes and sectors. He mu
 
 ## Pain points
 
-1. Carlos receives the company name and RUC by email, the S/450,000 machinery value in a sales spreadsheet and the S/18,000 monthly cash flow in another file; copying those figures into his model can change the decision through a transcription error.
-2. Without a recorded quote-acceptance event, Carlos cannot distinguish a `PRE_APPROVED` case Pedro has not accepted from a `FORMAL_REVIEW` case that is ready for his work queue.
-3. Carlos can begin analysis before noticing that the RUC record, signed customer project contract or recent bank statements are still missing, forcing him to stop and request evidence halfway through the review.
-4. He manually recalculates the S/90,000 initial payment, S/360,000 financed amount and S/12,303.95 installment to confirm that his decision uses the same 36-month quote Pedro accepted.
-5. A result without the negative-record source, bureau source, returned score, overdue debt, late payments and policy version prevents Carlos from reproducing the exact reason for approval or rejection.
-6. With S/18,000 project cash flow on one screen and a S/12,303.95 installment on another, Carlos must manually verify the required S/15,379.94 coverage threshold and can apply the 125% rule incorrectly.
-7. If the approval reason remains in Carlos's personal notes instead of the case, an auditor cannot link the decision to Carlos, its timestamp, evidence and `POC-CREDIT-2026-08-v1` policy version.
-8. After approving the case, Carlos must email Julia and copy the approved terms; if she misses the message, the case remains without an operations owner and Pedro receives no delivery date.
-9. Without one ordered timeline, Carlos cannot prove that Pedro submitted the data, accepted the preliminary quote and received the credit decision in the permitted sequence.
-10. If RUC `20999999999` is already found in the blocking negative-record source, querying the private bureau anyway adds an unnecessary query and exposes score and debt data that the decision no longer needs.
+1. Carlos receives Pedro's company data, machinery value and project cash flow in different emails and spreadsheets, so he must consolidate them manually and can base the decision on a copied value that is incorrect.
+2. He does not know which applicants accepted their preliminary quote and are genuinely waiting for formal credit evaluation, so he can prioritize a case that the customer abandoned.
+3. He often discovers during analysis that the RUC record, signed customer project contract or recent bank statements are missing, forcing him to stop the review and contact Pedro again.
+4. He recalculates the S/90,000 initial payment, S/360,000 financed amount and S/12,303.95 installment to confirm that he is evaluating the same 36-month terms Pedro accepted.
+5. He cannot justify an approval or rejection when he does not know which negative-record source and credit bureau were consulted, which values they returned or which policy rules were applied.
+6. He manually compares the S/18,000 project cash flow against the required S/15,379.94 coverage, increasing the risk of applying the 125% payment-capacity rule incorrectly.
+7. He records the reason for approval in personal notes, leaving the decision without a direct connection to the analyst, evidence, date and policy version used.
+8. After approving a case, he must notify Julia and copy the approved terms manually; a missed email leaves the case without operational follow-up.
+9. He cannot reconstruct the order and date of Pedro's submission, quote acceptance and credit decision when the evidence is distributed across different channels.
+10. He may request a paid private-bureau report even when an earlier negative record already prevents approval, creating unnecessary cost and access to sensitive information.
 
 ## Pain points demonstrated by the POC
 

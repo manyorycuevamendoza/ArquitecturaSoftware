@@ -26,28 +26,29 @@ Pedro has won a 24-month earthworks contract and needs an excavator before mobil
 
 ## Pain points
 
-1. The screen says `PRE_APPROVED`, but Pedro cannot tell whether that lets him reserve the S/450,000 excavator or whether Carlos still needs to issue `CREDIT_APPROVED`; reserving it too early could make him lose the supplier deposit.
-2. A quote that shows only the S/12,303.95 installment, without stating that there are 36 monthly payments, prevents him from comparing the financing period with his 24-month earthworks contract.
-3. If the S/450,000 equipment value, S/90,000 initial payment, S/360,000 financed amount and estimated total are shown separately, he cannot verify how much project cash remains for payroll and materials.
-4. After accepting the quote, Pedro cannot see that the case is in `FORMAL_REVIEW`, assigned to Carlos, or what Carlos must do next; he therefore cannot give his customer a reliable mobilization date.
-5. A `MANUAL_REVIEW` or `CREDIT_REJECTED` message without identifying the failed rule — 12 months of operation, 125% installment coverage, negative record, score, overdue debt or late payments — gives him no concrete correction or explanation.
-6. When sales and credit use different forms, Pedro must re-enter the company name, RUC, machinery, value, initial payment, term, operating history and monthly project cash flow, creating two versions of the same request.
-7. Without a timeline entry containing the date, actor and preliminary disclaimer, Pedro cannot prove that he accepted a non-binding estimate rather than a final leasing contract.
-8. After credit approval, Pedro cannot see Julia's name, the machinery supplier, contract reference or confirmed delivery date, so he must call operations before scheduling operators and transport.
-9. Submission, quote acceptance, credit decision and delivery scheduling appear in separate channels, so Pedro cannot determine which completed step caused the current status or who owns the delay.
-10. The cash-flow field does not explain whether it expects monthly project income or the total contract value; entering the 24-month contract total would produce a misleading payment-coverage result.
+1. Pedro does not know whether his company qualifies for machinery leasing or whether it still needs a formal credit decision before he can reserve the S/450,000 excavator.
+2. He does not know in advance which company, project and financial information or supporting documents he must prepare to submit a complete request on the first attempt.
+3. He cannot determine the real financing cost unless he receives the S/90,000 initial payment, S/360,000 financed amount, S/12,303.95 installment, 36 monthly payments and estimated total together.
+4. He does not know whether the S/18,000 expected monthly project cash flow is enough to pay the installment while preserving money for payroll and materials.
+5. If the request is reviewed manually or rejected, he does not know whether the cause is insufficient operating history, payment capacity, a negative record, low score, overdue debt, late payments or missing evidence.
+6. He repeatedly provides the same company name, RUC, machinery, value, initial payment, term, operating history and project cash flow when the request moves from sales to credit.
+7. He does not know whether accepting the preliminary quote only allows the evaluation to continue or already obligates his company to contract and pay for the leasing.
+8. After submitting the request, he does not know who is reviewing it, what stage it has reached or what must happen before receiving the final decision.
+9. After credit approval, he still does not know which supplier will provide the excavator or the confirmed date when it will be available at the project.
+10. Without a confirmed credit decision and delivery date, he cannot safely schedule mobilization, operators and transport with his customer.
 
 ## Pain points demonstrated by the POC
 
 | Pain points | POC response |
 | --- | --- |
-| 1, 4, 9 | One progress bar shows the current status, responsible role, next action and complete case history. |
-| 2, 3 | The quote shows the number of monthly payments, installment, initial payment, financed amount and estimated totals. |
+| 1, 8 | One progress bar distinguishes preliminary eligibility from formal approval and shows the responsible role and next action. |
+| 2 | The application form identifies the required intake information; real document preparation remains a pilot gap. |
+| 3 | The quote shows the number of monthly payments, installment, initial payment, financed amount and estimated totals. |
+| 4 | The eligibility result compares monthly project cash flow against the required 125% installment coverage. |
 | 5 | Preliminary and formal credit results show pass, fail or not-evaluated status with the exact illustrative threshold and source. |
 | 6 | Carlos and Julia see the same application; Pedro does not enter the information again. |
 | 7 | Quote acceptance is recorded in the shared timeline with the preliminary disclaimer. |
-| 8 | Pedro sees Julia's supplier, contract reference and scheduled delivery date after coordination. |
-| 10 | The cash-flow field explains that it expects the money generated by the project each month. |
+| 9, 10 | Pedro sees Julia's supplier, contract reference and scheduled delivery date before planning mobilization. |
 
 ## Key scenario
 
