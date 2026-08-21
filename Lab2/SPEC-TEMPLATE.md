@@ -22,11 +22,11 @@ For the POC, success means completing one transparent digital happy path from ap
 
 - Disbursement of real funds or payment to machinery suppliers.
 - Legally binding electronic signatures.
-- Integration with tax, identity, credit-bureau, banking or insurance providers.
+- Real integration with tax, identity, negative-record, SBS/private credit-bureau, banking or insurance providers; the POC uses deterministic simulations.
 - Physical delivery, GPS tracking, maintenance and recovery of machinery.
 - Collections, delinquency management and repossession.
 - Final regulatory or legal compliance certification.
-- Automatic final credit approval; the POC provides preliminary eligibility only.
+- Production use of an automatic final credit decision; the POC records only a simulated formal decision under illustrative rules.
 
 ## Key product concepts
 
@@ -38,8 +38,13 @@ For the POC, success means completing one transparent digital happy path from ap
 | Initial payment | Applicant contribution expressed as a percentage of equipment value |
 | Preliminary quote | Estimated financed amount, term and monthly installment; it is not a binding offer |
 | Risk review | Assessment of business history, project cash flow, evidence and payment capacity |
+| Negative-record check | First formal-risk gate; a match stops the evaluation before a private credit-bureau query |
+| Credit-behavior report | Authorized external report containing risk score, overdue debt and recent payment behavior; simulated in the POC |
+| Short-circuit rule | Policy behavior that records later rules as `NOT_EVALUATED` when an earlier blocking condition ends the decision |
 | Lease decision | Pre-approved, manual review or rejected outcome with recorded reasons |
 | Happy path | Eligible SME submits valid data, accepts a preliminary quote, receives formal credit approval and obtains a scheduled machinery-delivery date |
+
+The [SBS Reporte de Deudas](https://www.sbs.gob.pe/usuarios/nuestros-servicios/reporte-de-deudas/reporte-de-deudas/quot) describes debt, credit lines and classifications based on payment behavior, while the official [Equifax business-report description](https://soluciones.equifax.com.pe/e-commerce/resources/files/reporte-empresarial-tercero.pdf) includes commercial/credit behavior, predictive score and delinquent-debt information. These sources support the product concepts, not the POC thresholds. Merely appearing in a credit bureau is not treated as negative; rejection requires the separate blocking result defined by the leasing policy.
 
 ## Users and their needs
 
@@ -61,8 +66,8 @@ For the POC, success means completing one transparent digital happy path from ap
 
 - **Organization:** Leasing company.
 - **Meaning of the role:** Carlos is the credit-risk analyst who evaluates evidence and decides whether the leasing company can formally accept the financial risk.
-- **Product needs:** Complete and comparable applications, explainable policy results, evidence status, decision history and auditability.
-- **Participation in the POC:** Carlos has a credit-review view. After Pedro accepts the quote, Carlos sees the same application and rule results, validates three simulated evidence items and records the formal approval reason.
+- **Product needs:** Complete and comparable applications, ordered negative-list and credit-bureau checks, explainable policy results, evidence status, decision history and auditability.
+- **Participation in the POC:** Carlos has a credit-review view. After Pedro accepts the quote, Carlos sees the same application, validates simulated evidence and runs an ordered external-risk simulation. A negative-record hit stops the bureau query; otherwise, score and payment behavior determine the simulated formal decision.
 - **Full persona:** [Carlos.md](Personas/Carlos.md)
 
 ### Julia.md
@@ -86,12 +91,16 @@ The machinery supplier is an external participant, not one of the three personas
 5. Every relevant state change records actor, time and reason.
 6. The initial product supports one machinery item per application; machinery fleets are deferred.
 7. Architecture is selected only after evaluating the requirements and personas.
+8. Formal risk evaluation queries the negative-record source first. A match produces `CREDIT_REJECTED` and prevents the private-bureau query.
+9. A clear negative-record result allows the POC to evaluate the simulated bureau score (minimum 650), overdue debt (S/0) and late payments (maximum 2 in 12 months).
+10. Every external-risk result records source, returned values, rule status and credit-policy version; these thresholds are illustrative and require validation by the leasing risk owner.
 
 ## Expected user experience
 
 - Pedro completes a guided request in less than five minutes and always sees whether the result is preliminary, pending formal review or formally approved.
 - The estimate clearly separates equipment value, initial payment, financed amount, number of monthly payments, monthly installment and estimated totals.
-- Carlos sees the exact data Pedro submitted, the same calculated quote, explicit rule results and a three-item evidence checklist.
+- Carlos sees the exact data Pedro submitted, the same calculated quote, a three-item evidence checklist, consulted risk sources, returned values and explicit versioned rule results.
+- If the RUC appears in the negative source, Carlos sees that the bureau was not queried and that score, overdue debt and late-payment rules were not evaluated.
 - Julia sees only when the case is ready for operations, along with the approved terms, current owner and next required action.
 - No user needs to re-enter information already accepted in an earlier step.
 - Pedro sees the supplier and scheduled delivery date after Julia completes coordination.
@@ -106,10 +115,12 @@ The machinery supplier is an external participant, not one of the three personas
 3. The eligibility policy returns `PRE_APPROVED` with an explainable quote.
 4. Pedro reviews the installment, number of payments and estimated totals, acknowledges that the quote is preliminary and accepts it.
 5. The application moves to `FORMAL_REVIEW`, ready for Carlos to validate evidence.
-6. Carlos sees the same request and rule results, validates the simulated RUC record, project contract and bank statements, and records an approval reason.
-7. The application moves to `CREDIT_APPROVED`, owned by Julia.
-8. Julia records the simulated supplier, contract reference and confirmed delivery date without re-entering Pedro's data.
-9. The application moves to `DELIVERY_SCHEDULED`, and Pedro sees the formal decision, delivery details and complete timeline.
+6. Carlos validates the simulated RUC record, signed customer project contract and bank statements and records a decision reason.
+7. The application checks the simulated negative-record source. The happy-path RUC is clear, so it then queries the simulated Equifax-like behavior provider.
+8. The credit policy verifies score ≥ 650, overdue debt = S/0 and no more than 2 late payments in 12 months; the happy-path report passes every rule.
+9. The application moves to `CREDIT_APPROVED`, owned by Julia.
+10. Julia records the simulated supplier, contract reference and confirmed delivery date without re-entering Pedro's data.
+11. The application moves to `DELIVERY_SCHEDULED`, and Pedro sees the formal decision, delivery details and complete timeline.
 
 This is the complete scope of the implemented POC. `PRE_APPROVED` is not final approval; `CREDIT_APPROVED` is a simulated formal decision for demonstrating the workflow, not a binding contract or real authorization to purchase machinery. `DELIVERY_SCHEDULED` records a simulated coordination outcome, not physical delivery.
 
@@ -119,17 +130,30 @@ This is the complete scope of the implemented POC. `PRE_APPROVED` is not final a
 2. The system records the reason and moves the case to `MANUAL_REVIEW`.
 3. Carlos opens the same review view, validates the simulated supporting evidence and records a decision.
 
-### Rejection path
+### Structural rejection path
 
 1. Mandatory identity or financing conditions are invalid.
 2. The system rejects the request with specific, auditable reasons.
+
+### Negative-record stop path
+
+1. Carlos runs formal credit evaluation for a structurally valid, accepted application.
+2. The negative-record provider finds the RUC.
+3. The application moves to `CREDIT_REJECTED` immediately.
+4. The credit-bureau provider is not called; score, overdue-debt and late-payment rules are recorded as `NOT_EVALUATED`.
+
+### Credit-behavior rejection path
+
+1. The negative-record result is clear.
+2. The simulated credit bureau returns score, overdue debt and recent late payments.
+3. If any versioned threshold fails, the application moves to `CREDIT_REJECTED` with the returned values and rule-by-rule explanation.
 
 ## Scope by stages
 
 | Stage | Included |
 | --- | --- |
-| POC | One-item application; deterministic eligibility; detailed quote; simulated Pedro, Carlos and Julia views; formal approval; supplier/contract/delivery scheduling; shared timeline; and one in-memory repository |
-| Pilot | Authentication and authorization, real document upload/validation, rejection and information-request decisions, persistent database, append-only audit and operational worklists |
+| POC | One-item application; deterministic eligibility; detailed quote; simulated Pedro, Carlos and Julia views; negative-list and Equifax-like adapters; formal approval/rejection; supplier/contract/delivery scheduling; shared timeline; and one in-memory repository |
+| Pilot | Authentication and authorization, authorized provider sandbox integrations, real document upload/validation, information-request decisions, persistent database, append-only audit and operational worklists |
 | Production | Authorized external integrations, contract workflow, supplier settlement, observability, high availability, security hardening and validated capacity |
 
 ## Acceptance criteria
@@ -142,9 +166,12 @@ This is the complete scope of the implemented POC. `PRE_APPROVED` is not final a
 6. Every decision includes the policy checks that passed or failed.
 7. Carlos cannot approve the happy-path case until the three required evidence items are marked valid and an approval reason is entered.
 8. Carlos's approval changes the same case to `CREDIT_APPROVED`, assigns it to Julia and preserves Pedro's original data and quote.
-9. Julia cannot schedule delivery before credit approval and must record supplier, contract reference and delivery date.
-10. Julia's completion moves the same case to `DELIVERY_SCHEDULED`, and Pedro can see the formal decision and delivery information.
-11. The case history records Pedro's submission and acceptance, Carlos's approval and Julia's coordination in order.
-12. Functional and non-functional requirements trace to at least one persona need.
-13. Eval-Spec obtains at least 8/10 without hiding residual gaps.
-14. The POC builds and its automated end-to-end self-test completes successfully.
+9. A negative-record hit moves the case to `CREDIT_REJECTED`, does not call the bureau adapter and marks all later behavior rules `NOT_EVALUATED`.
+10. A clear negative-record result queries the simulated bureau and displays score, overdue debt, late payments, source, policy version and individual rule outcomes.
+11. The happy-path RUC passes score ≥ 650, overdue debt = S/0 and late payments ≤ 2, while the seeded low-score RUC produces an explainable `CREDIT_REJECTED` result.
+12. Julia cannot schedule delivery before credit approval and must record supplier, contract reference and delivery date.
+13. Julia's completion moves the same case to `DELIVERY_SCHEDULED`, and Pedro can see the formal decision and delivery information.
+14. The case history records Pedro's submission and acceptance, Carlos's decision and Julia's coordination in order.
+15. Functional and non-functional requirements trace to at least one persona need.
+16. Eval-Spec obtains at least 8/10 without hiding residual gaps.
+17. The POC builds and its automated end-to-end self-test completes successfully.

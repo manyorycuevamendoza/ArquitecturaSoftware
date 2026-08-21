@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { LeaseApplicationService } from "./application/leaseApplicationService.js";
 import { InMemoryLeaseApplicationRepository } from "./adapters/inMemoryLeaseApplicationRepository.js";
+import { SimulatedCreditBureauProvider, SimulatedNegativeRecordProvider } from "./adapters/simulatedCreditRiskProviders.js";
 
 const SAMPLE = {
   companyName: "Constructora Andina SAC",
@@ -22,7 +23,9 @@ const money = new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN
 export default function App() {
   const service = useMemo(() => new LeaseApplicationService(new InMemoryLeaseApplicationRepository(), {
     now: () => new Date().toISOString(),
-    generateId: () => crypto.randomUUID()
+    generateId: () => crypto.randomUUID(),
+    negativeRecordProvider: new SimulatedNegativeRecordProvider(),
+    creditBureauProvider: new SimulatedCreditBureauProvider()
   }), []);
   const [activeRole, setActiveRole] = useState("pedro");
   const [application, setApplication] = useState(null);
@@ -49,8 +52,15 @@ export default function App() {
     run(() => service.acceptQuote(application.id, acknowledged), "carlos");
   }
 
-  function approveCredit(review) {
-    run(() => service.approveCredit(application.id, review), "julia");
+  function evaluateCredit(review) {
+    setError("");
+    try {
+      const updated = service.evaluateCredit(application.id, review);
+      setApplication(updated);
+      setActiveRole(updated.status === "CREDIT_APPROVED" ? "julia" : "pedro");
+    } catch (evaluationError) {
+      setError(evaluationError.message);
+    }
   }
 
   function scheduleDelivery(coordination) {
@@ -70,7 +80,7 @@ export default function App() {
     <main>
       {error && <p className="error card" role="alert">{error}</p>}
       {activeRole === "pedro" && <PedroView application={application} onSubmit={submit} acknowledged={acknowledged} onAcknowledged={setAcknowledged} onAccept={acceptQuote} />}
-      {activeRole === "carlos" && <CarlosView application={application} onApprove={approveCredit} />}
+      {activeRole === "carlos" && <CarlosView application={application} onEvaluate={evaluateCredit} />}
       {activeRole === "julia" && <JuliaView application={application} onSchedule={scheduleDelivery} />}
     </main>
   </>;
@@ -111,7 +121,8 @@ function PedroView({ application, onSubmit, acknowledged, onAcknowledged, onAcce
     </section>}
     {["PRE_APPROVED", "MANUAL_REVIEW", "REJECTED"].includes(application.status) && <PreliminaryResult application={application} acknowledged={acknowledged} onAcknowledged={onAcknowledged} onAccept={onAccept} />}
     {application.status === "FORMAL_REVIEW" && <Callout title="Formal approval is pending" tone="warning">Carlos now owns the case and must validate the evidence. The preliminary result is not a final approval.</Callout>}
-    {application.creditDecision && <Callout title="The lease was formally approved" tone="success">Carlos approved the financial review. Reason: {application.creditDecision.reason}</Callout>}
+    {application.creditDecision && <CreditAssessment assessment={application.creditAssessment} />}
+    {application.creditDecision && <Callout title={application.creditDecision.outcome === "APPROVED" ? "The lease was formally approved" : "The credit assessment was rejected"} tone={application.creditDecision.outcome === "APPROVED" ? "success" : "danger"}>Carlos recorded this decision. Reason: {application.creditDecision.reason}</Callout>}
     {application.operation && <section className="card section-gap"><h2>Delivery confirmed</h2><DefinitionGrid items={[
       ["Supplier", application.operation.supplierName],
       ["Contract reference", application.operation.contractReference],
@@ -122,7 +133,7 @@ function PedroView({ application, onSubmit, acknowledged, onAcknowledged, onAcce
   </>;
 }
 
-function CarlosView({ application, onApprove }) {
+function CarlosView({ application, onEvaluate }) {
   return <>
     <Intro eyebrow="Carlos · Credit-risk analyst" title="Review one complete and explainable case">
       Validate the same data Pedro submitted, see every automatic rule and record a formal decision without rebuilding the application from emails.
@@ -141,31 +152,33 @@ function CarlosView({ application, onApprove }) {
         {application.quote && <Quote quote={application.quote} compact />}
       </section>
       <RuleResults rules={application.ruleResults} />
-      {["FORMAL_REVIEW", "MANUAL_REVIEW"].includes(application.status) && <CreditReviewForm evidence={application.evidence} onApprove={onApprove} />}
+      {["FORMAL_REVIEW", "MANUAL_REVIEW"].includes(application.status) && <CreditReviewForm evidence={application.evidence} onEvaluate={onEvaluate} />}
       {application.status === "PRE_APPROVED" && <EmptyState title="Waiting for Pedro">The quote is pre-approved, but Pedro must acknowledge and accept it before formal review.</EmptyState>}
       {application.status === "REJECTED" && <EmptyState title="Case rejected at intake">The structural failures are listed above. This case cannot enter the happy path.</EmptyState>}
-      {application.creditDecision && <EvidenceSummary evidence={application.evidence} />}
-      {application.creditDecision && <Callout title="Decision recorded" tone="success">{application.creditDecision.analyst} approved this case: {application.creditDecision.reason}</Callout>}
+      {application.creditAssessment && <CreditAssessment assessment={application.creditAssessment} />}
+      {application.creditDecision && !application.creditAssessment.negativeRecord.found && <EvidenceSummary evidence={application.evidence} />}
+      {application.creditDecision && <Callout title={`Decision recorded: ${application.creditDecision.outcome}`} tone={application.creditDecision.outcome === "APPROVED" ? "success" : "danger"}>{application.creditDecision.analyst} recorded: {application.creditDecision.reason}</Callout>}
       <Timeline events={application.timeline} />
     </>}
   </>;
 }
 
-function CreditReviewForm({ evidence, onApprove }) {
+function CreditReviewForm({ evidence, onEvaluate }) {
   function submit(event) {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(event.currentTarget));
-    onApprove({ rucRecord: data.rucRecord === "on", projectContract: data.projectContract === "on", bankStatements: data.bankStatements === "on", reason: data.reason });
+    onEvaluate({ rucRecord: data.rucRecord === "on", projectContract: data.projectContract === "on", bankStatements: data.bankStatements === "on", reason: data.reason });
   }
   return <section className="card section-gap">
-    <p className="eyebrow">Formal credit decision</p><h2>Required evidence</h2>
-    <p className="supporting">This POC simulates document validation; it does not upload or verify real documents.</p>
+    <p className="eyebrow">Formal credit decision</p><h2>Evidence and external-risk checks</h2>
+    <p className="supporting">The POC checks a simulated negative-record database first. If the RUC is found, it stops and does not query or score the credit-bureau behavior. Otherwise, it applies the simulated score, overdue-debt and late-payment rules.</p>
+    <div className="test-data"><strong>Test RUCs</strong><span><code>20123456789</code> passes</span><span><code>20999999999</code> appears in the negative database</span><span><code>20666666666</code> has a low score and overdue debt</span></div>
     <form onSubmit={submit}>
       <div className="evidence-list">
         {evidence.map((item) => <label className="check-row" key={item.code}><input type="checkbox" name={fieldName(item.code)} /> <span><strong>{item.label}</strong><small>Mark as validated by Carlos</small></span></label>)}
       </div>
-      <label>Approval reason<textarea name="reason" required defaultValue="Verified documents and project cash flow support the requested lease." /></label>
-      <button type="submit">Approve credit and send to Julia</button>
+      <label>Credit decision reason<textarea name="reason" required defaultValue="Verified documents, project capacity and external-risk results support the credit decision." /></label>
+      <button type="submit">Run credit assessment</button>
     </form>
   </section>;
 }
@@ -179,7 +192,7 @@ function JuliaView({ application, onSchedule }) {
     {application && <>
       <CaseOverview application={application} audience="Julia" />
       <Progress application={application} />
-      {application.creditDecision && <section className="card section-gap"><h2>Credit-approved case</h2><p className="supporting">These are the same applicant, machinery and financial terms Carlos approved.</p><DefinitionGrid items={[
+      {["CREDIT_APPROVED", "DELIVERY_SCHEDULED"].includes(application.status) && <section className="card section-gap"><h2>Credit-approved case</h2><p className="supporting">These are the same applicant, machinery and financial terms Carlos approved.</p><DefinitionGrid items={[
         ["Company", application.request.companyName], ["RUC", application.request.ruc],
         ["Machinery", application.request.machinery], ["Approved by", application.creditDecision.analyst]
       ]} /><Quote quote={application.quote} compact /></section>}
@@ -247,6 +260,22 @@ function RuleResults({ rules, nested = false }) {
 
 function EvidenceSummary({ evidence }) { return <section className="card section-gap"><h2>Validated evidence</h2><ul className="checks">{evidence.map((item) => <li className={item.status === "VALID" ? "passed" : "failed"} key={item.code}>{item.status === "VALID" ? "✓" : "!"} {item.label}: {formatStatus(item.status)}</li>)}</ul></section>; }
 
+function CreditAssessment({ assessment }) {
+  const negativeLabel = assessment.negativeRecord.found ? "FOUND — evaluation stopped" : "CLEAR";
+  return <section className="card section-gap"><p className="eyebrow">Credit policy {assessment.policyVersion}</p><h2>External-risk assessment</h2>
+    <DefinitionGrid items={[
+      ["Negative-record source", assessment.negativeRecord.source],
+      ["Negative-record result", negativeLabel],
+      ["Credit-bureau source", assessment.bureauReport?.source ?? "Not queried"],
+      ["Credit score", assessment.bureauReport?.score ?? "Not evaluated"],
+      ["Overdue debt", assessment.bureauReport ? money.format(assessment.bureauReport.overdueDebt) : "Not evaluated"],
+      ["Late payments (12 months)", assessment.bureauReport?.latePaymentsLast12Months ?? "Not evaluated"]
+    ]} />
+    <h3>Credit rules</h3><ul className="checks">{assessment.ruleResults.map((item) => <li key={item.code} className={item.status === "PASSED" ? "passed" : item.status === "FAILED" ? "failed" : "skipped"}>{item.status === "PASSED" ? "✓" : item.status === "FAILED" ? "!" : "—"} {item.message}</li>)}</ul>
+    <p className="disclaimer">These providers and thresholds are deterministic POC simulations, not real Equifax/SBS responses or an approved lending policy.</p>
+  </section>;
+}
+
 function Quote({ quote, compact = false }) {
   const items = [
     ["Equipment value", money.format(quote.equipmentValue)],
@@ -267,8 +296,8 @@ function Metric({ label, value }) { return <div><span>{label}</span><strong>{val
 function EmptyState({ title, children }) { return <section className="card empty-state"><h2>{title}</h2><p>{children}</p></section>; }
 function Callout({ title, tone, children }) { return <section className={`card callout ${tone}`}><h2>{title}</h2><p>{children}</p></section>; }
 function fieldName(code) { return ({ RUC_RECORD: "rucRecord", PROJECT_CONTRACT: "projectContract", BANK_STATEMENTS: "bankStatements" })[code]; }
-function progressIndex(status) { return ({ PRE_APPROVED: 0, MANUAL_REVIEW: 0, REJECTED: 0, FORMAL_REVIEW: 1, CREDIT_APPROVED: 2, DELIVERY_SCHEDULED: 3 })[status] ?? 0; }
-function statusTone(status) { return status === "DELIVERY_SCHEDULED" || status === "CREDIT_APPROVED" || status === "PRE_APPROVED" ? "success" : status === "REJECTED" ? "danger" : "warning"; }
+function progressIndex(status) { return ({ PRE_APPROVED: 0, MANUAL_REVIEW: 0, REJECTED: 0, FORMAL_REVIEW: 1, CREDIT_REJECTED: 1, CREDIT_APPROVED: 2, DELIVERY_SCHEDULED: 3 })[status] ?? 0; }
+function statusTone(status) { return status === "DELIVERY_SCHEDULED" || status === "CREDIT_APPROVED" || status === "PRE_APPROVED" ? "success" : status === "REJECTED" || status === "CREDIT_REJECTED" ? "danger" : "warning"; }
 function formatStatus(status) { return status.toLowerCase().split("_").map((word) => word[0].toUpperCase() + word.slice(1)).join(" "); }
 function shortId(id) { return String(id).split("-")[0].toUpperCase(); }
 function futureDate(days) { const date = new Date(); date.setDate(date.getDate() + days); return date.toISOString().slice(0, 10); }

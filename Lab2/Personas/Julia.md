@@ -26,16 +26,16 @@ Julia coordinates the handoff from commercial and credit teams to contract prepa
 
 ## Pain points
 
-1. Acting on a case before she can confirm Carlos's formal approval risks starting contract preparation on a deal that was never credit-approved.
-2. Credit approval arriving by email, without reassigning ownership or stating her next action, means a decision can go unnoticed for days while Pedro waits on a delivery that has not moved.
-3. Discovering that the company, RUC or machinery description differs from Carlos's approved case mid-preparation risks producing a contract that does not match what credit actually approved.
-4. Retyping the supplier, approved machinery and financial terms into a separate file risks introducing errors that make the contract diverge from the approved decision.
-5. Preparing the contract reference without visibility into the exact approved installment and term risks a contract that does not reflect what was actually approved.
-6. When supplier confirmation and delivery date live only in an email thread, nothing forces her to close the loop, and a delivery can slip without anyone tracking it against the case.
-7. Pedro has to call operations directly because he cannot see whether a delivery date has been confirmed, pulling her away from other cases to answer status questions.
-8. Without a record of when Pedro accepted the quote or Carlos approved credit, she cannot tell how much time has already passed before she even starts scheduling — time that matters if Pedro's mobilization date is at risk.
-9. Delivery can be coordinated while the case owner is still credit, leaving it unclear who is accountable if the handoff goes wrong.
-10. Without one clear signal that supplier, contract reference and delivery date are all recorded, a case can be treated as complete while a required piece is still missing — and no one catches it until Pedro complains.
+1. Julia can receive a `PRE_APPROVED` or `FORMAL_REVIEW` case by email and start preparing a contract before Carlos records `CREDIT_APPROVED`, creating work for financing that may still be rejected.
+2. When Carlos approves by email without changing the owner to “Leasing-operations coordinator,” Julia has no queue item telling her to contact the supplier and the case can remain unattended for days.
+3. If the contract draft says a different company name, RUC or excavator description from Carlos's approved record, Julia cannot tell which version is authoritative without returning the case to credit.
+4. Copying “Maquinarias del Peru SAC,” the excavator description and approved values into an operations spreadsheet can introduce a supplier or amount different from the credit-approved application.
+5. Without seeing the approved S/12,303.95 installment and 36-month term beside the case, Julia can assign a contract reference to terms that Pedro and Carlos never accepted.
+6. A supplier confirmation and delivery date stored only in an email thread do not move the case to `DELIVERY_SCHEDULED`, so the team cannot distinguish a verbal promise from a recorded commitment.
+7. If Pedro cannot see the supplier and confirmed date in his view, he calls Julia for status and she must search email before answering whether the excavator can arrive before mobilization.
+8. Without timestamps for Pedro's acceptance and Carlos's approval, Julia cannot calculate how long the case waited before reaching operations or identify which handoff endangered the project start.
+9. If Julia can schedule delivery while the case owner is still Carlos or the status is `FORMAL_REVIEW`, two roles can act on incompatible assumptions about whether credit was approved.
+10. If supplier name, contract reference or delivery date can be omitted, Julia may mark the case complete even though Pedro still lacks one of the three pieces needed to plan receipt of the excavator.
 
 ## Pain points demonstrated by the POC
 

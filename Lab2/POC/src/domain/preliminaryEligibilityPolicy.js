@@ -33,10 +33,11 @@ export function evaluatePreliminaryEligibility({ id, idempotencyKey, request, cr
     createdAt,
     quoteAcceptedAt: null,
     creditDecision: null,
+    creditAssessment: null,
     operation: null,
     evidence: [
       { code: "RUC_RECORD", label: "RUC record", status: "PENDING" },
-      { code: "PROJECT_CONTRACT", label: "Signed project contract", status: "PENDING" },
+      { code: "PROJECT_CONTRACT", label: "Signed customer project contract", status: "PENDING" },
       { code: "BANK_STATEMENTS", label: "Recent bank statements", status: "PENDING" }
     ],
     timeline: [

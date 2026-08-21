@@ -84,6 +84,13 @@ Este archivo conserva aprendizajes reutilizables del Grupo 03 para iniciar cada 
 - **Evidencia:** la primera POC terminaba al asignar el caso a Carlos; la revisión del flujo exigió implementar las vistas de Carlos y Julia hasta dejar la entrega programada y visible para Pedro.
 - **Límite:** un happy path end-to-end demuestra el recorrido exitoso, pero no obliga a implementar todas las excepciones, integraciones reales ni acciones físicas.
 
+### LAB-LEARN-11 — Una regla bloqueante debe cortar consultas posteriores
+
+- **Modifica:** el orden de integraciones de riesgo; primero se ejecuta la fuente bloqueante y solo un resultado limpio habilita consultas privadas o con costo.
+- **Origen:** Lab 2.
+- **Evidencia:** el self-test verifica que un RUC presente en la base negativa produce `CREDIT_REJECTED`, deja score, mora y atrasos como `NOT_EVALUATED` y no incrementa el contador del adaptador de bureau.
+- **Límite:** una falla técnica del proveedor no equivale a un registro negativo; en un piloto debe generar revisión técnica o reintento, nunca rechazo crediticio automático.
+
 ## Checklist para iniciar un laboratorio
 
 1. Leer el enunciado original completo y registrar el idioma solicitado.

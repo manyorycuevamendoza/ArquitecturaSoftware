@@ -45,6 +45,9 @@ button:hover { background: #0e4f37; }
 .checks li { padding: .65rem .75rem; border-radius: 8px; }
 .passed { background: #edf8f3; color: #16563f; }
 .failed { background: #fff0eb; color: #923c23; }
+.skipped { background: #eef1ef; color: #5d6962; }
+.test-data { display: grid; gap: .35rem; margin: 1rem 0; padding: 1rem; border-left: 4px solid #297358; background: #f2f7f4; font-size: .85rem; }
+.test-data code { padding: .1rem .3rem; border-radius: 4px; background: white; color: #123c2e; }
 .disclaimer { margin-top: 1.5rem; color: #65736c; font-size: .8rem; line-height: 1.5; }
 .error { color: #923c23; }
 .supporting { color: #65736c; line-height: 1.5; }

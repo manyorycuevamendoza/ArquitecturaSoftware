@@ -1,10 +1,13 @@
 import { evaluatePreliminaryEligibility } from "../domain/preliminaryEligibilityPolicy.js";
+import { evaluateCreditAssessment } from "../domain/creditAssessmentPolicy.js";
 
 export class LeaseApplicationService {
-  constructor(repository, { now, generateId }) {
+  constructor(repository, { now, generateId, negativeRecordProvider, creditBureauProvider }) {
     this.repository = repository;
     this.now = now;
     this.generateId = generateId;
+    this.negativeRecordProvider = negativeRecordProvider;
+    this.creditBureauProvider = creditBureauProvider;
   }
 
   submit(request, idempotencyKey) {
@@ -35,30 +38,59 @@ export class LeaseApplicationService {
     return accepted;
   }
 
-  approveCredit(applicationId, review) {
+  evaluateCredit(applicationId, review) {
     const application = this.repository.find(applicationId);
     if (!application) throw new Error("Lease application was not found.");
-    if (["CREDIT_APPROVED", "DELIVERY_SCHEDULED"].includes(application.status)) return application;
-    if (!["FORMAL_REVIEW", "MANUAL_REVIEW"].includes(application.status)) throw new Error("Only a case assigned to credit review can be approved.");
+    if (["CREDIT_APPROVED", "CREDIT_REJECTED", "DELIVERY_SCHEDULED"].includes(application.status)) return application;
+    if (!["FORMAL_REVIEW", "MANUAL_REVIEW"].includes(application.status)) throw new Error("Only a case assigned to Carlos can be evaluated.");
+
+    const decidedAt = this.now();
+    const negativeRecord = this.negativeRecordProvider.findByRuc(application.request.ruc, decidedAt);
+    if (negativeRecord.found) {
+      const creditAssessment = evaluateCreditAssessment({ negativeRecord, bureauReport: null });
+      return this.#recordCreditDecision(application, review, application.evidence, creditAssessment, decidedAt);
+    }
 
     const evidence = normalizeEvidence(review);
     const missing = evidence.filter((item) => item.status !== "VALID");
-    if (missing.length > 0) throw new Error(`Carlos must validate all required evidence: ${missing.map((item) => item.label).join(", ")}.`);
+    if (missing.length > 0) throw new Error(`Carlos must validate all required evidence before consulting the credit bureau: ${missing.map((item) => item.label).join(", ")}.`);
     const reason = String(review.reason ?? "").trim();
     if (!reason) throw new Error("Carlos must record the reason for the credit decision.");
 
-    const decidedAt = this.now();
-    const approved = {
+    const bureauReport = this.creditBureauProvider.getBehaviorByRuc(application.request.ruc, decidedAt);
+    const creditAssessment = evaluateCreditAssessment({ negativeRecord, bureauReport });
+    return this.#recordCreditDecision(application, { ...review, reason }, evidence, creditAssessment, decidedAt);
+  }
+
+  #recordCreditDecision(application, review, evidence, creditAssessment, decidedAt) {
+    const approved = creditAssessment.outcome === "APPROVED";
+    const analystReason = String(review.reason ?? "").trim();
+    const reason = approved
+      ? analystReason
+      : analystReason
+        ? `${creditAssessment.explanation} Analyst note: ${analystReason}`
+        : creditAssessment.explanation;
+    const decided = {
       ...application,
-      status: "CREDIT_APPROVED",
+      status: approved ? "CREDIT_APPROVED" : "CREDIT_REJECTED",
       evidence,
-      creditDecision: { outcome: "APPROVED", analyst: "Carlos", reason, decidedAt, policyVersion: application.policyVersion },
-      ownerRole: "Leasing-operations coordinator",
-      nextAction: "Julia prepares the contract and confirms a delivery date with the supplier",
-      timeline: appendEvent(application, decidedAt, "Carlos", "Credit-risk analyst", "Credit approved", reason)
+      creditAssessment,
+      creditDecision: {
+        outcome: creditAssessment.outcome,
+        analyst: "Carlos",
+        reason,
+        decidedAt,
+        preliminaryPolicyVersion: application.policyVersion,
+        creditPolicyVersion: creditAssessment.policyVersion
+      },
+      ownerRole: approved ? "Leasing-operations coordinator" : "SME owner",
+      nextAction: approved
+        ? "Julia prepares the contract and confirms a delivery date with the supplier"
+        : "Pedro reviews the credit rejection and its rule-by-rule explanation",
+      timeline: appendEvent(application, decidedAt, "Carlos", "Credit-risk analyst", approved ? "Credit approved" : "Credit rejected", reason)
     };
-    this.repository.save(approved);
-    return approved;
+    this.repository.save(decided);
+    return decided;
   }
 
   scheduleDelivery(applicationId, coordination) {
@@ -85,7 +117,7 @@ export class LeaseApplicationService {
 function normalizeEvidence(review) {
   return [
     { code: "RUC_RECORD", label: "RUC record", status: review.rucRecord ? "VALID" : "MISSING" },
-    { code: "PROJECT_CONTRACT", label: "Signed project contract", status: review.projectContract ? "VALID" : "MISSING" },
+    { code: "PROJECT_CONTRACT", label: "Signed customer project contract", status: review.projectContract ? "VALID" : "MISSING" },
     { code: "BANK_STATEMENTS", label: "Recent bank statements", status: review.bankStatements ? "VALID" : "MISSING" }
   ];
 }
