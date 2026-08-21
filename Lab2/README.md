@@ -20,6 +20,7 @@ Design and validate the architecture of a Peruvian machinery-leasing platform fo
 | Functional and non-functional requirements | [Requirements/](Requirements/) | Complete |
 | Evaluation close to or above 8/10 | [Spec/Results.md](Spec/Results.md) | Complete |
 | Selected architecture | [Architecture.md](Architecture.md) | Complete |
+| Architecture decision record | [Decisions/ADR-001-architecture-style.md](Decisions/ADR-001-architecture-style.md) | Complete |
 | Running end-to-end happy-path POC for Pedro, Carlos and Julia | [POC/](POC/) | Complete |
 
 ## Assumptions introduced by the team
@@ -40,6 +41,8 @@ Lab2/
 ├── Assignment.md
 ├── SPEC-TEMPLATE.md
 ├── Architecture.md
+├── Decisions/
+│   └── ADR-001-architecture-style.md
 ├── Personas/
 │   ├── Pedro.md
 │   ├── Carlos.md

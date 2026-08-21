@@ -1,5 +1,7 @@
 # Selected Software Architecture
 
+Decision record: [ADR-001 — Architecture style](Decisions/ADR-001-architecture-style.md), which documents the reversal from the interim 3-tier decision.
+
 ## Decision
 
 Select a **hexagonal architecture (ports and adapters) implemented as one modular application with one transactional database**.
@@ -78,6 +80,74 @@ The domain does not know HTTP, a database engine, a credit provider or a UI fram
 
 The core flow is synchronous because the applicant needs an immediate result. A general event queue is not required for the POC. Non-critical notifications may be asynchronous later, but they cannot become the source of truth for the lease decision.
 
+## Complete leasing lifecycle and POC boundary
+
+A lease is not a loan: the lessor never transfers cash to the applicant. It buys the machinery from the supplier, retains legal ownership, and grants use against periodic instalments. The applicant may take ownership only after paying every instalment, by exercising a purchase option for a residual value. The following state machine is the complete business lifecycle; the POC deliberately implements only the first segment.
+
+```mermaid
+stateDiagram-v2
+    [*] --> SUBMITTED
+    SUBMITTED --> PRE_APPROVED
+    SUBMITTED --> MANUAL_REVIEW
+    SUBMITTED --> REJECTED
+    MANUAL_REVIEW --> PRE_APPROVED
+    MANUAL_REVIEW --> REJECTED
+    PRE_APPROVED --> FORMAL_REVIEW : quote accepted
+    FORMAL_REVIEW --> CREDIT_REJECTED
+    FORMAL_REVIEW --> CREDIT_APPROVED
+    CREDIT_APPROVED --> DELIVERY_SCHEDULED : supplier, contract and date recorded
+
+    state "Outside the POC" as OUT {
+        DELIVERY_SCHEDULED --> CONTRACT_SIGNED
+        CONTRACT_SIGNED --> PURCHASE_ORDER_ISSUED : lessor pays the supplier
+        PURCHASE_ORDER_ISSUED --> ASSET_DELIVERED : supplier delivers to the applicant
+        ASSET_DELIVERED --> ACTIVE : instalment schedule starts
+        ACTIVE --> ACTIVE : instalment paid
+        ACTIVE --> IN_ARREARS
+        IN_ARREARS --> ACTIVE
+        IN_ARREARS --> REPOSSESSION
+        ACTIVE --> PAID_OFF : final instalment settled
+        PAID_OFF --> OWNERSHIP_TRANSFERRED : purchase option exercised at residual value
+        PAID_OFF --> ASSET_RETURNED : purchase option declined
+    }
+
+    REJECTED --> [*]
+    CREDIT_REJECTED --> [*]
+    OWNERSHIP_TRANSFERRED --> [*]
+    ASSET_RETURNED --> [*]
+    REPOSSESSION --> [*]
+```
+
+### Why the cut is placed at `DELIVERY_SCHEDULED`
+
+The assignment requires a running happy path for some of the users, not the full contract lifetime. The three personas of this iteration — applicant, credit analyst and operations coordinator — all act before delivery, so the implemented segment covers every persona end to end. The states after `DELIVERY_SCHEDULED` belong to actors this iteration does not model: the legal/contract function, the treasury function that settles the supplier, and the collections function that follows instalments.
+
+The cut is a scope decision, not an omission. It carries two consequences that the pilot must absorb:
+
+- `DELIVERY_SCHEDULED` is the **start** of the contract in business terms, not a terminal state. The current aggregate ends where the money actually begins to move.
+- The instalment schedule, the asset register and the residual value are the elements that make this product a lease rather than a credit line. They are specified below and deferred, not discarded.
+
+### Deferred domain concepts
+
+| Concept | Why it is required beyond the POC |
+| --- | --- |
+| Machinery asset | The lessor owns the equipment; serial number, location, insurance and condition must be tracked because the asset is the collateral |
+| Residual value | The price of the purchase option; it must be fixed when the contract is signed, since it determines the instalment |
+| Instalment schedule | The obligation the applicant actually pays; generated from financed amount, rate and term at contract signature |
+| Purchase order and supplier settlement | The lessor pays the supplier directly; this is a financial transaction the POC does not represent |
+| Purchase option exercise | An explicit act by the applicant after the last instalment, never an automatic consequence of the schedule ending |
+
+### Supplier port
+
+The supplier is an external boundary of the same nature as the risk providers, and belongs behind a port for the pilot.
+
+| Port | Purpose |
+| --- | --- |
+| Supplier catalogue and quotation | Retrieve equipment reference, price and availability |
+| Purchase order and delivery confirmation | Issue the order after contract signature and receive delivery evidence |
+
+In the POC, Julia records supplier, contract reference and delivery date as validated fields (`FR-OPS-04`); no supplier system is contacted.
+
 ## Data decision
 
 Use one transactional database for applicants, applications, quotes, decisions, evidence metadata and audit references. A shared process and strong consistency requirements are more important than independent data ownership in this case.
@@ -102,7 +172,7 @@ Document binaries may use a dedicated document store in production, accessed thr
 
 | Alternative | Decision for Lab 2 |
 | --- | --- |
-| 3-tier | Viable, but a conventional dependency direction may couple leasing rules to database and provider details unless additional discipline is introduced. |
+| 3-tier | Adopted as an interim decision and later reverted; see [ADR-001](Decisions/ADR-001-architecture-style.md). A conventional dependency direction couples the ordered risk-provider rules of `FR-RSK-03` to provider access. |
 | **Hexagonal** | **Selected.** Protects quote and eligibility rules from changing external providers and lets the POC replace them with controlled adapters. |
 | Event-driven | Not selected as the primary architecture; the happy path needs an immediate decision and does not require a general event queue. |
 | Microservices | Not selected; the initial domain, team and data do not justify independent deployment or databases. |

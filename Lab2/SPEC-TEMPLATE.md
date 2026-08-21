@@ -25,6 +25,8 @@ For the POC, success means completing one transparent digital happy path from ap
 - Real integration with tax, identity, negative-record, SBS/private credit-bureau, banking or insurance providers; the POC uses deterministic simulations.
 - Physical delivery, GPS tracking, maintenance and recovery of machinery.
 - Collections, delinquency management and repossession.
+- Instalment schedule generation, instalment payment and settlement of the contract.
+- Exercise of the purchase option and transfer of ownership at residual value.
 - Final regulatory or legal compliance certification.
 - Production use of an automatic final credit decision; the POC records only a simulated formal decision under illustrative rules.
 
@@ -42,6 +44,11 @@ For the POC, success means completing one transparent digital happy path from ap
 | Credit-behavior report | Authorized external report containing risk score, overdue debt and recent payment behavior; simulated in the POC |
 | Short-circuit rule | Policy behavior that records later rules as `NOT_EVALUATED` when an earlier blocking condition ends the decision |
 | Lease decision | Pre-approved, manual review or rejected outcome with recorded reasons |
+| Machinery asset | Equipment owned by the lessor throughout the contract and used by the applicant; it is the collateral of the operation |
+| Purchase order | Instruction through which the lessor pays the supplier directly; the applicant never receives the financed cash |
+| Instalment schedule | Periodic obligation generated at contract signature from financed amount, rate and term |
+| Residual value | Price of the purchase option, fixed at contract signature |
+| Purchase option | Explicit act by which the applicant acquires ownership after settling every instalment; declining it returns the asset to the lessor |
 | Happy path | Eligible SME submits valid data, accepts a preliminary quote, receives formal credit approval and obtains a scheduled machinery-delivery date |
 
 The [SBS Reporte de Deudas](https://www.sbs.gob.pe/usuarios/nuestros-servicios/reporte-de-deudas/reporte-de-deudas/quot) describes debt, credit lines and classifications based on payment behavior, while the official [Equifax business-report description](https://soluciones.equifax.com.pe/e-commerce/resources/files/reporte-empresarial-tercero.pdf) includes commercial/credit behavior, predictive score and delinquent-debt information. These sources support the product concepts, not the POC thresholds. Merely appearing in a credit bureau is not treated as negative; rejection requires the separate blocking result defined by the leasing policy.
@@ -150,11 +157,17 @@ This is the complete scope of the implemented POC. `PRE_APPROVED` is not final a
 
 ## Scope by stages
 
-| Stage | Included |
-| --- | --- |
-| POC | One-item application; deterministic eligibility; detailed quote; simulated Pedro, Carlos and Julia views; negative-list and Equifax-like adapters; formal approval/rejection; supplier/contract/delivery scheduling; shared timeline; and one in-memory repository |
-| Pilot | Authentication and authorization, authorized provider sandbox integrations, real document upload/validation, information-request decisions, persistent database, append-only audit and operational worklists |
-| Production | Authorized external integrations, contract workflow, supplier settlement, observability, high availability, security hardening and validated capacity |
+The complete leasing lifecycle runs from application to purchase option. This iteration implements the segment that ends at `DELIVERY_SCHEDULED`, because the three required personas all act before delivery. The later states are specified and deferred, not discarded; the full state machine is documented in [Architecture.md](Architecture.md).
+
+| Stage | Lifecycle segment | Included |
+| --- | --- | --- |
+| POC | `SUBMITTED` → `DELIVERY_SCHEDULED` | One-item application; deterministic eligibility; detailed quote; simulated Pedro, Carlos and Julia views; negative-list and Equifax-like adapters; formal approval/rejection; supplier/contract/delivery scheduling; shared timeline; and one in-memory repository |
+| Pilot | Same segment, real infrastructure | Authentication and authorization, authorized provider sandbox integrations, real document upload/validation, information-request decisions, persistent database, append-only audit and operational worklists |
+| Production — contracting | `CONTRACT_SIGNED` → `ASSET_DELIVERED` | Electronic signature, residual value and instalment schedule fixed at signature, supplier port with purchase order, supplier settlement and delivery evidence |
+| Production — servicing | `ACTIVE` → `PAID_OFF` | Asset register with serial, location and insurance; instalment collection and reconciliation; arrears, restructuring and repossession |
+| Production — closing | `PAID_OFF` → `OWNERSHIP_TRANSFERRED` / `ASSET_RETURNED` | Explicit purchase-option exercise at residual value, ownership transfer, or asset return and remarketing |
+
+Cross-cutting production concerns — observability, high availability, security hardening and validated capacity — apply to every stage above.
 
 ## Acceptance criteria
 
