@@ -74,8 +74,15 @@ Este archivo conserva aprendizajes reutilizables del Grupo 03 para iniciar cada 
 
 - **Modifica:** la entrega del prototipo; incluye una prueba ejecutable y declara qué capacidades productivas no demuestra.
 - **Origen:** Lab 2.
-- **Evidencia:** el self-test y la prueba HTTP verificaron `PRE_APPROVED → FORMAL_REVIEW`, mientras el README excluye crédito real, contratos e integraciones.
+- **Evidencia:** el self-test y el build verificaron `PRE_APPROVED → FORMAL_REVIEW → CREDIT_APPROVED → DELIVERY_SCHEDULED`, mientras el README diferencia decisiones simuladas de crédito real, contratos e integraciones.
 - **Límite:** pasar el happy path no valida seguridad, capacidad, regulación ni escenarios de fallo de producción.
+
+### LAB-LEARN-10 — El happy path debe cruzar todos los roles necesarios para producir el resultado
+
+- **Modifica:** el alcance del POC; no termina en el primer handoff si el resultado esperado del negocio requiere decisiones posteriores de otros usuarios.
+- **Origen:** Lab 2.
+- **Evidencia:** la primera POC terminaba al asignar el caso a Carlos; la revisión del flujo exigió implementar las vistas de Carlos y Julia hasta dejar la entrega programada y visible para Pedro.
+- **Límite:** un happy path end-to-end demuestra el recorrido exitoso, pero no obliga a implementar todas las excepciones, integraciones reales ni acciones físicas.
 
 ## Checklist para iniciar un laboratorio
 
@@ -93,7 +100,7 @@ Este archivo conserva aprendizajes reutilizables del Grupo 03 para iniciar cada 
 | Laboratorio | Caso | Estado del contexto |
 | --- | --- | --- |
 | Lab 1 | Gestión clínica y operativa de UCI | Lecciones incorporadas |
-| Lab 2 | Leasing de maquinaria en Perú | Contexto inicial, Eval-Spec 8.8/10 y POC happy path ejecutado |
+| Lab 2 | Leasing de maquinaria en Perú | Eval-Spec 9.1/10 y POC end-to-end ejecutado en tres vistas |
 
 ## Regla de actualización
 

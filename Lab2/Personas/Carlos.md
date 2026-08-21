@@ -26,20 +26,32 @@ Carlos reviews applications from companies of different sizes and sectors. He mu
 
 ## Pain points
 
-1. Applications arrive through email with different structures.
-2. Key figures use inconsistent periods or currencies.
-3. Documents are missing but the case still appears ready for analysis.
-4. He manually recalculates installments to validate commercial quotes.
-5. Rules are applied differently by each analyst.
-6. He cannot identify who changed an applicant figure and when.
-7. Duplicate company records fragment prior decision history.
-8. Borderline cases are rejected automatically instead of reaching review.
-9. He spends time explaining decisions that lack recorded rule results.
-10. Sensitive financial documents are sometimes shared through informal channels.
+1. Pedro's RUC, machinery value, operating history and project cash flow arrive in separate emails or spreadsheets that Carlos must consolidate.
+2. He cannot tell whether Pedro accepted the preliminary quote or whether the case is actually ready for formal review.
+3. He starts reviewing a case without knowing whether the RUC record, signed project contract and bank statements are present and valid.
+4. He manually recalculates the initial payment, financed amount and 36-month installment to verify the applicant's quote.
+5. He receives only `PRE_APPROVED` or `MANUAL_REVIEW` without seeing which rule passed, failed or which policy version produced it.
+6. Project cash flow and installment are shown in different screens, making the 125% payment-coverage check difficult to confirm.
+7. He records an approval in personal notes without a mandatory reason attached to the application.
+8. After approval, he must email Julia because the case does not automatically change owner or next action.
+9. He cannot reconstruct who submitted, accepted and approved the case in chronological order.
+10. A borderline case may be rejected before he can validate supporting evidence and apply human judgment.
+
+## Pain points demonstrated by the POC
+
+| Pain points | POC response |
+| --- | --- |
+| 1, 4, 6 | Carlos sees Pedro's normalized application, the same calculated quote and the project cash flow in one view. |
+| 2 | The case enters Carlos's actionable view only after Pedro accepts the preliminary quote. |
+| 3 | Approval requires a visible checklist for RUC record, project contract and bank statements. |
+| 5, 10 | The view displays each versioned policy result and accepts both formal-review and manual-review cases. |
+| 7 | Carlos must enter an approval reason; the decision stores analyst, time and policy version. |
+| 8 | Approval changes the owner to Julia and states her next action. |
+| 9 | The shared timeline records submission, quote acceptance, credit approval and delivery scheduling. |
 
 ## Key scenario
 
-Carlos opens Pedro's formal-review case and sees normalized applicant, project and quote data with every preliminary rule result. The application is complete, so he can focus on validating evidence and recording a reasoned decision rather than reconstructing the request.
+Carlos opens the same case after Pedro accepts the quote. He compares project cash flow with the calculated installment, reads every policy result, marks the three required evidence items as valid and records the formal approval reason. The case immediately becomes Julia's responsibility.
 
 ## Success criteria
 
@@ -47,3 +59,4 @@ Carlos opens Pedro's formal-review case and sees normalized applicant, project a
 - Recalculate a quote with the same result as the applicant view.
 - Trace every material change to actor and time.
 - Explain a decision using stored policy results rather than personal notes.
+- Prevent approval until all three required evidence items are validated and a reason is recorded.

@@ -20,7 +20,7 @@ Design and validate the architecture of a Peruvian machinery-leasing platform fo
 | Functional and non-functional requirements | [Requirements/](Requirements/) | Complete |
 | Evaluation close to or above 8/10 | [Spec/Results.md](Spec/Results.md) | Complete |
 | Selected architecture | [Architecture.md](Architecture.md) | Complete |
-| Running happy-path POC | [POC/](POC/) | Complete |
+| Running end-to-end happy-path POC for Pedro, Carlos and Julia | [POC/](POC/) | Complete |
 
 ## Assumptions introduced by the team
 

@@ -26,24 +26,35 @@ Julia coordinates the handoff from commercial and credit teams to contract prepa
 
 ## Pain points
 
-1. Statuses in email and spreadsheets contradict each other.
-2. Accepted quotes reach operations without a clear responsible person.
-3. She discovers missing applicant data during contract preparation.
-4. Supplier and machinery details are copied manually between files.
-5. Quote expirations are tracked with calendar reminders.
-6. She cannot distinguish customer delay from internal delay.
-7. Changes to the approved terms are not clearly versioned.
-8. She must ask credit whether a case is truly approved.
-9. Management reports require manual consolidation.
-10. Applicants call her because the platform does not explain the next step.
+1. A case appears in her spreadsheet after a preliminary result, but she cannot confirm whether Carlos formally approved it.
+2. Credit approval arrives by email without changing the responsible owner or stating Julia's next action.
+3. During contract preparation she discovers that the company, RUC or machinery description differs from Carlos's approved case.
+4. She retypes the supplier name, approved machinery and financial terms into a separate operations file.
+5. She cannot see the exact approved installment and number of monthly payments while preparing the contract reference.
+6. Supplier confirmation and delivery date remain in an email thread instead of the applicant's case.
+7. Pedro calls operations because he cannot see whether a delivery date has been confirmed.
+8. She cannot reconstruct when Pedro accepted the quote or when Carlos approved the credit decision.
+9. A delivery may be coordinated while the current case owner is still credit, producing unclear responsibility.
+10. She has no single completion signal showing that supplier, contract reference and delivery date were all recorded.
+
+## Pain points demonstrated by the POC
+
+| Pain points | POC response |
+| --- | --- |
+| 1, 2, 9 | Julia can act only in `CREDIT_APPROVED`; the handoff changes the owner and next action explicitly. |
+| 3, 4, 5 | Her view reuses the same company, machinery and approved payment terms without re-entry. |
+| 6, 10 | Completion requires supplier, contract reference and confirmed delivery date, then moves to `DELIVERY_SCHEDULED`. |
+| 7 | The scheduled delivery becomes visible in Pedro's view. |
+| 8 | The shared case history shows Pedro's and Carlos's earlier actions in order. |
 
 ## Key scenario
 
-When Pedro accepts the preliminary quote, Julia sees the case in formal review with its owner and next required action. After credit approval in the pilot stage, the same record becomes ready for contract preparation without copying company or machinery data.
+After Carlos formally approves Pedro's case, Julia receives the same record with herself as owner. She verifies the approved company, machinery and payment term, records the supplier and contract reference, and confirms a delivery date. The case then returns to Pedro as `DELIVERY_SCHEDULED`.
 
 ## Success criteria
 
 - Every active case has one status, owner and next action.
 - No case reaches contract preparation with mandatory data missing.
 - Identify delayed cases and the responsible side in less than one minute.
-- Produce an operational status report without a separate spreadsheet.
+- Complete the happy-path handoff without copying applicant or approved financial data.
+- Make the supplier and scheduled delivery date visible to Pedro in the same case.

@@ -32,6 +32,16 @@ export function evaluatePreliminaryEligibility({ id, idempotencyKey, request, cr
     ruleResults: rules,
     createdAt,
     quoteAcceptedAt: null,
+    creditDecision: null,
+    operation: null,
+    evidence: [
+      { code: "RUC_RECORD", label: "RUC record", status: "PENDING" },
+      { code: "PROJECT_CONTRACT", label: "Signed project contract", status: "PENDING" },
+      { code: "BANK_STATEMENTS", label: "Recent bank statements", status: "PENDING" }
+    ],
+    timeline: [
+      { at: createdAt, actor: "Pedro", role: "SME owner", action: "Application submitted", detail: `Preliminary result: ${status}` }
+    ],
     ownerRole: status === "PRE_APPROVED" ? "SME owner" : "Credit-risk analyst",
     nextAction: status === "PRE_APPROVED"
       ? "Review and accept the preliminary quote"
@@ -48,7 +58,9 @@ function calculateQuote(request) {
   const monthlyRate = ANNUAL_REFERENCE_RATE / 12;
   const factor = (1 + monthlyRate) ** request.termMonths;
   const estimatedMonthlyInstallment = roundMoney(financedAmount * monthlyRate * factor / (factor - 1));
-  return { equipmentValue: request.equipmentValue, initialPayment, financedAmount, annualReferenceRate: ANNUAL_REFERENCE_RATE, termMonths: request.termMonths, estimatedMonthlyInstallment };
+  const estimatedLeasePayments = roundMoney(estimatedMonthlyInstallment * request.termMonths);
+  const estimatedTotalPaid = roundMoney(initialPayment + estimatedLeasePayments);
+  return { equipmentValue: request.equipmentValue, initialPayment, financedAmount, annualReferenceRate: ANNUAL_REFERENCE_RATE, termMonths: request.termMonths, estimatedMonthlyInstallment, estimatedLeasePayments, estimatedTotalPaid };
 }
 
 function roundMoney(value) {

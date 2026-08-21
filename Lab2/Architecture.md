@@ -29,7 +29,8 @@ flowchart LR
 - Preliminary quote calculation.
 - Explainable eligibility policy.
 - Quote acceptance and idempotency rules.
-- Evidence and analyst-decision use cases.
+- Evidence validation and analyst-decision rules.
+- Credit-to-operations handoff and delivery-scheduling rules.
 - Role-independent business validation.
 
 The domain does not know HTTP, a database engine, a credit provider or a UI framework.
@@ -41,7 +42,8 @@ The domain does not know HTTP, a database engine, a credit provider or a UI fram
 | Submit application | Validate input and create a preliminary decision |
 | Accept quote | Move one pre-approved application to formal review once |
 | Review application | Record evidence and analyst decision |
-| Track operations | Query owner, status, age and next action |
+| Coordinate approved application | Record supplier, contract reference and delivery date |
+| Track operations | Query owner, status, progress and next action |
 | Application repository | Save and retrieve the current aggregate and versions |
 | Company verification | Obtain authorized RUC and identity evidence |
 | Credit information | Obtain authorized external risk evidence |
@@ -55,7 +57,7 @@ The domain does not know HTTP, a database engine, a credit provider or a UI fram
 - Transactional database repository for the pilot.
 - Provider-specific RUC, credit, document and notification adapters for production.
 
-## Critical happy-path flow
+## End-to-end happy-path flow
 
 1. The React adapter receives Pedro's request and invokes the application use case.
 2. The use case validates required fields and asks the domain policy for a decision.
@@ -63,6 +65,10 @@ The domain does not know HTTP, a database engine, a credit provider or a UI fram
 4. The repository port stores the application atomically.
 5. React renders the preliminary quote returned by the use case.
 6. Quote acceptance invokes a separate idempotent use case and moves the same application to `FORMAL_REVIEW`.
+7. Carlos's React view reads that same application, displays the policy evidence and requires the three simulated evidence items plus an approval reason.
+8. Formal approval moves the aggregate to `CREDIT_APPROVED`, assigns it to Julia and appends the decision to the case history.
+9. Julia's React view reuses the approved applicant, machinery and quote data and records the supplier, contract reference and delivery date.
+10. The aggregate moves to `DELIVERY_SCHEDULED`; Pedro can see the formal decision, delivery information and complete progress without re-entering data.
 
 The core flow is synchronous because the applicant needs an immediate result. A general event queue is not required for the POC. Non-critical notifications may be asynchronous later, but they cannot become the source of truth for the lease decision.
 
@@ -105,4 +111,4 @@ Document binaries may use a dedicated document store in production, accessed thr
 
 ## Scope statement
 
-The POC demonstrates submit, evaluate, quote and accept through the same ports that a production adapter could call. It does not prove regulatory compliance, real credit quality, external-provider reliability or production capacity.
+The POC demonstrates submit, evaluate, quote, accept, evidence validation, formal approval and delivery scheduling through one modular application and one in-memory repository. Its Pedro, Carlos and Julia views simulate role handoffs but do not implement authentication or authorization. It does not prove document authenticity, regulatory compliance, real credit quality, binding contracting, supplier integration, physical delivery, external-provider reliability or production capacity.

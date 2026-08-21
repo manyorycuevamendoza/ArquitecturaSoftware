@@ -26,24 +26,37 @@ Pedro has won a 24-month earthworks contract and needs an excavator before mobil
 
 ## Pain points
 
-1. He does not know whether the company qualifies until after several meetings.
-2. Different sales representatives request the same documents again.
-3. Quotes hide the financed amount behind a single monthly figure.
-4. He cannot compare terms and initial-payment scenarios clearly.
-5. Credit decisions arrive after the machinery reservation has expired.
-6. Rejections use generic messages and provide no corrective action.
-7. Paper forms are difficult to complete while visiting project sites.
-8. He cannot see who owns the request or its current status.
-9. He fears that a preliminary estimate may be presented as a binding obligation.
-10. He lacks confirmation that submitted financial and project data is protected.
+1. After sending the request, he cannot distinguish **pre-approved** from **formally approved**, so he does not know whether he can commit to the excavator.
+2. A commercial quote shows a monthly amount but not whether he will make 24, 36 or 60 monthly payments.
+3. He cannot see the equipment value, initial payment, financed amount, installment and estimated total together before accepting.
+4. When credit starts reviewing the case, he cannot see whether Carlos has it or what action is pending.
+5. If the case needs manual review, he receives a generic message instead of the exact failed threshold, such as insufficient operating history or payment coverage.
+6. He enters the RUC, machinery, project cash flow and requested terms again when the case moves from sales to credit.
+7. He has no dated record proving that he accepted only a preliminary, non-binding quote rather than a final contract.
+8. After formal approval, he must call the leasing company to learn who is coordinating the supplier and the delivery date.
+9. He cannot follow the case as one sequence from request through quote acceptance, credit decision and delivery scheduling.
+10. He may reserve machinery based on a preliminary result because the screen does not clearly show the responsible role and next step.
+
+## Pain points demonstrated by the POC
+
+| Pain points | POC response |
+| --- | --- |
+| 1, 4, 9, 10 | One progress bar shows the current status, responsible role, next action and complete case history. |
+| 2, 3 | The quote shows the number of monthly payments, installment, initial payment, financed amount and estimated totals. |
+| 5 | Every preliminary eligibility rule shows its pass/fail result and exact threshold. |
+| 6 | Carlos and Julia see the same application; Pedro does not enter the information again. |
+| 7 | Quote acceptance is recorded in the shared timeline with the preliminary disclaimer. |
+| 8 | Pedro sees Julia's supplier, contract reference and scheduled delivery date after coordination. |
 
 ## Key scenario
 
-Pedro enters his RUC, excavator value, initial payment, requested term, operating history and expected project cash flow. The system validates the request, explains the eligibility checks and displays a preliminary quote. He accepts it and receives a confirmation that the case moved to formal review.
+Pedro enters his RUC, excavator value, initial payment, requested term, operating history and expected project cash flow once. He sees whether the result is preliminary, how many monthly payments he would make and who owns the next step. After Carlos approves and Julia schedules delivery, Pedro returns to the same case and sees the formal decision and confirmed date.
 
 ## Success criteria
 
 - Complete the initial request in less than five minutes.
 - Receive the preliminary result in no more than three seconds after submission.
-- Understand financed amount, installment, term and next step without assistance.
+- Distinguish preliminary eligibility from formal approval without assistance.
+- Understand financed amount, installment, number of payments, estimated total and next step without assistance.
 - Submit each accepted data item only once.
+- See Carlos's approval and Julia's delivery schedule in the same case history.
