@@ -26,10 +26,10 @@ Pedro has won a 24-month earthworks contract and needs an excavator before mobil
 
 ## Pain points
 
-1. Pedro does not know whether his company qualifies for machinery leasing or whether it still needs a formal credit decision before he can reserve the S/450,000 excavator.
+1. Pedro does not know whether his company qualifies for machinery leasing or whether it still needs a formal credit decision before he can reserve the required excavator.
 2. He does not know in advance which company, project and financial information or supporting documents he must prepare to submit a complete request on the first attempt.
-3. He cannot determine the real financing cost unless he receives the S/90,000 initial payment, S/360,000 financed amount, S/12,303.95 installment, 36 monthly payments and estimated total together.
-4. He does not know whether the S/18,000 expected monthly project cash flow is enough to pay the installment while preserving money for payroll and materials.
+3. He cannot understand the total financial commitment because the initial payment, financed amount, monthly installment, number of payments and estimated total are not clearly presented together.
+4. He does not know whether the expected monthly project cash flow is enough to pay the installment while preserving money for payroll and materials.
 5. If the request is reviewed manually or rejected, he does not know whether the cause is insufficient operating history, payment capacity, a negative record, low score, overdue debt, late payments or missing evidence.
 6. He repeatedly provides the same company name, RUC, machinery, value, initial payment, term, operating history and project cash flow when the request moves from sales to credit.
 7. He does not know whether accepting the preliminary quote only allows the evaluation to continue or already obligates his company to contract and pay for the leasing.

@@ -30,9 +30,9 @@ Carlos reviews applications from companies of different sizes and sectors. He mu
 1. Carlos receives Pedro's company data, machinery value and project cash flow in different emails and spreadsheets, so he must consolidate them manually and can base the decision on a copied value that is incorrect.
 2. He does not know which applicants accepted their preliminary quote and are genuinely waiting for formal credit evaluation, so he can prioritize a case that the customer abandoned.
 3. He often discovers during analysis that the RUC record, signed customer project contract or recent bank statements are missing, forcing him to stop the review and contact Pedro again.
-4. He recalculates the S/90,000 initial payment, S/360,000 financed amount and S/12,303.95 installment to confirm that he is evaluating the same 36-month terms Pedro accepted.
+4. He recalculates the initial payment, financed amount, installment and term to confirm that he is evaluating the same financial conditions Pedro accepted.
 5. He cannot justify an approval or rejection when he does not know which negative-record source and credit bureau were consulted, which values they returned or which policy rules were applied.
-6. He manually compares the S/18,000 project cash flow against the required S/15,379.94 coverage, increasing the risk of applying the 125% payment-capacity rule incorrectly.
+6. He manually compares project cash flow with the required installment coverage, increasing the risk of applying the payment-capacity rule incorrectly.
 7. He records the reason for approval in personal notes, leaving the decision without a direct connection to the analyst, evidence, date and policy version used.
 8. After approving a case, he must notify Julia and copy the approved terms manually; a missed email leaves the case without operational follow-up.
 9. He cannot reconstruct the order and date of Pedro's submission, quote acceptance and credit decision when the evidence is distributed across different channels.
