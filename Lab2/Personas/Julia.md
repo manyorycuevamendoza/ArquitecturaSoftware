@@ -28,7 +28,7 @@ Julia coordinates the handoff from commercial and credit teams to contract prepa
 
 1. Julia does not know with certainty whether Carlos formally approved the financing before she begins preparing the leasing contract and contacting the supplier.
 2. She does not know when an approved case becomes her responsibility or which operational action she must perform first, so the request can remain unattended for days.
-3. She finds different company names, RUCs or excavator descriptions in the sales, credit and contract files and must ask which version was actually approved.
+3. She finds different applicant or machinery information in the commercial, credit and contract records and must ask which version was actually approved.
 4. She manually copies the supplier, machinery description and approved financial terms into an operations spreadsheet, risking a contract with different information from the credit decision.
 5. She does not have the approved installment and payment term available while preparing the contract reference and coordinating the purchase.
 6. She stores the supplier confirmation and delivery date in email, so the rest of the team cannot verify whether the delivery is only being discussed or already confirmed.

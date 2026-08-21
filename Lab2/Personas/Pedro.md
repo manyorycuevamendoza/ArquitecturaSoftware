@@ -26,16 +26,16 @@ Pedro has won a 24-month earthworks contract and needs an excavator before mobil
 
 ## Pain points
 
-1. Pedro does not know whether his company qualifies for machinery leasing or whether it still needs a formal credit decision before he can reserve the required excavator.
-2. He does not know in advance which company, project and financial information or supporting documents he must prepare to submit a complete request on the first attempt.
-3. He cannot understand the total financial commitment because the initial payment, financed amount, monthly installment, number of payments and estimated total are not clearly presented together.
-4. He does not know whether the expected monthly project cash flow is enough to pay the installment while preserving money for payroll and materials.
-5. If the request is reviewed manually or rejected, he does not know whether the cause is insufficient operating history, payment capacity, a negative record, low score, overdue debt, late payments or missing evidence.
-6. He repeatedly provides the same company name, RUC, machinery, value, initial payment, term, operating history and project cash flow when the request moves from sales to credit.
-7. He does not know whether accepting the preliminary quote only allows the evaluation to continue or already obligates his company to contract and pay for the leasing.
-8. After submitting the request, he does not know who is reviewing it, what stage it has reached or what must happen before receiving the final decision.
-9. After credit approval, he still does not know which supplier will provide the excavator or the confirmed date when it will be available at the project.
-10. Without a confirmed credit decision and delivery date, he cannot safely schedule mobilization, operators and transport with his customer.
+1. Pedro does not know whether his company qualifies for machinery leasing or whether it still needs a formal credit decision before committing to the required equipment.
+2. He does not know all the information and supporting documents required to submit a complete application on the first attempt.
+3. He cannot understand the total financial commitment because the quote does not explain all payment conditions together in a clear and comparable way.
+4. He does not know whether the project can cover the leasing payments while preserving enough working capital for daily operations.
+5. When the application requires additional review or is rejected, he does not receive a clear reason or know what information or condition must be corrected.
+6. He repeatedly submits the same company, project, machinery and financial information as the application moves between commercial and credit evaluation.
+7. He does not know whether accepting a preliminary quote only continues the evaluation or already creates a contractual payment obligation.
+8. After submitting the application, he does not know its current stage, responsible person or next required action.
+9. After credit approval, he does not know which supplier will provide the machinery or when it will be available for the project.
+10. Without confirmed financing and machinery availability, he cannot align the project start date with the equipment delivery.
 
 ## Pain points demonstrated by the POC
 
