@@ -26,16 +26,16 @@ Julia coordinates the handoff from commercial and credit teams to contract prepa
 
 ## Pain points
 
-1. A case appears in her spreadsheet after a preliminary result, but she cannot confirm whether Carlos formally approved it.
-2. Credit approval arrives by email without changing the responsible owner or stating Julia's next action.
-3. During contract preparation she discovers that the company, RUC or machinery description differs from Carlos's approved case.
-4. She retypes the supplier name, approved machinery and financial terms into a separate operations file.
-5. She cannot see the exact approved installment and number of monthly payments while preparing the contract reference.
-6. Supplier confirmation and delivery date remain in an email thread instead of the applicant's case.
-7. Pedro calls operations because he cannot see whether a delivery date has been confirmed.
-8. She cannot reconstruct when Pedro accepted the quote or when Carlos approved the credit decision.
-9. A delivery may be coordinated while the current case owner is still credit, producing unclear responsibility.
-10. She has no single completion signal showing that supplier, contract reference and delivery date were all recorded.
+1. Acting on a case before she can confirm Carlos's formal approval risks starting contract preparation on a deal that was never credit-approved.
+2. Credit approval arriving by email, without reassigning ownership or stating her next action, means a decision can go unnoticed for days while Pedro waits on a delivery that has not moved.
+3. Discovering that the company, RUC or machinery description differs from Carlos's approved case mid-preparation risks producing a contract that does not match what credit actually approved.
+4. Retyping the supplier, approved machinery and financial terms into a separate file risks introducing errors that make the contract diverge from the approved decision.
+5. Preparing the contract reference without visibility into the exact approved installment and term risks a contract that does not reflect what was actually approved.
+6. When supplier confirmation and delivery date live only in an email thread, nothing forces her to close the loop, and a delivery can slip without anyone tracking it against the case.
+7. Pedro has to call operations directly because he cannot see whether a delivery date has been confirmed, pulling her away from other cases to answer status questions.
+8. Without a record of when Pedro accepted the quote or Carlos approved credit, she cannot tell how much time has already passed before she even starts scheduling — time that matters if Pedro's mobilization date is at risk.
+9. Delivery can be coordinated while the case owner is still credit, leaving it unclear who is accountable if the handoff goes wrong.
+10. Without one clear signal that supplier, contract reference and delivery date are all recorded, a case can be treated as complete while a required piece is still missing — and no one catches it until Pedro complains.
 
 ## Pain points demonstrated by the POC
 

@@ -26,16 +26,16 @@ Pedro has won a 24-month earthworks contract and needs an excavator before mobil
 
 ## Pain points
 
-1. After sending the request, he cannot distinguish **pre-approved** from **formally approved**, so he does not know whether he can commit to the excavator.
-2. A commercial quote shows a monthly amount but not whether he will make 24, 36 or 60 monthly payments.
-3. He cannot see the equipment value, initial payment, financed amount, installment and estimated total together before accepting.
-4. When credit starts reviewing the case, he cannot see whether Carlos has it or what action is pending.
-5. If the case needs manual review, he receives a generic message instead of the exact failed threshold, such as insufficient operating history or payment coverage.
-6. He enters the RUC, machinery, project cash flow and requested terms again when the case moves from sales to credit.
-7. He has no dated record proving that he accepted only a preliminary, non-binding quote rather than a final contract.
-8. After formal approval, he must call the leasing company to learn who is coordinating the supplier and the delivery date.
-9. He cannot follow the case as one sequence from request through quote acceptance, credit decision and delivery scheduling.
-10. He may reserve machinery based on a preliminary result because the screen does not clearly show the responsible role and next step.
+1. He cannot distinguish a preliminary from a formally approved result, so he risks committing to the excavator — talking to suppliers, planning mobilization — before financing is actually secured.
+2. A commercial quote gives him a monthly amount without the term, so he cannot judge whether the real payment period fits his 24-month project or would overextend him if it runs longer.
+3. Without seeing equipment value, initial payment, financed amount, installment and estimated total together, he cannot judge whether the deal actually preserves the working capital he needs for payroll and materials.
+4. Once credit starts reviewing his case, he has no way to know if it is progressing or stalled, so he cannot commit a mobilization date to his own client.
+5. A generic manual-review message, instead of the exact failed threshold, leaves him unable to fix the real problem — such as insufficient history or payment coverage — and he may abandon a deal that was actually financeable.
+6. Re-entering the same RUC, machinery, cash flow and terms when the case moves from sales to credit costs him time he does not have and risks inconsistencies between what was quoted and what is evaluated.
+7. Without a dated record of what he actually accepted, he has no protection if a preliminary, non-binding quote is later treated as a firm commitment.
+8. After formal approval, not knowing who is coordinating the supplier or the delivery date forces him to chase the leasing company by phone instead of planning his crew's schedule.
+9. Not being able to follow his case as one sequence — request, quote acceptance, credit decision, delivery — forces him to repeatedly interrupt his own work just to check where things stand.
+10. Mistaking a preliminary result for a final approval could lead him to commit to a supplier or schedule before financing is actually secured, exposing him to a deal that falls through.
 
 ## Pain points demonstrated by the POC
 

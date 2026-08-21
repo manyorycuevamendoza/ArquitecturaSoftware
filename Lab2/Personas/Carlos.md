@@ -26,16 +26,16 @@ Carlos reviews applications from companies of different sizes and sectors. He mu
 
 ## Pain points
 
-1. Pedro's RUC, machinery value, operating history and project cash flow arrive in separate emails or spreadsheets that Carlos must consolidate.
-2. He cannot tell whether Pedro accepted the preliminary quote or whether the case is actually ready for formal review.
-3. He starts reviewing a case without knowing whether the RUC record, signed project contract and bank statements are present and valid.
-4. He manually recalculates the initial payment, financed amount and 36-month installment to verify the applicant's quote.
-5. He receives only `PRE_APPROVED` or `MANUAL_REVIEW` without seeing which rule passed, failed or which policy version produced it.
-6. Project cash flow and installment are shown in different screens, making the 125% payment-coverage check difficult to confirm.
-7. He records an approval in personal notes without a mandatory reason attached to the application.
-8. After approval, he must email Julia because the case does not automatically change owner or next action.
-9. He cannot reconstruct who submitted, accepted and approved the case in chronological order.
-10. A borderline case may be rejected before he can validate supporting evidence and apply human judgment.
+1. Consolidating Pedro's RUC, machinery value, operating history and cash flow from separate emails and spreadsheets slows every review and introduces transcription errors that can affect a credit decision.
+2. Without knowing whether Pedro accepted the preliminary quote, he risks spending review time on a case Pedro never confirmed, or delaying one Pedro is actively waiting on.
+3. Starting a review without knowing whether the RUC record, project contract and bank statements are present forces rework once a missing document surfaces mid-analysis.
+4. Manually recalculating the initial payment, financed amount and installment is slow, and a mismatch he misses could mean approving a deal at the wrong terms.
+5. Receiving only `PRE_APPROVED` or `MANUAL_REVIEW`, without the rule and policy version behind it, leaves him unable to explain or defend the decision to the approval committee.
+6. Cross-referencing cash flow and installment across separate screens makes it easy to misjudge the 125% payment-coverage check and approve a deal that does not actually meet it.
+7. Recording an approval only in personal notes, without a mandatory reason on the case, leaves the company unable to defend the decision if it is later questioned in an audit.
+8. Emailing Julia after approval, instead of the case reassigning itself, means a decision can sit unnoticed and delay Pedro's delivery.
+9. Without a reliable chronological record of submission, acceptance and approval, he cannot defend the integrity of a decision during an audit or dispute.
+10. Rejecting a borderline case automatically, before he can validate evidence and apply judgment, risks losing a client who was actually financeable.
 
 ## Pain points demonstrated by the POC
 
