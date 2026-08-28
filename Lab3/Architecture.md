@@ -1,8 +1,14 @@
 # R.E.D.A.L.E. - SendIt
 
+Este documento toma el contexto de SendIt y lo convierte en una arquitectura desde cero. No se parte de una tecnología: primero se identifican las necesidades de Ana, Luis y Marta; luego se derivan los requisitos y finalmente se seleccionan servicios, datos y componentes que los satisfacen.
+
+La solución final se muestra como una evolución. La primera iteración valida el flujo mínimo, la segunda incorpora seguridad y consistencia, y la tercera agrega escala. El diseño recomendado para el piloto es la segunda iteración; la tercera es la ruta de crecimiento.
+
 ## Iteraciones de diseño: de menos a más
 
 La arquitectura se presenta en tres diagramas Excalidraw. Cada iteracion agrega solo lo que los requisitos y las estimaciones justifican.
+
+También existe un lienzo consolidado, similar al ejemplo de clase, que muestra R, E, D, A, L y las tres iteraciones de menos a más: [04-redale-iteraciones.excalidraw](Diagrams/04-redale-iteraciones.excalidraw).
 
 | Iteracion | Que demuestra | Diagrama |
 | --- | --- | --- |

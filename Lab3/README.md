@@ -20,6 +20,25 @@ Una remesa es el dinero que una persona envia a otra persona, normalmente a un f
 | R.E.D.A.L.E. e iteraciones | [Architecture.md](Architecture.md) |
 | Diagrama editable | [Diagrams/sendit-architecture.excalidraw](Diagrams/sendit-architecture.excalidraw) |
 | Diagramas por iteracion | [Architecture.md](Architecture.md#iteraciones-de-diseño-de-menos-a-más) |
+| Diagrama consolidado estilo clase | [Diagrams/04-redale-iteraciones.excalidraw](Diagrams/04-redale-iteraciones.excalidraw) |
+
+## Como se conecta el trabajo
+
+El contexto no se concatena directamente dentro de una caja de arquitectura. Se transforma paso a paso:
+
+```text
+Problema y alcance
+	↓
+Personas y pain points
+	↓
+Requerimientos funcionales y no funcionales
+	↓
+R.E.D.A.L.E.: requerimientos → estimaciones → servicios → datos → componentes → escala
+	↓
+Diagramas Excalidraw y decisión final
+```
+
+Usa `04-redale-iteraciones.excalidraw` para exponer todo en un solo lienzo, como en el ejemplo del profesor. Usa `01-minima.excalidraw`, `02-segura-consistente.excalidraw` y `sendit-architecture.excalidraw` cuando necesites explicar cada iteración con más detalle.
 
 ## Usuario modelo
 
