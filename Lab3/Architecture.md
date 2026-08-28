@@ -8,15 +8,15 @@ La solución final se muestra como una evolución. La primera iteración valida 
 
 La arquitectura se presenta en tres diagramas Excalidraw. Cada iteracion agrega solo lo que los requisitos y las estimaciones justifican.
 
-También existe un lienzo consolidado, similar al ejemplo de clase, que muestra R, E, D, A, L y las tres iteraciones de menos a más: [04-redale-iteraciones.excalidraw](Diagrams/04-redale-iteraciones.excalidraw).
+El entregable principal es un solo lienzo con el formato Top Down Design del profesor: [06-topdown-sendit.excalidraw](Diagrams/06-topdown-sendit.excalidraw). Ahí los requerimientos nacen de las personas y las tres iteraciones se muestran de forma acumulativa.
 
 La versión recomendada para la exposición es [05-redale-completo.excalidraw](Diagrams/05-redale-completo.excalidraw): la Iteración 3 conserva todos los bloques de la Iteración 2 y agrega gateway, workers, rate limiting y replica de lectura.
 
 | Iteracion | Que demuestra | Diagrama |
 | --- | --- | --- |
-| 1. Minima | Un canal, una API, una base de datos y proveedores simulados | [01-minima.excalidraw](Diagrams/01-minima.excalidraw) |
-| 2. Segura y consistente | App/web, AML, ledger append-only, idempotencia y agente presencial | [02-segura-consistente.excalidraw](Diagrams/02-segura-consistente.excalidraw) |
-| 3. Escalable | Gateway, APIs stateless, workers, replicas y canales independientes | [03-escalable.excalidraw](Diagrams/03-escalable.excalidraw) |
+| 1. Minima | Actores y una sola aplicacion: valida el flujo, no los controles | [06-topdown-sendit.excalidraw](Diagrams/06-topdown-sendit.excalidraw) |
+| 2. Segura y consistente | Login, seguridad, validacion, KYC/sanciones/AML, mensajeria y BD | [06-topdown-sendit.excalidraw](Diagrams/06-topdown-sendit.excalidraw) |
+| 3. Completa | Todo lo anterior mas cotizacion, pago, evaluacion AML, ledger, retiro, ON_HOLD y reconciliacion EOD | [06-topdown-sendit.excalidraw](Diagrams/06-topdown-sendit.excalidraw) |
 
 ### Iteracion 1 - arquitectura minima
 
@@ -32,7 +32,7 @@ Ante mayor volumen, el gateway distribuye trafico entre APIs stateless. Workers 
 
 ## R - Requerimientos
 
-El problema, el usuario modelo y los requisitos estan en [Problema.md](Problema.md), [Usuarios.md](Usuarios.md) y el [backlog de requerimientos](Requirements/Backlog.md), con su detalle en [Requirements/](Requirements/). Las prioridades son: no duplicar efectos financieros, no exponer datos, mantener una secuencia verificable y explicar el monto final al remitente.
+El problema, el usuario modelo y los requisitos estan en [Problema.md](Problema.md), [Usuarios.md](Usuarios.md) y [Requirements/](Requirements/). Las prioridades son: no duplicar efectos financieros, no exponer datos, mantener una secuencia verificable y explicar el monto final al remitente.
 
 ## E - Estimaciones
 

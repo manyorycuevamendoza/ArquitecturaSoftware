@@ -1,7 +1,5 @@
 # Requerimientos funcionales
 
-> El enunciado pide los requerimientos en formato backlog, solo con titulo. Esa vista esta en [Backlog.md](Backlog.md); este documento es el detalle de respaldo de los requerimientos funcionales.
-
 `Actor que inicia` indica quién usa la capacidad. `Responsable` indica el rol de usuario que debe garantizar, operar o supervisar que el requisito se cumpla. Por eso Ana inicia el pago, pero el **Administrador de SendIt** supervisa la idempotencia, la validación de pertenencia y la consistencia financiera.
 
 | ID | Requerimiento | Criterio de aceptacion | Actor que inicia | Responsable |

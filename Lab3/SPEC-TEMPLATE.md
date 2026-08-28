@@ -46,15 +46,15 @@ Provide a secure and traceable service that allows a sender to create, pay and t
 
 ## Users and their needs
 
-### Ana.md - Sender
+### Ana — Sender
 
 Ana sends money from Peru to her family member Luis in Colombia. She needs a transparent quote, strong authentication, a single charge, a clear status and a receipt. She uses the mobile application or website.
 
-### Luis.md - Beneficiary
+### Luis — Beneficiary
 
 Luis needs to know when the money is available, the amount and currency, the authorized pickup location and the withdrawal code. He must not see Ana's private financial or AML information.
 
-### Marta.md - In-person payout operator
+### Marta — In-person payout operator
 
 Marta works at an authorized payout agent. She verifies Luis's name, identity document, one-time withdrawal code, amount and `AVAILABLE` status before handing over cash. She can confirm one withdrawal, but cannot edit balances or delete audit events.
 
