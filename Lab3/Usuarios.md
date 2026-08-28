@@ -6,7 +6,7 @@
 | Beneficiario | Usuario beneficiario | Recibe y confirma la entrega |
 | Operador de cumplimiento | Rol interno del sistema | Control AML automatico y excepciones |
 | Operador de soporte | Usuario interno | Atiende consultas sin alterar el ledger |
-| Administrador de SendIt | Usuario interno | Supervisa seguridad, consistencia, proveedores y operación del servicio |
+| Operador de SendIt | Usuario interno | Supervisa seguridad, consistencia, proveedores y operación del servicio |
 | Agente pagador | Rol de Marta | Verifica al beneficiario y entrega efectivo |
 | Proveedor de identidad | Sistema externo | Devuelve resultado de verificacion |
 | Proveedor AML | Sistema externo | Evalua listas, limites y patrones de riesgo |
