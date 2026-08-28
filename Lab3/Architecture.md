@@ -10,6 +10,8 @@ La arquitectura se presenta en tres diagramas Excalidraw. Cada iteracion agrega 
 
 También existe un lienzo consolidado, similar al ejemplo de clase, que muestra R, E, D, A, L y las tres iteraciones de menos a más: [04-redale-iteraciones.excalidraw](Diagrams/04-redale-iteraciones.excalidraw).
 
+La versión recomendada para la exposición es [05-redale-completo.excalidraw](Diagrams/05-redale-completo.excalidraw): la Iteración 3 conserva todos los bloques de la Iteración 2 y agrega gateway, workers, rate limiting y replica de lectura.
+
 | Iteracion | Que demuestra | Diagrama |
 | --- | --- | --- |
 | 1. Minima | Un canal, una API, una base de datos y proveedores simulados | [01-minima.excalidraw](Diagrams/01-minima.excalidraw) |

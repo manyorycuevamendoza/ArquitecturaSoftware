@@ -21,6 +21,7 @@ Una remesa es el dinero que una persona envia a otra persona, normalmente a un f
 | Diagrama editable | [Diagrams/sendit-architecture.excalidraw](Diagrams/sendit-architecture.excalidraw) |
 | Diagramas por iteracion | [Architecture.md](Architecture.md#iteraciones-de-diseño-de-menos-a-más) |
 | Diagrama consolidado estilo clase | [Diagrams/04-redale-iteraciones.excalidraw](Diagrams/04-redale-iteraciones.excalidraw) |
+| Diagrama consolidado completo | [Diagrams/05-redale-completo.excalidraw](Diagrams/05-redale-completo.excalidraw) |
 
 ## Como se conecta el trabajo
 
