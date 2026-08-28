@@ -32,7 +32,7 @@ Ante mayor volumen, el gateway distribuye trafico entre APIs stateless. Workers 
 
 ## R - Requerimientos
 
-El problema, el usuario modelo y los requisitos estan en [Problema.md](Problema.md), [Usuarios.md](Usuarios.md) y [Requirements/](Requirements/). Las prioridades son: no duplicar efectos financieros, no exponer datos, mantener una secuencia verificable y explicar el monto final al remitente.
+El problema, el usuario modelo y los requisitos estan en [Problema.md](Problema.md), [Usuarios.md](Usuarios.md) y el [backlog de requerimientos](Requirements/Backlog.md), con su detalle en [Requirements/](Requirements/). Las prioridades son: no duplicar efectos financieros, no exponer datos, mantener una secuencia verificable y explicar el monto final al remitente.
 
 ## E - Estimaciones
 

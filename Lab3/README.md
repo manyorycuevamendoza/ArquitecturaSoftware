@@ -13,8 +13,9 @@ Una remesa es el dinero que una persona envia a otra persona, normalmente a un f
 | Problema, alcance y supuestos | [Problema.md](Problema.md) |
 | Usuario modelo y actores | [Usuarios.md](Usuarios.md) |
 | Personas | [Personas/](Personas/) |
-| Requerimientos funcionales | [Requirements/Functional.md](Requirements/Functional.md) |
-| Requerimientos no funcionales | [Requirements/NonFunctional.md](Requirements/NonFunctional.md) |
+| Requerimientos en formato backlog | [Requirements/Backlog.md](Requirements/Backlog.md) |
+| Requerimientos funcionales (detalle) | [Requirements/Functional.md](Requirements/Functional.md) |
+| Requerimientos no funcionales (detalle) | [Requirements/NonFunctional.md](Requirements/NonFunctional.md) |
 | SPEC template | [SPEC-TEMPLATE.md](SPEC-TEMPLATE.md) |
 | Resultado de EVAL | [Spec/Results.md](Spec/Results.md) |
 | R.E.D.A.L.E. e iteraciones | [Architecture.md](Architecture.md) |
@@ -39,7 +40,7 @@ R.E.D.A.L.E.: requerimientos → estimaciones → servicios → datos → compon
 Diagramas Excalidraw y decisión final
 ```
 
-Usa `04-redale-iteraciones.excalidraw` para exponer todo en un solo lienzo, como en el ejemplo del profesor. Usa `01-minima.excalidraw`, `02-segura-consistente.excalidraw` y `sendit-architecture.excalidraw` cuando necesites explicar cada iteración con más detalle.
+Usa `04-redale-iteraciones.excalidraw` para exponer todo en un solo lienzo, como en el ejemplo del profesor. Usa `01-minima.excalidraw`, `02-segura-consistente.excalidraw`, `03-escalable.excalidraw` y `sendit-architecture.excalidraw` cuando necesites explicar cada iteración con más detalle.
 
 ## Usuario modelo
 
@@ -53,6 +54,6 @@ En Excalidraw, usa **Open** y selecciona `Diagrams/sendit-architecture.excalidra
 
 1. [Problema](Problema.md)
 2. [Personas](Personas/)
-3. [Requerimientos](Requirements/)
+3. [Backlog de requerimientos](Requirements/Backlog.md)
 4. [Evaluacion](Spec/Results.md)
 5. [R.E.D.A.L.E.](Architecture.md)

@@ -1,5 +1,7 @@
 # Requerimientos no funcionales
 
+> El enunciado pide los requerimientos en formato backlog, solo con titulo. Esa vista esta en [Backlog.md](Backlog.md); este documento es el detalle de respaldo de los requerimientos no funcionales.
+
 | ID | Requerimiento y verificacion | Responsable |
 | --- | --- | --- |
 | NFR-SEC-01 | Datos sensibles cifrados en transito y reposo; todos los accesos no autorizados son denegados y auditados. | Plataforma |
