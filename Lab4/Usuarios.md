@@ -2,19 +2,19 @@
 
 | Actor | Tipo | Responsabilidad |
 | --- | --- | --- |
-| Docente rural | Usuario modelo directo | Enseña con el paquete local y solicita material asistido por IA. |
-| Estudiante | Usuario beneficiario | Consulta y descarga el contenido semanal en la red local. |
-| Coordinadora de contenidos (Lima) | Usuario interno | Publica la versión curricular y prepara el envío regional. |
-| Transportista regional | Rol operativo | Entrega el paquete físico y devuelve el paquete de retorno; no modifica contenido. |
-| Administrador regional | Rol interno | Carga el paquete en el Nodo Escolar Local y revisa el comprobante de instalación. |
-| Proveedor de IA | Sistema externo | Recibe únicamente el prompt optimizado desde la central y devuelve la generación. |
+| Docente rural | Usuario modelo directo | Enseña con la caché local y solicita material asistido por IA. |
+| Estudiante | Usuario beneficiario | Consulta y descarga el contenido semanal en la red local de la escuela. |
+| Coordinadora de contenidos (Lima) | Usuario interno | Publica versiones curriculares y monitorea sincronizaciones y costo de IA. |
+| Administrador regional | Rol interno | Configura y supervisa el Nodo Escolar Local; no publica contenido. |
+| Proveedor de almacenamiento | Sistema externo | Expone por HTTPS los manifiestos y archivos versionados. |
+| Proveedor de IA | Sistema externo | Recibe el prompt optimizado desde el AI Gateway y devuelve la generación. |
 
 ## Personas frente a roles
 
 | Persona | Rol representado | Relación con el caso |
 | --- | --- | --- |
-| Rosa | Docente rural | Usuario modelo: necesita enseñar y producir material con recursos limitados. |
-| Diego | Estudiante | Beneficiario directo: necesita acceder al curso sin datos móviles ni Internet. |
-| Valeria | Coordinadora de contenidos | Operadora: necesita asegurar que cada región reciba una versión correcta y controlar el presupuesto de IA. |
+| Rosa | Docente rural | Usuario modelo: necesita enseñar y producir material pese a cortes. |
+| Diego | Estudiante | Beneficiario directo: necesita acceder al curso aunque Internet se caiga. |
+| Valeria | Coordinadora de contenidos | Operadora: necesita publicar versiones correctas y controlar el presupuesto de IA. |
 
-El transportista y el administrador regional aparecen en los requisitos como roles, no como personas modelo: su interacción está acotada a la cadena de custodia e instalación.
+El administrador y los proveedores aparecen como roles o sistemas externos; no son personas modelo porque no concentran una necesidad primaria del caso.

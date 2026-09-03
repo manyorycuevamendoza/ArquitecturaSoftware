@@ -2,7 +2,7 @@
 
 Arquitectura de Software — UTEC — 2026-II
 
-RemoteSchooly distribuye educación semanal a pueblos remotos del Perú y controla el uso de IA por parte de docentes. El diseño trata los dos problemas como restricciones independientes pero coordinadas: los contenidos llegan aun cuando la escuela no tiene Internet; las solicitudes a IA se preparan y gobiernan antes de consumir tokens.
+RemoteSchooly distribuye educación semanal a pueblos remotos del Perú y controla el uso de IA por parte de docentes. Los contenidos llegan por una conexión limitada e intermitente y las solicitudes a IA se preparan y gobiernan antes de consumir tokens.
 
 ## Entregables
 
@@ -21,7 +21,7 @@ RemoteSchooly distribuye educación semanal a pueblos remotos del Perú y contro
 
 ## Decisión central
 
-No se intenta llevar Internet a las escuelas remotas: cada semana la central de Lima prepara, firma y entrega físicamente un paquete de contenidos a un **Nodo Escolar Local**. Estudiantes y docentes acceden por la red local de la escuela, sin salida a Internet. Los avances y pedidos de soporte vuelven en un paquete físico en el siguiente trayecto.
+La central de Lima publica el contenido por Internet. En cada escuela, un **Nodo Escolar Local** sincroniza solo las diferencias mediante descargas segmentadas y reanudables; prioriza el material esencial y conserva la última versión válida durante un corte. Cuando la red vuelve, reanuda desde el último bloque verificado y confirma la instalación. No se usa transporte físico.
 
 Para IA, el docente no conversa directamente con el modelo. Primero completa una solicitud estructurada; un **AI Gateway** local valida que sea concreta, pide solo los datos faltantes y construye un prompt breve con el fragmento curricular pertinente. Solo entonces invoca el modelo con límites de entrada/salida, caché y medición por curso. La meta no es “prometer” ahorro: se mide contra una línea base equivalente y se acepta si reduce tokens facturados al menos en 40%.
 

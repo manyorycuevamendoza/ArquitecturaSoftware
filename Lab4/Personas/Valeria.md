@@ -2,7 +2,7 @@
 
 ## Contexto y objetivos
 
-Valeria prepara y publica materiales para varias regiones desde la central de Lima. Debe enviar una sola versión correcta por escuela y justificar que el uso de IA disminuyó al menos 40% respecto de una línea base comparable.
+Valeria prepara y publica materiales para varias regiones desde la central de Lima. Debe lograr que una sola versión correcta se sincronice por redes limitadas e intermitentes y justificar que el uso de IA disminuyó al menos 40% respecto de una línea base comparable.
 
 - Publicar paquetes por semana, región, grado y curso.
 - Saber qué paquete fue instalado en cada escuela.
@@ -12,9 +12,9 @@ Valeria prepara y publica materiales para varias regiones desde la central de Li
 ## Pain points
 
 1. Una corrección puede quedar mezclada con una versión anterior.
-2. No sabe si la escuela recibió el paquete destinado a ella.
-3. El transporte no le entrega evidencia de que el contenido no fue alterado.
-4. No puede exigir que una escuela se conecte para confirmar recepción.
+2. No sabe si la escuela completó o dejó a medias la sincronización de la versión destinada a ella.
+3. Un corte puede dejar archivos parciales o inconsistentes en el nodo.
+4. No puede exigir que una escuela permanezca conectada para confirmar recepción.
 5. Las solicitudes docentes contienen contexto curricular repetido.
 6. El proveedor factura tokens de entrada y salida, pero no muestra qué parte fue evitable.
 7. Una consulta incompleta igual puede generar una respuesta costosa.
@@ -24,4 +24,4 @@ Valeria prepara y publica materiales para varias regiones desde la central de Li
 
 ## Necesidades del producto
 
-Versionado, manifiesto firmado, comprobante físico de instalación, gobernanza de prompts, métricas de tokens por solicitud y reporte comparativo reproducible.
+Versionado, manifiesto firmado, telemetría de sincronización reanudable, gobernanza de prompts, métricas de tokens por solicitud y reporte comparativo reproducible.
