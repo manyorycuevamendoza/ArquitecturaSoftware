@@ -16,12 +16,27 @@ RemoteSchooly distribuye educación semanal a pueblos remotos del Perú y contro
 | Especificación completa | [SPEC-TEMPLATE.md](SPEC-TEMPLATE.md) |
 | Evaluación de requisitos | [Spec/Results.md](Spec/Results.md) |
 | Diseño R.E.D.A.L.E. y happy paths | [Architecture.md](Architecture.md) |
-| Diagrama Top Down Design | [Diagrams/01-topdown-remoteschooly.excalidraw](Diagrams/01-topdown-remoteschooly.excalidraw) |
+| Diagrama Top Down Design (resumen) | [Diagrams/01-topdown-remoteschooly.excalidraw](Diagrams/01-topdown-remoteschooly.excalidraw) |
+| Diagrama Top Down por iteraciones (**el de la exposición**) | [Diagrams/02-topdown-remoteschooly-v2.excalidraw](Diagrams/02-topdown-remoteschooly-v2.excalidraw) |
 | Ejemplo de solicitud intermedia | [Examples/solicitud-ia.example.json](Examples/solicitud-ia.example.json) |
+
+## Qué diagrama usar
+
+Para exponer usa `Diagrams/02-topdown-remoteschooly-v2.excalidraw`. Es un solo lienzo con el formato Top Down Design: los requerimientos nacen de las personas y el diseño crece en tres iteraciones acumulativas.
+
+| Iteración | Qué muestra |
+| --- | --- |
+| #1 | El sistema como una sola caja: qué entra y qué sale. |
+| #2 | Distribución **offline-first** sobre el Internet que ya existe. Sin SSD ni transporte físico. |
+| #3 | Gobernanza de tokens con **login** y **biblioteca de prompts** versionada, incluido el reuso de un prompt de 2026 en 2027. |
+
+Cada paso del lienzo lleva una frase numerada: el diagrama se lee como un relato, no como un conjunto de cajas sueltas.
 
 ## Decisión central
 
 La central de Lima publica el contenido por Internet. En cada escuela, un **Nodo Escolar Local** sincroniza solo las diferencias mediante descargas segmentadas y reanudables; prioriza el material esencial y conserva la última versión válida durante un corte. Cuando la red vuelve, reanuda desde el último bloque verificado y confirma la instalación. No se usa transporte físico.
+
+Se descarta el medio físico (SSD, USB, transportista). El enunciado no dice que la escuela esté sin Internet: dice que el Internet es limitado y se corta. Un SSD resolvería un problema que la escuela no tiene y agregaría custodia, viajes y una semana de retraso por cada error de empaquetado. «Offline» aquí significa que la clase no depende de la red en el momento en que ocurre, no que no exista red: el nodo local es el que responde.
 
 Para IA, el docente no conversa directamente con el modelo. Primero completa una solicitud estructurada; un **AI Gateway** local valida que sea concreta, pide solo los datos faltantes y construye un prompt breve con el fragmento curricular pertinente. Solo entonces invoca el modelo con límites de entrada/salida, caché y medición por curso. La meta no es “prometer” ahorro: se mide contra una línea base equivalente y se acepta si reduce tokens facturados al menos en 40%.
 

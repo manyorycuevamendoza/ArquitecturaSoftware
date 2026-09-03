@@ -2,7 +2,17 @@
 
 La arquitectura resuelve dos restricciones independientes: las escuelas tienen Internet limitado y con cortes, y el costo de IA debe reducirse de forma demostrable. Los materiales se distribuyen exclusivamente por la red: el Nodo Escolar Local descarga diferencias en bloques reanudables, prioriza recursos esenciales y conserva la última versión válida. El uso de IA se controla con una solicitud intermedia antes de cualquier llamada al modelo.
 
-El diagrama editable es [01-topdown-remoteschooly.excalidraw](Diagrams/01-topdown-remoteschooly.excalidraw).
+El diagrama editable es [02-topdown-remoteschooly-v2.excalidraw](Diagrams/02-topdown-remoteschooly-v2.excalidraw): un solo lienzo Top Down Design con tres iteraciones acumulativas y una frase numerada por paso. La versión resumida anterior queda en [01-topdown-remoteschooly.excalidraw](Diagrams/01-topdown-remoteschooly.excalidraw).
+
+## Iteraciones del diagrama
+
+| Iteración | Qué demuestra | Qué se agrega |
+| --- | --- | --- |
+| #1 | El sistema como una sola caja: quién lo usa y qué promete. | Nada por dentro todavía. |
+| #2 | Distribución offline-first sobre el Internet existente. | Manifiesto firmado, almacenamiento por rangos, Sync Agent por diferencias, verificación, activación atómica y cola de retorno idempotente. |
+| #3 | Gobernanza de tokens. | Login, Clarification Gate, biblioteca de prompts versionada, presupuesto, caché, AI Gateway y ledger. |
+
+Cada iteración conserva lo anterior; ninguna sustituye a la previa.
 
 ## R — Requerimientos
 
@@ -97,6 +107,23 @@ El archivo intermedio es la frontera de costo: conserva solo intención pedagóg
 | Generar | Invoca una vez al modelo con máximos de entrada/salida. | Tokens facturados |
 | Reutilizar | Busca por huella de solicitud, versión y plantilla. | 0 tokens si hay hit |
 
+### Identidad y biblioteca de prompts
+
+El docente entra con su cuenta antes de tocar el formulario. El login no es un trámite: sin identidad no hay cuota por docente, ni consumo atribuible por escuela en el ledger, ni permiso para editar plantillas. Un pedido anónimo no se puede presupuestar ni auditar, y el reporte de reducción dejaría de ser comparable.
+
+El prompt tampoco vive en la pantalla del docente. Se guarda como **plantilla versionada** en una biblioteca: `prompt_id`, `version`, texto canónico, campos obligatorios, autor, estado y la versión curricular con la que nació. El Clarification Gate consulta esa plantilla para saber qué campos exige el tipo de recurso; no inventa las preguntas ni las pide al modelo.
+
+### Reutilización de un prompt entre años (2026 → 2027)
+
+| Qué se reutiliza | Qué se vuelve a resolver |
+| --- | --- |
+| El `prompt_id` y su texto canónico: el docente no reescribe el prompt, solo llena los campos. | Los fragmentos curriculares: se resuelven contra la versión vigente (`2027.1`), no contra los IDs congelados de 2026. |
+| Los campos obligatorios y el presupuesto de la plantilla. | La huella de caché. |
+
+La huella es `hash(prompt_id + version + valores de campos + IDs de fragmentos + modelo + curriculum_version)`. Como la versión curricular cambia de año, un resultado guardado en 2026 no se devuelve como si fuera de 2027: se regenera una vez y se vuelve a cachear. Si el currículo cambió de fondo, la coordinadora publica `worksheet-v2` y marca `worksheet-v1` como histórica; nunca se borra, porque se necesita para auditar en qué se gastó el presupuesto de 2026.
+
+El efecto sobre el costo es doble: se reutiliza el trabajo caro —diseñar y probar el prompt—, y se evita reutilizar una respuesta que ya no corresponde al año.
+
 ## A — Modelo de datos
 
 La fuente de verdad del piloto es una base relacional central y un almacén local en el nodo. La sincronización es eventual y explícita por versión; no se promete consistencia global en tiempo real durante un corte.
@@ -112,6 +139,8 @@ La fuente de verdad del piloto es una base relacional central y un almacén loca
 | `context_chunks` | `chunk_id`, `curriculum_version`, `tags`, `content_hash`, `token_count` |
 | `ai_generations` | `generation_id`, `request_hash`, `model`, `input_tokens`, `output_tokens`, `estimated_cost`, `cache_hit` |
 | `token_baselines` | `task_id`, `model`, `curriculum_version`, `baseline_tokens`, `gateway_tokens`, `reduction_pct` |
+| `users` | `user_id`, `role`, `school_id`, `courses`, `token_quota`, `status` |
+| `prompt_templates` | `prompt_id`, `version`, `resource_type`, `canonical_text`, `required_fields`, `budget`, `born_curriculum_version`, `state`, `author_id`, `created_at` |
 
 ## L — Componentes
 
@@ -122,8 +151,10 @@ La fuente de verdad del piloto es una base relacional central y un almacén loca
 | Sync Agent del nodo | Compara manifiestos, descarga diferencias, reanuda y verifica bloques. | `FR-DIS-02..05` |
 | Caché y catálogo local | Publica la última versión `READY` a la LAN/Wi-Fi. | `FR-DIS-04/05` |
 | Cola local / Sync Outbox | Conserva y reintenta avances, incidencias y solicitudes. | `FR-DIS-06` |
+| Identidad y sesión | Autentica al docente y expone rol, escuela, cursos y cuota. | `NFR-SEC-01`, `FR-AI-07` |
 | Formulario IA | Recoge intención con campos definidos. | `FR-AI-01` |
-| Clarification Gate | Detecta omisiones y formula preguntas concretas. | `FR-AI-03` |
+| Clarification Gate | Detecta omisiones y formula preguntas concretas; toma los campos obligatorios de la plantilla vigente. | `FR-AI-03` |
+| Biblioteca de prompts | Versiona plantillas, marca la vigente del año y conserva las históricas. | `FR-AI-05/06` |
 | Prompt Rewriter / Context Builder | Construye la solicitud y el prompt canónico mínimo. | `FR-AI-02/04` |
 | Budget Guard y caché | Aplica topes y evita invocaciones equivalentes. | `FR-AI-05/06` |
 | Medidor y reporte | Registra consumo y compara con baseline. | `FR-AI-07/08` |
