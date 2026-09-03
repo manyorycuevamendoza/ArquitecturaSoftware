@@ -1,0 +1,18 @@
+{
+  "requestId": "ia-2026-w12-0042",
+  "schoolId": "PE-AYA-041",
+  "course": "Comunicación",
+  "grade": "4.° primaria",
+  "objective": "Practicar inferencias a partir de una lectura breve",
+  "resourceType": "ficha de trabajo",
+  "durationMinutes": 25,
+  "outputFormat": "Markdown con lectura, 4 preguntas y rúbrica breve",
+  "constraints": ["lenguaje claro", "sin enlaces externos", "máximo 350 palabras"],
+  "teacherNotes": "Usar contexto de una comunidad agrícola.",
+  "curriculumVersion": "2026.2",
+  "selectedChunkIds": ["COM-4-INF-02", "COM-4-RUB-01"],
+  "templateVersion": "worksheet-v1",
+  "budget": { "maxInputTokens": 700, "maxOutputTokens": 450 },
+  "clarifications": [],
+  "canonicalPrompt": "Crea una ficha de trabajo de Comunicación para 4.° primaria. Objetivo: practicar inferencias a partir de una lectura breve. Duración: 25 minutos. Formato: Markdown con lectura, 4 preguntas y rúbrica breve. Restricciones: lenguaje claro; sin enlaces externos; máximo 350 palabras. Contexto permitido: comunidad agrícola. Usa solo los fragmentos curriculares seleccionados."
+}
