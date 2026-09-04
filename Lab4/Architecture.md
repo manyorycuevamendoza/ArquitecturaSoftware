@@ -2,7 +2,12 @@
 
 La arquitectura resuelve dos restricciones independientes: las escuelas tienen Internet limitado y con cortes, y el costo de IA debe reducirse de forma demostrable. Los materiales se distribuyen exclusivamente por la red: el Nodo Escolar Local descarga diferencias en bloques reanudables, prioriza recursos esenciales y conserva la última versión válida. El uso de IA se controla con una solicitud intermedia antes de cualquier llamada al modelo.
 
-El diagrama editable es [02-topdown-remoteschooly-v2.excalidraw](Diagrams/02-topdown-remoteschooly-v2.excalidraw): un solo lienzo Top Down Design con tres iteraciones acumulativas y una frase numerada por paso. La versión resumida anterior queda en [01-topdown-remoteschooly.excalidraw](Diagrams/01-topdown-remoteschooly.excalidraw).
+Hay dos lienzos editables y se complementan:
+
+- [03-flujo-narrativo-remoteschooly.excalidraw](Diagrams/03-flujo-narrativo-remoteschooly.excalidraw) — el recorrido completo contado de izquierda a derecha en lenguaje no técnico: 24 momentos en tres capítulos, con el nombre técnico de cada pieza como nota al pie de la caja. Sirve para explicar **qué ocurre**.
+- [02-topdown-remoteschooly-v2.excalidraw](Diagrams/02-topdown-remoteschooly-v2.excalidraw) — el Top Down Design con tres iteraciones acumulativas y una frase numerada por paso. Sirve para sustentar **por qué está diseñado así**.
+
+La versión resumida anterior queda en [01-topdown-remoteschooly.excalidraw](Diagrams/01-topdown-remoteschooly.excalidraw).
 
 ## Iteraciones del diagrama
 
