@@ -1,2 +1,5 @@
 # Lab2 POC ya no se versiona en este repo (se deja en disco, fuera de git)
 Lab2/POC/
+
+__pycache__/
+*.pyc
