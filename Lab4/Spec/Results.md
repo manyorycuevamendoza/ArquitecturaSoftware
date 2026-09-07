@@ -5,7 +5,7 @@
 | Dimensión | Puntaje | Evidencia |
 | --- | ---: | --- |
 | Cobertura de personas | 8.9/10 | Rosa, Diego y Valeria tienen necesidades diferenciadas y requisitos trazables. |
-| Cobertura de los dos problemas | 9.3/10 | `FR-DIS-01..11` cubren red limitada y cortes; `FR-AI-01..12` cubren reducción de tokens. Cada requisito traza a un punto de decisión resuelto y a un lienzo. |
+| Cobertura de los dos problemas | 9.3/10 | `FR-DIS-01..13` cubren red limitada y cortes; `FR-AI-01..15` cubren reducción de tokens. Cada requisito traza a un punto de decisión resuelto y a un lienzo. |
 | Verificabilidad | 9.1/10 | Diferencias, rangos, reanudación, estado `READY`, límites y fórmula de ahorro son observables. |
 | Claridad de alcance | 9.0/10 | Se excluyen transporte físico, Internet satelital y disponibilidad total. |
 | Factibilidad arquitectónica | 8.8/10 | Un servicio modular, almacenamiento HTTPS y un Sync Agent local resuelven el piloto sin microservicios prematuros. |
@@ -22,6 +22,7 @@ justifica, no el componente que lo implementa. El desglose completo está en
 | --- | --- | --- |
 | Rosa | Una descarga reinicia, la activación queda a medias, o la sincronización le quita la red durante la clase. | `FR-DIS-02/03/07/10`, `NFR-NET-01/03`, `NFR-INT-03` |
 | Rosa | Pide material a la IA y pierde el tiempo o el control del gasto. | `FR-AI-01/03/11/12`, `NFR-USA-01` |
+| Rosa | No puede entrar al sistema durante un corte porque el login depende de Lima. | `FR-AI-13`, `NFR-SEC-02` |
 | Diego | Un corte deja el material incompleto, inaccesible, o pierde las semanas sin señal. | `FR-DIS-04/05/09`, `NFR-NET-02`, `NFR-INT-01`, `NFR-AVL-01`, `NFR-PER-01` |
 | Diego | Su avance se pierde o se registra dos veces. | `FR-DIS-06/08` |
 | Valeria | Debe saber qué versión llegó a cada escuela y auditar el orden real de los hechos. | `FR-DIS-01/08`, `NFR-INT-02`, `NFR-AUD-01/02` |

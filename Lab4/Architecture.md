@@ -21,8 +21,8 @@ Cada iteración conserva lo anterior; ninguna sustituye a la previa.
 
 ## R — Requerimientos
 
-- `FR-DIS-01..11` cubren publicación de estado completo, resolución de los cuatro casos por archivo, reanudación, prioridad, verificación, cola idempotente, activación atómica, doble marca de tiempo, salto de versiones, planificación de ventana y gestión de espacio.
-- `FR-AI-01..12` convierten un pedido libre en una solicitud concreta, limitada y medible: identidad, biblioteca de plantillas, aclaración sin costo, archivo intermedio acotado, caché por huella, doble presupuesto, cola con cuota reservada y reporte comparable.
+- `FR-DIS-01..13` cubren publicación de estado completo, resolución de los cuatro casos por archivo, reanudación, prioridad, verificación, cola idempotente, activación atómica, doble marca de tiempo, salto de versiones, planificación de ventana y gestión de espacio.
+- `FR-AI-01..15` convierten un pedido libre en una solicitud concreta, limitada y medible: identidad, biblioteca de plantillas, aclaración sin costo, archivo intermedio acotado, caché por huella, doble presupuesto, cola con cuota reservada y reporte comparable.
 - `NFR-NET-01..04` definen el comportamiento ante cortes, bajo ancho de banda y en horario de clase; `NFR-CAP-01/02` fijan el mínimo de disco por nodo y el umbral de alerta; `NFR-COST-01..04` hacen comprobable la reducción de costo y acotan qué tarea es comparable.
 
 La trazabilidad completa está en [Requirements/](Requirements/) y la evaluación en [Spec/Results.md](Spec/Results.md).
@@ -116,6 +116,8 @@ El archivo intermedio es la frontera de costo: conserva solo intención pedagóg
 
 El docente entra con su cuenta antes de tocar el formulario. El login no es un trámite: sin identidad no hay cuota por docente, ni consumo atribuible por escuela en el ledger, ni permiso para editar plantillas. Un pedido anónimo no se puede presupuestar ni auditar, y el reporte de reducción dejaría de ser comparable.
 
+La sesión se resuelve **en el nodo**, no en Lima. El nodo mantiene una réplica de identidad y cuota de los docentes de su escuela, así Rosa puede entrar y trabajar durante un corte. El consumo hecho sin red queda pendiente y se reconcilia cuando la conexión vuelve; si el saldo local y el central discrepan, manda el de la central. Un login que dependiera de Lima rompería el diseño offline-first justo en el punto donde más se necesita.
+
 El prompt tampoco vive en la pantalla del docente. Se guarda como **plantilla versionada** en una biblioteca: `prompt_id`, `version`, texto canónico, campos obligatorios, autor, estado y la versión curricular con la que nació. El Clarification Gate consulta esa plantilla para saber qué campos exige el tipo de recurso; no inventa las preguntas ni las pide al modelo.
 
 ### Reutilización de un prompt entre años (2026 → 2027)
@@ -156,7 +158,7 @@ La fuente de verdad del piloto es una base relacional central y un almacén loca
 | Sync Agent del nodo | Compara manifiestos, descarga diferencias, reanuda, verifica, activa por puntero y planifica la ventana. | `FR-DIS-02..05`, `FR-DIS-07/09/10/11` |
 | Caché y catálogo local | Publica la última versión `READY` a la LAN/Wi-Fi. | `FR-DIS-04/05` |
 | Cola local / Sync Outbox | Conserva y reintenta avances e incidencias con identificador congelado al crear; encola solicitudes de IA con la cuota reservada. | `FR-DIS-06/08`, `FR-AI-11` |
-| Identidad y sesión | Autentica al docente y expone rol, escuela, cursos y cuota. | `FR-AI-09`, `NFR-SEC-01` |
+| Identidad y sesión | Autentica al docente contra una réplica local, expone rol, escuela, cursos y cuota, y reconcilia el consumo con la central al volver la red. | `FR-AI-09`, `FR-AI-13/14`, `NFR-SEC-01/02` |
 | Formulario IA | Recoge intención con campos definidos. | `FR-AI-01` |
 | Clarification Gate | Evalúa en orden plantilla, cuota y campos; formula preguntas concretas sin invocar al modelo. | `FR-AI-03` |
 | Biblioteca de prompts | Versiona plantillas, marca la vigente del año y conserva las históricas. | `FR-AI-10` |

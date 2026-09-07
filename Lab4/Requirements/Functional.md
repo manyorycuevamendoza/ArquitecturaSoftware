@@ -23,6 +23,8 @@ punto de decisión se resolvió.
 | FR-DIS-09 | El Nodo deberá poder pasar de cualquier versión previa a la más reciente sin aplicar las versiones intermedias. | Una escuela con tres semanas de atraso compara su manifiesto local contra el manifiesto más reciente publicado, descarga el acumulado resultante y activa directamente la versión más nueva. No se descargan versiones de archivos que una versión posterior ya reemplazó, ni se ejecutan activaciones intermedias. | Diego, estudiante | PD-4 |
 | FR-DIS-10 | El Nodo deberá evaluar red, horario de clase y energía disponible antes de abrir una transferencia. | Sin señal utilizable no se intenta transferir y la clase continúa sirviéndose desde la caché local. Sin energía suficiente no se inicia la transferencia. En horario de clase la transferencia se ejecuta con tope de ancho de banda; si además la energía es insuficiente, no se ejecuta. | Rosa, docente rural | PD-7 |
 | FR-DIS-11 | El Nodo deberá verificar el espacio disponible antes de descargar y liberar según una jerarquía fija cuando no alcance. | Si la versión nueva no cabe, se libera en este orden: multimedia opcional de versiones antiguas, luego versiones antiguas completas. Nunca se elimina la versión activa, la cola de eventos sin enviar ni el índice de bloques validados. Con la cola pendiente y el disco lleno, la cola se envía antes de liberar espacio. | Administrador regional | PD-8 |
+| FR-DIS-12 | El sistema deberá permitir el alta de un nodo nuevo sin ninguna versión previa, entregándole la llave pública de verificación por un canal distinto al del contenido. | Un nodo recién instalado obtiene la llave pública de la central durante su aprovisionamiento, no dentro del primer paquete que descarga. Con esa llave verifica la firma de su primer manifiesto y realiza una primera carga completa. Un nodo sin llave aprovisionada no activa contenido, aunque el paquete llegue íntegro. | Administrador regional | PD-2 |
+| FR-DIS-13 | La central deberá validar el contenido de cada evento de retorno, no solo su identificador. | Antes de aplicarlo, la central comprueba que el evento pertenece a una escuela existente, que su tipo es conocido, que sus campos obligatorios están presentes y que el hash declarado corresponde al contenido recibido. Un evento con identificador nuevo pero contenido inválido se rechaza con motivo registrado y no se aplica; la deduplicación por identificador no sustituye a la validación. | Valeria, coordinadora | PD-3 |
 
 ## Problema 2: gobernanza del gasto en IA
 
@@ -40,6 +42,9 @@ punto de decisión se resolvió.
 | FR-AI-10 | El sistema deberá conservar los prompts como plantillas versionadas en una biblioteca, no en la conversación del docente. | Cada plantilla guarda `prompt_id`, versión, texto canónico, campos obligatorios, presupuesto, autor, estado y versión curricular de origen. Publicar una plantilla nueva marca la anterior como histórica; ninguna se elimina, porque se necesita para auditar el gasto del periodo en que estuvo vigente. El Clarification Gate lee de la plantilla qué campos exige y no los infiere. | Valeria, coordinadora | PD-9 |
 | FR-AI-11 | El sistema deberá encolar la solicitud lista cuando no haya conexión, reservando la cuota, y revalidarla al drenar la cola. | Una solicitud sin red queda `PENDING_NETWORK` con su cuota reservada, de modo que varias solicitudes encoladas no puedan exceder el presupuesto del periodo al enviarse juntas. Al recuperar conexión, cada solicitud recalcula su huella contra la versión curricular vigente y vuelve a pasar por campos, caché y presupuesto antes de invocar al proveedor: estar encolada no es una autorización de gasto. | Rosa, docente rural | PD-10, PD-12 |
 | FR-AI-12 | Un bloqueo por presupuesto deberá devolver el control al docente y no reintentar automáticamente. | Cuando la solicitud no cabe en el presupuesto y no se puede recortar, el sistema explica qué reducir y no vuelve a intentar por su cuenta. El bloqueo se registra con cero tokens externos. | Rosa, docente rural | PD-12 |
+| FR-AI-13 | El docente deberá poder iniciar sesión y trabajar sin conexión, contra una réplica local de identidad y cuota que se reconcilia con la central al volver la red. | El nodo mantiene, para los docentes de su escuela, identificador, rol, cursos y cuota vigente. Rosa inicia sesión durante un corte y el nodo resuelve la sesión sin consultar a la central. El consumo realizado sin red queda pendiente de reconciliación; al recuperar conexión el nodo envía el consumo y recibe la cuota actualizada. Si la réplica local y la central discrepan, prevalece el saldo de la central y la diferencia se registra. | Rosa, docente rural | PD-9 |
+| FR-AI-14 | El sistema deberá administrar cuota por docente y por escuela, de modo que varios docentes de la misma escuela no se consuman entre sí el presupuesto sin control. | Cada docente tiene cuota propia y la escuela un techo agregado; una solicitud se acepta solo si cabe en las dos. Dos docentes que piden a la vez en la misma escuela no pueden superar el techo de la escuela, ni siquiera con solicitudes encoladas. El reporte de consumo se puede desagregar por docente, por curso y por escuela. | Valeria, coordinadora | PD-9 |
+| FR-AI-15 | Cada identificador de la cadena de IA deberá tener un lugar de origen declarado y ser único. | `requestId` nace en el nodo al crear el archivo intermedio y no cambia aunque la solicitud se encole y se reintente. La huella de caché se calcula en el Gateway sobre plantilla, versión, campos, IDs de fragmentos, modelo y versión curricular. `generationId` nace en la central al registrar una generación y es lo que devuelve un acierto de caché. Un reintento reutiliza `requestId` y no crea un segundo registro de consumo. | Valeria, coordinadora | PD-10 |
 
 ## De quién nace cada requisito
 
@@ -49,10 +54,10 @@ necesidad que la justifique.
 
 | Persona | Lo que necesita | Requisitos que nacen de ahí |
 | --- | --- | --- |
-| **Rosa**, docente rural | Enseñar en la fecha en que toca, con o sin señal, y pedir material sin perder el tiempo ni gastar de más. | `FR-DIS-02`, `FR-DIS-03`, `FR-DIS-07`, `FR-DIS-10`, `FR-AI-01`, `FR-AI-03`, `FR-AI-11`, `FR-AI-12`, `NFR-NET-01`, `NFR-NET-03`, `NFR-INT-03`, `NFR-USA-01` |
+| **Rosa**, docente rural | Enseñar en la fecha en que toca, con o sin señal, y pedir material sin perder el tiempo ni gastar de más. | `FR-DIS-02`, `FR-DIS-03`, `FR-DIS-07`, `FR-DIS-10`, `FR-AI-01`, `FR-AI-03`, `FR-AI-11`, `FR-AI-12`, `FR-AI-13`, `NFR-NET-01`, `NFR-NET-03`, `NFR-INT-03`, `NFR-USA-01` |
 | **Diego**, estudiante | Acceder al curso completo aunque Internet se caiga, y que su avance no se pierda ni se cuente dos veces. | `FR-DIS-04`, `FR-DIS-05`, `FR-DIS-06`, `FR-DIS-09`, `NFR-NET-02`, `NFR-INT-01`, `NFR-AVL-01`, `NFR-PER-01` |
-| **Valeria**, coordinadora de contenidos | Publicar versiones correctas, auditar qué llegó a cada escuela y demostrar el ahorro en vez de prometerlo. | `FR-DIS-01`, `FR-DIS-08`, `FR-AI-02`, `FR-AI-04`, `FR-AI-05`, `FR-AI-06`, `FR-AI-07`, `FR-AI-08`, `FR-AI-09`, `FR-AI-10`, `NFR-NET-04`, `NFR-INT-02`, `NFR-COST-01..04`, `NFR-AUD-01/02`, `NFR-SEC-01` |
-| **Administrador regional** | Dimensionar y supervisar el nodo de la escuela sin viajar hasta ella. | `FR-DIS-11`, `NFR-CAP-01`, `NFR-CAP-02` |
+| **Valeria**, coordinadora de contenidos | Publicar versiones correctas, auditar qué llegó a cada escuela y demostrar el ahorro en vez de prometerlo. | `FR-DIS-01`, `FR-DIS-08`, `FR-AI-02`, `FR-AI-04`, `FR-AI-05`, `FR-AI-06`, `FR-AI-07`, `FR-AI-08`, `FR-AI-09`, `FR-AI-10`, `FR-AI-14`, `FR-AI-15`, `FR-DIS-13`, `NFR-NET-04`, `NFR-INT-02`, `NFR-COST-01..04`, `NFR-AUD-01/02`, `NFR-SEC-01` |
+| **Administrador regional** | Dimensionar y supervisar el nodo de la escuela sin viajar hasta ella. | `FR-DIS-11`, `FR-DIS-12`, `NFR-CAP-01`, `NFR-CAP-02`, `NFR-SEC-02` |
 
 Los proveedores de almacenamiento y de IA no aparecen como responsables: son
 sistemas externos, no tienen una necesidad propia dentro del caso.
@@ -73,3 +78,33 @@ sistemas externos, no tienen una necesidad propia dentro del caso.
 | Valeria | No puede auditar en qué se gastó el presupuesto porque el prompt vivía en un chat. | `FR-AI-07`, `FR-AI-10` |
 | Administrador regional | El nodo no puede activar nunca porque se dimensionó con el tamaño del paquete. | `NFR-CAP-01` |
 | Administrador regional | El disco llega al 100% y ni siquiera se puede escribir el registro del fallo. | `NFR-CAP-02` |
+
+## Preguntas de sustentación y el requisito que las responde
+
+El profesor pregunta por lo que el diagrama no dice: qué hace exactamente un
+componente, qué pasa en el camino alterno, dónde nace un identificador, y qué
+ocurre cuando hay muchos de algo. Cada pregunta previsible tiene aquí el
+requisito que la contesta.
+
+| Pregunta | Requisito |
+| --- | --- |
+| ¿Cómo entra Rosa si no hay Internet? | `FR-AI-13`: la sesión se resuelve contra una réplica local de identidad y cuota. |
+| ¿Para qué sirve el login, más allá del trámite? | `FR-AI-09`: sin identidad no hay cuota, ni consumo atribuible, ni auditoría. |
+| ¿Qué pasa si dos docentes de la misma escuela piden a la vez? | `FR-AI-14`: cuota por docente y techo por escuela; se valida contra las dos. |
+| ¿Qué hace exactamente el Clarification Gate? | `FR-AI-03`: evalúa plantilla, cuota y campos en ese orden, y pregunta sin invocar al modelo. |
+| ¿Qué hace el Budget Guard? | `FR-AI-05`: aplica presupuesto de entrada y de salida, y bloquea antes de enviar. |
+| ¿Dónde nace el identificador de una solicitud? | `FR-AI-15`: `requestId` en el nodo, la huella en el Gateway, `generationId` en la central. |
+| ¿Dónde nace el identificador de un avance del estudiante? | `FR-DIS-06`: en el nodo, al crear el evento, nunca al transmitirlo. |
+| ¿En el retorno no se valida nada? | `FR-DIS-13`: la central valida contenido, no solo el identificador; deduplicar no es validar. |
+| ¿Qué pasa con una escuela nueva, sin ninguna versión? | `FR-DIS-12` para la llave y la primera carga; `FR-DIS-05` para el caso sin respaldo. |
+| ¿Cómo verifica la firma un nodo recién instalado? | `FR-DIS-12`: la llave pública llega en el aprovisionamiento, por un canal distinto al contenido. |
+| ¿Qué pasa si la escuela estuvo tres semanas sin señal? | `FR-DIS-09`: salta a la más reciente sin aplicar las intermedias. |
+| ¿Qué pasa si se corta la luz justo al activar? | `FR-DIS-07` y `NFR-INT-03`: se mueve un puntero; nunca hay media versión visible. |
+| ¿Qué pasa si se llena el disco? | `FR-DIS-11`: jerarquía de borrado; la cola de eventos nunca se sacrifica. |
+| ¿Qué pasa si sincronizan las 500 escuelas a la vez? | `NFR-NET-04`: espera aleatoria propia dentro de la ventana. |
+| ¿Para qué sirve el reporte de reducción? | `FR-AI-08` y `NFR-COST-03`: hace comprobable el 40% y define qué tarea es comparable. |
+| ¿Por qué guardan dos fechas por evento? | `FR-DIS-08`: la del nodo cuenta cuándo pasó; la de la central ordena la auditoría. |
+| ¿Qué pasa si el reloj del nodo está mal? | `FR-DIS-06` y `NFR-AUD-02`: el identificador no depende del reloj; el orden lo pone la central. |
+| ¿Se puede cambiar la llave de firma sin ir a la escuela? | `NFR-SEC-02`: rotación con periodo de solapamiento entre llave anterior y nueva. |
+| ¿Un prompt de 2026 sirve en 2027? | `FR-AI-06`: la versión curricular entra en la huella; una huella vieja no se entrega. |
+| ¿Qué pasa con una solicitud encolada cuando vuelve la red? | `FR-AI-11`: recalcula la huella y vuelve a pasar por campos, caché y presupuesto. |

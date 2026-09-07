@@ -47,6 +47,7 @@ persona tiene la necesidad que lo justifica, no qué componente lo implementa.
 | NFR-AUD-01 | Sincronizaciones e invocaciones IA son auditables con identificador, versión, actor, fecha y resultado; no se registra contenido sensible innecesario del estudiante. | Valeria, coordinadora | PD-3 |
 | NFR-AUD-02 | El orden temporal de la auditoría se establece con la hora de la central, no con la del nodo. Un nodo con el reloj desviado produce registros con hora local incorrecta pero conserva orden e identidad correctos. | Valeria, coordinadora | PD-6 |
 | NFR-SEC-01 | Solo los roles autorizados pueden publicar contenido, administrar un nodo, editar plantillas de prompt o ver reportes de costo; los clientes LAN solo leen sus recursos permitidos. | Valeria, coordinadora | PD-9 |
+| NFR-SEC-02 | La sesión resuelta sin conexión caduca en un plazo configurado y se revalida contra la central en la siguiente ventana de red. La llave pública de verificación de manifiestos se puede rotar sin reinstalar el nodo: durante la rotación el nodo acepta la llave anterior y la nueva por un periodo declarado. | Administrador regional | PD-9 |
 | NFR-USA-01 | Al probar con cinco docentes, al menos cuatro completan una solicitud IA válida o responden una aclaración sin asistencia y entienden el estado "pendiente de sincronización". | Rosa, docente rural | PD-9 |
 
 ## Alcance declarado
