@@ -8,16 +8,16 @@ RemoteSchooly distribuye educación semanal a pueblos remotos del Perú y contro
 
 | Entregable | Archivo |
 | --- | --- |
-| Enunciado interpretado, alcance y supuestos | [Problema.md](1-Problema/Problema.md) |
-| Usuarios, roles y usuario modelo | [Usuarios.md](2-Personas/Usuarios.md) |
-| Personas | [Personas/](2-Personas/) |
-| Requerimientos funcionales | [Requirements/Functional.md](3-Requerimientos/Functional.md) |
-| Requerimientos no funcionales | [Requirements/NonFunctional.md](3-Requerimientos/NonFunctional.md) |
-| Especificación completa | [SPEC-TEMPLATE.md](5-Especificacion/SPEC-TEMPLATE.md) |
-| Evaluación de requisitos | [Spec/Results.md](5-Especificacion/Results.md) |
-| Diseño R.E.D.A.L.E. y happy paths | [Architecture.md](4-Arquitectura/Architecture.md) |
+| Enunciado interpretado, alcance y supuestos | [1-Problema/Problema.md](1-Problema/Problema.md) |
+| Usuarios, roles y usuario modelo | [2-Personas/Usuarios.md](2-Personas/Usuarios.md) |
+| Personas | [2-Personas/](2-Personas/) |
+| Requerimientos funcionales | [3-Requerimientos/Functional.md](3-Requerimientos/Functional.md) |
+| Requerimientos no funcionales | [3-Requerimientos/NonFunctional.md](3-Requerimientos/NonFunctional.md) |
+| Especificación completa | [5-Especificacion/SPEC-TEMPLATE.md](5-Especificacion/SPEC-TEMPLATE.md) |
+| Evaluación de requisitos | [5-Especificacion/Results.md](5-Especificacion/Results.md) |
+| Diseño R.E.D.A.L.E. y happy paths | [4-Arquitectura/Architecture.md](4-Arquitectura/Architecture.md) |
 | **Diagramas y enlaces de Excalidraw** | [Diagrams/](Diagrams/README.md) |
-| Ejemplo de solicitud intermedia | [Examples/solicitud-ia.example.json](4-Arquitectura/Examples/solicitud-ia.example.json) |
+| Ejemplo de solicitud intermedia | [4-Arquitectura/Examples/solicitud-ia.example.json](4-Arquitectura/Examples/solicitud-ia.example.json) |
 
 ## Qué diagrama usar
 

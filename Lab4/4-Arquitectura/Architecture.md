@@ -24,7 +24,7 @@ Cada iteración conserva lo anterior; ninguna sustituye a la previa.
 - `FR-AI-01..16` convierten un pedido libre en una solicitud concreta, limitada y medible: identidad, biblioteca de plantillas, aclaración sin costo, archivo intermedio acotado, caché por huella, doble presupuesto, cola con cuota reservada y reporte comparable.
 - `NFR-NET-01..04` definen el comportamiento ante cortes, bajo ancho de banda y en horario de clase; `NFR-CAP-01/02` fijan el mínimo de disco por nodo y el umbral de alerta; `NFR-COST-01..04` hacen comprobable la reducción de costo y acotan qué tarea es comparable.
 
-La trazabilidad completa está en [Requirements/](../3-Requerimientos/) y la evaluación en [Spec/Results.md](../5-Especificacion/Results.md).
+La trazabilidad completa está en [3-Requerimientos/](../3-Requerimientos/) y la evaluación en [5-Especificacion/Results.md](../5-Especificacion/Results.md).
 
 ## E — Estimaciones iniciales
 
