@@ -5,7 +5,7 @@
 | Dimensión | Puntaje | Evidencia |
 | --- | ---: | --- |
 | Cobertura de personas | 8.9/10 | Rosa, Diego y Valeria tienen necesidades diferenciadas y requisitos trazables. |
-| Cobertura de los dos problemas | 9.3/10 | `FR-DIS-01..13` cubren red limitada y cortes; `FR-AI-01..15` cubren reducción de tokens. Cada requisito traza a un punto de decisión resuelto y a un lienzo. |
+| Cobertura de los dos problemas | 9.3/10 | `FR-DIS-01..13` cubren red limitada y cortes; `FR-AI-01..16` cubren reducción de tokens. Cada requisito traza a un punto de decisión resuelto y a un lienzo. |
 | Verificabilidad | 9.1/10 | Diferencias, rangos, reanudación, estado `READY`, límites y fórmula de ahorro son observables. |
 | Claridad de alcance | 9.0/10 | Se excluyen transporte físico, Internet satelital y disponibilidad total. |
 | Factibilidad arquitectónica | 8.8/10 | Un servicio modular, almacenamiento HTTPS y un Sync Agent local resuelven el piloto sin microservicios prematuros. |

@@ -22,7 +22,7 @@ Cada iteración conserva lo anterior; ninguna sustituye a la previa.
 ## R — Requerimientos
 
 - `FR-DIS-01..13` cubren publicación de estado completo, resolución de los cuatro casos por archivo, reanudación, prioridad, verificación, cola idempotente, activación atómica, doble marca de tiempo, salto de versiones, planificación de ventana y gestión de espacio.
-- `FR-AI-01..15` convierten un pedido libre en una solicitud concreta, limitada y medible: identidad, biblioteca de plantillas, aclaración sin costo, archivo intermedio acotado, caché por huella, doble presupuesto, cola con cuota reservada y reporte comparable.
+- `FR-AI-01..16` convierten un pedido libre en una solicitud concreta, limitada y medible: identidad, biblioteca de plantillas, aclaración sin costo, archivo intermedio acotado, caché por huella, doble presupuesto, cola con cuota reservada y reporte comparable.
 - `NFR-NET-01..04` definen el comportamiento ante cortes, bajo ancho de banda y en horario de clase; `NFR-CAP-01/02` fijan el mínimo de disco por nodo y el umbral de alerta; `NFR-COST-01..04` hacen comprobable la reducción de costo y acotan qué tarea es comparable.
 
 La trazabilidad completa está en [Requirements/](Requirements/) y la evaluación en [Spec/Results.md](Spec/Results.md).
