@@ -15,7 +15,7 @@ idempotente.
 
 ### Problema 2: el gasto excesivo de tokens
 
-**https://excalidraw.com/#json=FT1N8fCn9sO5zLKkbAHmO,5KWc-HgQJH2RTm3lcuVCAw**
+**https://excalidraw.com/#json=BmDh4K8AmVviYehGmCnEO,49CS3hPCLYUat6AmqW3C1g**
 
 Cuatro puntos de decisión (PD-9 a PD-12), 18 casos, 10 peores casos. Ocho
 escenas donde cada paso descarta una razón para llamar al modelo: se pregunta,
