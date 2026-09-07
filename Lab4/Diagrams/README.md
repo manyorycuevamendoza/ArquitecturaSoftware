@@ -6,7 +6,7 @@ Se abren en el navegador, sin descargar nada.
 
 ### Problema 1: distribución con Internet intermitente
 
-**https://excalidraw.com/#json=6NmtnSrpFmLvUKguJUbAN,mlAwlfJVLCijv9M1_9Sbkg**
+**https://excalidraw.com/#json=BKyWYKFVjCRWK2Y3BvpAT,iRfRV975VZCEajOceZoatA**
 
 Ocho puntos de decisión (PD-1 a PD-8), 36 casos, 24 peores casos. El recorrido
 completo de Valeria a Valeria: publicación, ventana de sincronización, qué
