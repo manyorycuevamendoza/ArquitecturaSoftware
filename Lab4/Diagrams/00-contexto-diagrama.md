@@ -947,6 +947,8 @@ distribución (iteración #2) y PD-9 a PD-12 la gobernanza de tokens (iteración
 | --- | --- |
 | [02-topdown-remoteschooly-v2.excalidraw](02-topdown-remoteschooly-v2.excalidraw) | Top Down Design: personas, requerimientos y las tres iteraciones acumulativas |
 | [03-arquitectura-remoteschooly.excalidraw](03-arquitectura-remoteschooly.excalidraw) | Arquitectura por zonas con sus bases de datos, los peores casos P1 a P34 sobre el componente que los ataja, y la historia en diez escenas |
+| [Problema1/](Problema1/README.md) | Distribución con Internet intermitente: PD-1 a PD-8, 36 casos, P1 a P24. Cinco lienzos por bloque más el recorrido completo |
+| [Problema2/problema2.excalidraw](Problema2/README.md) | Gasto excesivo de tokens: PD-9 a PD-12, 18 casos, P25 a P34, y el cruce de 16 filas del AI Gateway con sus 9 casos vivos |
 
 ## Registro
 
@@ -957,3 +959,4 @@ distribución (iteración #2) y PD-9 a PD-12 la gobernanza de tokens (iteración
 | 2026-09-03 | PD-5 a PD-8 resueltos. Se define la activación por puntero, el identificador de evento independiente del reloj, la prioridad de la clase sobre la sincronización y la jerarquía de borrado. Se agregan P15 a P24 |
 | 2026-09-03 | Diagrama de arquitectura `03-arquitectura-remoteschooly.excalidraw` generado desde este contexto. Se corrige P18, que duplicaba a P6 |
 | 2026-09-03 | PD-9 a PD-12 resueltos (iteración #3). Se define el orden de evaluación del Gate, la huella con versión curricular, la clasificación del archivo intermedio y el doble presupuesto. Se agregan P25 a P34 |
+| 2026-09-06 | Diagrama del Problema 2 (`Problema2/problema2.excalidraw`) generado desde PD-9 a PD-12 y desde el cruce de 16 filas de `01-decision-ai-gateway.md`. Las escenas se ordenan por el gasto, no por la numeración: PD-11 va antes que PD-10 porque sin prompt canónico no hay huella que buscar |
