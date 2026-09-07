@@ -158,8 +158,8 @@ No se entrega sin correr esto. Cada pasada agrega una comprobación.
 
 ```python
 import re, io
-fn = io.open("Requirements/Functional.md", encoding="utf-8").read()
-nf = io.open("Requirements/NonFunctional.md", encoding="utf-8").read()
+fn = io.open("3-Requerimientos/Functional.md", encoding="utf-8").read()
+nf = io.open("3-Requerimientos/NonFunctional.md", encoding="utf-8").read()
 personas = ("Rosa", "Diego", "Valeria", "Administrador regional")
 filas = re.findall(r'^\| ((?:N?FR)-[A-Z]+-\d+) \|(.+)$', fn + "\n" + nf, re.M)
 definidos = {f for f, _ in filas}

@@ -8,16 +8,16 @@ RemoteSchooly distribuye educación semanal a pueblos remotos del Perú y contro
 
 | Entregable | Archivo |
 | --- | --- |
-| Enunciado interpretado, alcance y supuestos | [Problema.md](Problema.md) |
-| Usuarios, roles y usuario modelo | [Usuarios.md](Usuarios.md) |
-| Personas | [Personas/](Personas/) |
-| Requerimientos funcionales | [Requirements/Functional.md](Requirements/Functional.md) |
-| Requerimientos no funcionales | [Requirements/NonFunctional.md](Requirements/NonFunctional.md) |
-| Especificación completa | [SPEC-TEMPLATE.md](SPEC-TEMPLATE.md) |
-| Evaluación de requisitos | [Spec/Results.md](Spec/Results.md) |
-| Diseño R.E.D.A.L.E. y happy paths | [Architecture.md](Architecture.md) |
+| Enunciado interpretado, alcance y supuestos | [Problema.md](1-Problema/Problema.md) |
+| Usuarios, roles y usuario modelo | [Usuarios.md](2-Personas/Usuarios.md) |
+| Personas | [Personas/](2-Personas/) |
+| Requerimientos funcionales | [Requirements/Functional.md](3-Requerimientos/Functional.md) |
+| Requerimientos no funcionales | [Requirements/NonFunctional.md](3-Requerimientos/NonFunctional.md) |
+| Especificación completa | [SPEC-TEMPLATE.md](5-Especificacion/SPEC-TEMPLATE.md) |
+| Evaluación de requisitos | [Spec/Results.md](5-Especificacion/Results.md) |
+| Diseño R.E.D.A.L.E. y happy paths | [Architecture.md](4-Arquitectura/Architecture.md) |
 | **Diagramas y enlaces de Excalidraw** | [Diagrams/](Diagrams/README.md) |
-| Ejemplo de solicitud intermedia | [Examples/solicitud-ia.example.json](Examples/solicitud-ia.example.json) |
+| Ejemplo de solicitud intermedia | [Examples/solicitud-ia.example.json](4-Arquitectura/Examples/solicitud-ia.example.json) |
 
 ## Qué diagrama usar
 
@@ -42,8 +42,8 @@ Para IA, el docente no conversa directamente con el modelo. Primero completa una
 
 ## Orden de lectura
 
-1. [Problema y supuestos](Problema.md)
-2. [Personas](Personas/)
-3. [Requerimientos](Requirements/)
-4. [Evaluación](Spec/Results.md)
-5. [Arquitectura y diagrama](Architecture.md)
+1. [Problema y supuestos](1-Problema/Problema.md)
+2. [Personas](2-Personas/)
+3. [Requerimientos](3-Requerimientos/)
+4. [Evaluación](5-Especificacion/Results.md)
+5. [Arquitectura y diagrama](4-Arquitectura/Architecture.md)

@@ -3,3 +3,5 @@ Lab2/POC/
 
 __pycache__/
 *.pyc
+
+.DS_Store
