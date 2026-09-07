@@ -21,9 +21,9 @@ Cada iteración conserva lo anterior; ninguna sustituye a la previa.
 
 ## R — Requerimientos
 
-- `FR-DIS-01..06` cubren publicación, sincronización por diferencias, reanudación, prioridad, integridad y cola de pendientes.
-- `FR-AI-01..08` convierten un pedido libre en una solicitud concreta, limitada y medible.
-- `NFR-NET-01/02` definen el comportamiento ante cortes y bajo ancho de banda; `NFR-COST-01/02` hace comprobable la reducción de costo.
+- `FR-DIS-01..11` cubren publicación de estado completo, resolución de los cuatro casos por archivo, reanudación, prioridad, verificación, cola idempotente, activación atómica, doble marca de tiempo, salto de versiones, planificación de ventana y gestión de espacio.
+- `FR-AI-01..12` convierten un pedido libre en una solicitud concreta, limitada y medible: identidad, biblioteca de plantillas, aclaración sin costo, archivo intermedio acotado, caché por huella, doble presupuesto, cola con cuota reservada y reporte comparable.
+- `NFR-NET-01..04` definen el comportamiento ante cortes, bajo ancho de banda y en horario de clase; `NFR-CAP-01/02` fijan el mínimo de disco por nodo y el umbral de alerta; `NFR-COST-01..04` hacen comprobable la reducción de costo y acotan qué tarea es comparable.
 
 La trazabilidad completa está en [Requirements/](Requirements/) y la evaluación en [Spec/Results.md](Spec/Results.md).
 
@@ -153,15 +153,15 @@ La fuente de verdad del piloto es una base relacional central y un almacén loca
 | --- | --- | --- |
 | CMS y publicador | Versiona contenido, genera manifiesto, firma y publica por HTTPS. | `FR-DIS-01` |
 | Almacenamiento HTTPS | Sirve manifiestos y archivos comprimidos con soporte de rangos. | `FR-DIS-02/03` |
-| Sync Agent del nodo | Compara manifiestos, descarga diferencias, reanuda y verifica bloques. | `FR-DIS-02..05` |
+| Sync Agent del nodo | Compara manifiestos, descarga diferencias, reanuda, verifica, activa por puntero y planifica la ventana. | `FR-DIS-02..05`, `FR-DIS-07/09/10/11` |
 | Caché y catálogo local | Publica la última versión `READY` a la LAN/Wi-Fi. | `FR-DIS-04/05` |
-| Cola local / Sync Outbox | Conserva y reintenta avances, incidencias y solicitudes. | `FR-DIS-06` |
-| Identidad y sesión | Autentica al docente y expone rol, escuela, cursos y cuota. | `NFR-SEC-01`, `FR-AI-07` |
+| Cola local / Sync Outbox | Conserva y reintenta avances e incidencias con identificador congelado al crear; encola solicitudes de IA con la cuota reservada. | `FR-DIS-06/08`, `FR-AI-11` |
+| Identidad y sesión | Autentica al docente y expone rol, escuela, cursos y cuota. | `FR-AI-09`, `NFR-SEC-01` |
 | Formulario IA | Recoge intención con campos definidos. | `FR-AI-01` |
-| Clarification Gate | Detecta omisiones y formula preguntas concretas; toma los campos obligatorios de la plantilla vigente. | `FR-AI-03` |
-| Biblioteca de prompts | Versiona plantillas, marca la vigente del año y conserva las históricas. | `FR-AI-05/06` |
+| Clarification Gate | Evalúa en orden plantilla, cuota y campos; formula preguntas concretas sin invocar al modelo. | `FR-AI-03` |
+| Biblioteca de prompts | Versiona plantillas, marca la vigente del año y conserva las históricas. | `FR-AI-10` |
 | Prompt Rewriter / Context Builder | Construye la solicitud y el prompt canónico mínimo. | `FR-AI-02/04` |
-| Budget Guard y caché | Aplica topes y evita invocaciones equivalentes. | `FR-AI-05/06` |
+| Budget Guard y caché | Consulta la caché por huella antes de presupuestar; aplica topes de entrada y de salida y bloquea sin reintentar. | `FR-AI-05/06/12` |
 | Medidor y reporte | Registra consumo y compara con baseline. | `FR-AI-07/08` |
 
 ## E — Escalar
