@@ -292,10 +292,10 @@ Rosa abre la app. El nodo le sirve el material desde la cache local por WiFi. No
 | --- | --- |
 | `Lab4/Architecture.md` | Diseno REDALE completo con flujos, modelo de datos y componentes |
 | `Lab4/README.md` | Indice de entregables y orden de lectura |
-| `Lab4/Diagrams/00-contexto-diagrama.md` | Documento vivo con los 12 PD resueltos, 34 peores casos y frases para el diagrama (959 lineas) |
-| `Lab4/Diagrams/01-topdown-remoteschooly.excalidraw` | Top Down Design original (resumen) |
-| `Lab4/Diagrams/02-topdown-remoteschooly-v2.excalidraw` | Top Down Design por iteraciones con frases numeradas |
-| `Lab4/Diagrams/03-arquitectura-remoteschooly.excalidraw` | Arquitectura por zonas con P-codes y narrativa en 10 escenas |
+| `Lab4/Diagrams/Contexto/00-contexto-diagrama.md` | Documento vivo con los 12 PD resueltos, 34 peores casos y frases para el diagrama (959 lineas) |
+| `Lab4/Diagrams/Contexto/01-topdown-remoteschooly.excalidraw` | Top Down Design original (resumen) |
+| `Lab4/Diagrams/Contexto/02-topdown-remoteschooly-v2.excalidraw` | Top Down Design por iteraciones con frases numeradas |
+| `Lab4/Diagrams/Contexto/03-arquitectura-remoteschooly.excalidraw` | Arquitectura por zonas con P-codes y narrativa en 10 escenas |
 | `Prompts/casos-posibles.md` | Metodo reutilizable de enumeracion exhaustiva de casos |
 | `.gitignore` | Lab2/POC excluido del repositorio |
 

@@ -1,6 +1,6 @@
 # Método: del punto de decisión al diagrama
 
-Cómo se construyó el diagrama de PD-1 (`Lab4/Diagrams/04-pd1-iteraciones.excalidraw`).
+Cómo se construyó el diagrama de PD-1 (`Lab4/Diagrams/Problema1/A-que-bajar.excalidraw`).
 Seis pasos. El primero es el prompt de casos posibles; los otros cinco son lo que
 vino después.
 
@@ -79,7 +79,7 @@ con tres columnas: qué provoca, en qué escena ocurre, cómo lo ataja el diseñ
 El código sirve para dos cosas: poner `P5` sobre la caja que lo resuelve, y
 responder en la sustentación sin buscar.
 
-Archivo: `Lab4/Diagrams/00-contexto-diagrama.md`
+Archivo: `Lab4/Diagrams/Contexto/00-contexto-diagrama.md`
 
 ---
 

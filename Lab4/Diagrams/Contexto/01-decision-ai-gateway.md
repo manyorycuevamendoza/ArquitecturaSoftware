@@ -6,7 +6,7 @@ exhaustiva y verificable: el producto cartesiano se cuenta, y toda combinación
 descartada lleva su razón escrita.
 
 El punto de decisión de sincronización (manifiesto local contra manifiesto de
-Lima) ya está resuelto en [../Architecture.md](../Architecture.md). Este
+Lima) ya está resuelto en [../Architecture.md](../../Architecture.md). Este
 documento cubre el punto de decisión que faltaba: el del AI Gateway, corazón
 del capítulo 2 del diagrama narrativo.
 
@@ -114,7 +114,7 @@ A (campos) → B (caché) → C (presupuesto) → D (red)
 Los casos 4 y 5 demuestran que **la caché va antes que el Budget Guard**. El
 orden natural al diseñar es «primero valido que pueda gastar»; con ese orden,
 una docente sin cuota queda bloqueada de un resultado que es gratuito. El
-diagrama de flujo de IA en [../Architecture.md](../Architecture.md) hoy dibuja
+diagrama de flujo de IA en [../Architecture.md](../../Architecture.md) hoy dibuja
 `Presupuesto → Caché`: esta enumeración dice que hay que invertirlo.
 
 ---

@@ -3,9 +3,9 @@
 Un solo lienzo: `problema2.excalidraw`. Cubre los cuatro puntos de decisión de la
 gobernanza de tokens (PD-9 a PD-12) y sus 18 casos.
 
-El detalle de cada cruce está en [../00-contexto-diagrama.md](../00-contexto-diagrama.md);
+El detalle de cada cruce está en [../Contexto/00-contexto-diagrama.md](../Contexto/00-contexto-diagrama.md);
 el cruce completo del AI Gateway —las 16 filas y los 9 casos que sobreviven— en
-[../01-decision-ai-gateway.md](../01-decision-ai-gateway.md). El lienzo se dibuja
+[../Contexto/01-decision-ai-gateway.md](../Contexto/01-decision-ai-gateway.md). El lienzo se dibuja
 **desde** esos dos archivos, no al revés.
 
 ## El recorrido
@@ -57,7 +57,7 @@ canónico armado no hay huella que buscar.
 - Debajo de cada escena va su **cruce de casos** completo, en fichas de color, y
   el **guion numerado** del 1 al 13, que se lee mientras se señalan las cajas.
   El guion apunta una idea por punto: lo que no cabe en dos líneas vive en
-  `00-contexto-diagrama.md`, no en el lienzo.
+  `Contexto/00-contexto-diagrama.md`, no en el lienzo.
 - En rojo, junto al componente que los ataja, los peores casos `P25` a `P34` del
   catálogo consolidado.
 - El **hilo marrón** entre escenas nunca es recto: es el mismo recurso del

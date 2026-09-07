@@ -1,7 +1,7 @@
 # Requerimientos no funcionales
 
 La columna PD indica el punto de decisión de
-[../Diagrams/00-contexto-diagrama.md](../Diagrams/00-contexto-diagrama.md) del que
+[../Diagrams/Contexto/00-contexto-diagrama.md](../Diagrams/Contexto/00-contexto-diagrama.md) del que
 sale el requisito. La columna **Usuario responsable** dice de quién nace: qué
 persona tiene la necesidad que lo justifica, no qué componente lo implementa.
 

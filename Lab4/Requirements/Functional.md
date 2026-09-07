@@ -1,7 +1,7 @@
 # Requerimientos funcionales
 
 Cada requisito nace de un punto de decisión resuelto en
-[../Diagrams/00-contexto-diagrama.md](../Diagrams/00-contexto-diagrama.md) y se
+[../Diagrams/Contexto/00-contexto-diagrama.md](../Diagrams/Contexto/00-contexto-diagrama.md) y se
 dibuja en los lienzos de [../Diagrams/Problema1/](../Diagrams/Problema1/README.md)
 y [../Diagrams/Problema2/](../Diagrams/Problema2/README.md). La columna **Usuario responsable** dice de quién nace el requisito: qué persona
 tiene la necesidad que lo justifica. Un requisito sin usuario detrás no es un

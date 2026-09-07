@@ -16,35 +16,34 @@ RemoteSchooly distribuye educación semanal a pueblos remotos del Perú y contro
 | Especificación completa | [SPEC-TEMPLATE.md](SPEC-TEMPLATE.md) |
 | Evaluación de requisitos | [Spec/Results.md](Spec/Results.md) |
 | Diseño R.E.D.A.L.E. y happy paths | [Architecture.md](Architecture.md) |
-| Enumeración de casos del punto de decisión del AI Gateway | [Decisions/01-decision-ai-gateway.md](Decisions/01-decision-ai-gateway.md) |
-| Diagrama Top Down Design (resumen) | [Diagrams/01-topdown-remoteschooly.excalidraw](Diagrams/01-topdown-remoteschooly.excalidraw) |
-| Diagrama Top Down por iteraciones (técnico) | [Diagrams/02-topdown-remoteschooly-v2.excalidraw](Diagrams/02-topdown-remoteschooly-v2.excalidraw) |
-| Diagrama narrativo del flujo completo (**el de la exposición**) | [Diagrams/03-flujo-narrativo-remoteschooly.excalidraw](Diagrams/03-flujo-narrativo-remoteschooly.excalidraw) |
+| **Diagramas y enlaces de Excalidraw** | [Diagrams/](Diagrams/README.md) |
+| Diagramas del problema 1: distribución, 36 casos | [Diagrams/Problema1/](Diagrams/Problema1/README.md) |
+| Diagrama del problema 2: gasto de tokens, 18 casos | [Diagrams/Problema2/](Diagrams/Problema2/README.md) |
+| Contexto: los 12 puntos de decisión y 34 peores casos | [Diagrams/Contexto/00-contexto-diagrama.md](Diagrams/Contexto/00-contexto-diagrama.md) |
+| Enumeración de casos del punto de decisión del AI Gateway | [Diagrams/Contexto/01-decision-ai-gateway.md](Diagrams/Contexto/01-decision-ai-gateway.md) |
 | Ejemplo de solicitud intermedia | [Examples/solicitud-ia.example.json](Examples/solicitud-ia.example.json) |
 
 ## Qué diagrama usar
 
-Hay dos lienzos vigentes y responden preguntas distintas.
+Los enlaces de Excalidraw y el índice completo están en [Diagrams/](Diagrams/README.md).
 
-**Para exponer el flujo: `Diagrams/03-flujo-narrativo-remoteschooly.excalidraw`.** Es el recorrido completo contado como una historia que se lee de izquierda a derecha, en lenguaje de aula y no de infraestructura. Son 24 momentos numerados repartidos en tres capítulos; cada caja dice qué pasa en palabras corrientes y lleva abajo, en gris pequeño, el nombre técnico de la pieza que lo hace.
+**Para exponer, uno por problema.**
 
-| Capítulo | Qué cuenta | Pasos |
+| Problema | Lienzo | Qué cuenta |
+| --- | --- | --- |
+| 1. Distribución con Internet intermitente | [Problema1/E-problema1-completo.excalidraw](Diagrams/Problema1/E-problema1-completo.excalidraw) | El recorrido entero de Valeria a Valeria, en diez escenas, con los 36 casos repartidos en el camino. |
+| 2. Gasto excesivo de tokens | [Problema2/problema2.excalidraw](Diagrams/Problema2/problema2.excalidraw) | Ocho escenas donde cada paso descarta una razón para llamar al modelo. La llamada es lo último que queda. |
+
+**Para responder una pregunta puntual del problema 1**, cada bloque tiene su propio lienzo con guion y tres iteraciones acumulativas.
+
+| Lienzo | Bloque | Casos |
 | --- | --- | ---: |
-| 1 | De Lima al aula: el material llega aunque el Internet se caiga. | 1–9 |
-| 2 | Rosa pide ayuda a la IA: todo se resuelve antes de gastar. | 10–19 |
-| 3 | El regreso: la escuela responde y Valeria comprueba que el ahorro es real. | 20–24 |
+| `A-que-bajar` | ¿Qué archivos transferir? | 4 |
+| `B-integridad-y-activacion` | ¿Puedo confiar en lo que llegó? | 11 |
+| `C-retorno-idempotente` | Lo hecho sin red vuelve una sola vez | 7 |
+| `D-cuando-sincronizar` | ¿Conviene sincronizar ahora? | 14 |
 
-Los colores son el argumento: azul es un paso normal, verde es un paso donde no se gasta nada, ámbar es donde algo falla o hay que esperar, y rojo es el único paso que cuesta dinero (el 18). Las cajas punteadas cuelgan del paso al que corresponden y cuentan qué pasa cuando algo sale mal.
-
-**Para sustentar el diseño: `Diagrams/02-topdown-remoteschooly-v2.excalidraw`.** Es el lienzo Top Down Design: los requerimientos nacen de las personas y el diseño crece en tres iteraciones acumulativas.
-
-| Iteración | Qué muestra |
-| --- | --- |
-| #1 | El sistema como una sola caja: qué entra y qué sale. |
-| #2 | Distribución **offline-first** sobre el Internet que ya existe. Sin SSD ni transporte físico. |
-| #3 | Gobernanza de tokens con **login** y **biblioteca de prompts** versionada, incluido el reuso de un prompt de 2026 en 2027. |
-
-Cada paso del lienzo lleva una frase numerada: el diagrama se lee como un relato, no como un conjunto de cajas sueltas.
+**Para sustentar el diseño**, el Top Down Design con tres iteraciones acumulativas está en [Contexto/02-topdown-remoteschooly-v2.excalidraw](Diagrams/Contexto/02-topdown-remoteschooly-v2.excalidraw). Cada iteración conserva la anterior: la primera plantea el sistema como una caja, la segunda abre la distribución offline-first, la tercera agrega la gobernanza de tokens con login y biblioteca de prompts.
 
 ## Decisión central
 
