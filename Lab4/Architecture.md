@@ -2,13 +2,11 @@
 
 La arquitectura resuelve dos restricciones independientes: las escuelas tienen Internet limitado y con cortes, y el costo de IA debe reducirse de forma demostrable. Los materiales se distribuyen exclusivamente por la red: el Nodo Escolar Local descarga diferencias en bloques reanudables, prioriza recursos esenciales y conserva la última versión válida. El uso de IA se controla con una solicitud intermedia antes de cualquier llamada al modelo.
 
-Los lienzos vigentes y el índice de enlaces están en [Diagrams/](Diagrams/README.md).
+Los enlaces de Excalidraw están en [Diagrams/](Diagrams/README.md).
 
-- [Diagrams/Contexto/Problema1/](Diagrams/Contexto/Problema1/README.md) resuelve la distribución con Internet intermitente: PD-1 a PD-8, 36 casos. Cinco lienzos, uno por bloque, más el recorrido completo. Sirve para explicar **qué ocurre** en la distribución.
-- [Diagrams/Contexto/Problema2/](Diagrams/Contexto/Problema2/README.md) resuelve la gobernanza del gasto en IA: PD-9 a PD-12, 18 casos, en un solo lienzo.
-- [Diagrams/Contexto/02-topdown-remoteschooly-v2.excalidraw](Diagrams/Contexto/02-topdown-remoteschooly-v2.excalidraw) es el Top Down Design con tres iteraciones acumulativas. Sirve para sustentar **por qué está diseñado así**.
-
-Las versiones anteriores quedan en [Diagrams/Contexto/](Diagrams/Contexto/).
+- El **problema 1** resuelve la distribución con Internet intermitente: PD-1 a PD-8, 36 casos. Sirve para explicar **qué ocurre**.
+- El **problema 2** resuelve la gobernanza del gasto en IA: PD-9 a PD-12, 18 casos. Sirve para explicar **dónde se evita el gasto**.
+- El Top Down Design, con tres iteraciones acumulativas, sirve para sustentar **por qué está diseñado así**.
 
 ## Iteraciones del diagrama
 

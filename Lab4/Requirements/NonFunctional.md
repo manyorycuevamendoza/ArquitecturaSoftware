@@ -1,9 +1,11 @@
 # Requerimientos no funcionales
 
-La columna PD indica el punto de decisión de
-[../Diagrams/Contexto/00-contexto-diagrama.md](../Diagrams/Contexto/00-contexto-diagrama.md) del que
-sale el requisito. La columna **Usuario responsable** dice de quién nace: qué
-persona tiene la necesidad que lo justifica, no qué componente lo implementa.
+Los enlaces de Excalidraw de los dos problemas están en
+[../Diagrams/](../Diagrams/README.md).
+
+La columna **Usuario responsable** dice de quién nace el requisito: qué persona
+tiene la necesidad que lo justifica, no qué componente lo implementa. La columna
+**PD** dice en qué punto de decisión se resolvió.
 
 ## Red y transferencia
 

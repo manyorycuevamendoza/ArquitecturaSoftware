@@ -1,12 +1,12 @@
 # Requerimientos funcionales
 
-Cada requisito nace de un punto de decisión resuelto en
-[../Diagrams/Contexto/00-contexto-diagrama.md](../Diagrams/Contexto/00-contexto-diagrama.md) y se
-dibuja en los lienzos de [../Diagrams/Contexto/Problema1/](../Diagrams/Contexto/Problema1/README.md)
-y [../Diagrams/Contexto/Problema2/](../Diagrams/Contexto/Problema2/README.md). La columna **Usuario responsable** dice de quién nace el requisito: qué persona
+Los enlaces de Excalidraw de los dos problemas están en
+[../Diagrams/](../Diagrams/README.md).
+
+La columna **Usuario responsable** dice de quién nace el requisito: qué persona
 tiene la necesidad que lo justifica. Un requisito sin usuario detrás no es un
-requisito, es una decisión técnica buscando excusa. La columna **PD** dice en qué
-punto de decisión se resolvió.
+requisito, es una decisión técnica buscando excusa. La columna **PD** dice en
+qué punto de decisión se resolvió.
 
 ## Problema 1: distribución con Internet intermitente
 

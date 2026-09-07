@@ -17,33 +17,20 @@ RemoteSchooly distribuye educación semanal a pueblos remotos del Perú y contro
 | Evaluación de requisitos | [Spec/Results.md](Spec/Results.md) |
 | Diseño R.E.D.A.L.E. y happy paths | [Architecture.md](Architecture.md) |
 | **Diagramas y enlaces de Excalidraw** | [Diagrams/](Diagrams/README.md) |
-| Diagramas del problema 1: distribución, 36 casos | [Diagrams/Contexto/Problema1/](Diagrams/Contexto/Problema1/README.md) |
-| Diagrama del problema 2: gasto de tokens, 18 casos | [Diagrams/Contexto/Problema2/](Diagrams/Contexto/Problema2/README.md) |
-| Contexto: los 12 puntos de decisión y 34 peores casos | [Diagrams/Contexto/00-contexto-diagrama.md](Diagrams/Contexto/00-contexto-diagrama.md) |
-| Enumeración de casos del punto de decisión del AI Gateway | [Diagrams/Contexto/01-decision-ai-gateway.md](Diagrams/Contexto/01-decision-ai-gateway.md) |
 | Ejemplo de solicitud intermedia | [Examples/solicitud-ia.example.json](Examples/solicitud-ia.example.json) |
 
 ## Qué diagrama usar
 
-Los enlaces de Excalidraw y el índice completo están en [Diagrams/](Diagrams/README.md).
+Los dos enlaces de Excalidraw están en [Diagrams/](Diagrams/README.md).
 
-**Para exponer, uno por problema.**
-
-| Problema | Lienzo | Qué cuenta |
-| --- | --- | --- |
-| 1. Distribución con Internet intermitente | [Problema1/E-problema1-completo.excalidraw](Diagrams/Contexto/Problema1/E-problema1-completo.excalidraw) | El recorrido entero de Valeria a Valeria, en diez escenas, con los 36 casos repartidos en el camino. |
-| 2. Gasto excesivo de tokens | [Problema2/problema2.excalidraw](Diagrams/Contexto/Problema2/problema2.excalidraw) | Ocho escenas donde cada paso descarta una razón para llamar al modelo. La llamada es lo último que queda. |
-
-**Para responder una pregunta puntual del problema 1**, cada bloque tiene su propio lienzo con guion y tres iteraciones acumulativas.
-
-| Lienzo | Bloque | Casos |
+| Problema | Qué cuenta | Casos |
 | --- | --- | ---: |
-| `A-que-bajar` | ¿Qué archivos transferir? | 4 |
-| `B-integridad-y-activacion` | ¿Puedo confiar en lo que llegó? | 11 |
-| `C-retorno-idempotente` | Lo hecho sin red vuelve una sola vez | 7 |
-| `D-cuando-sincronizar` | ¿Conviene sincronizar ahora? | 14 |
+| 1. Distribución con Internet intermitente | El recorrido entero de Valeria a Valeria, en diez escenas: publicación, ventana de sincronización, qué archivos bajar, verificación, activación atómica, la clase sin red y el retorno idempotente. | 36 |
+| 2. Gasto excesivo de tokens | Ocho escenas donde cada paso descarta una razón para llamar al modelo. La llamada es lo último que queda, y casi nunca se llega a ella. | 18 |
 
-**Para sustentar el diseño**, el Top Down Design con tres iteraciones acumulativas está en [Contexto/02-topdown-remoteschooly-v2.excalidraw](Diagrams/Contexto/02-topdown-remoteschooly-v2.excalidraw). Cada iteración conserva la anterior: la primera plantea el sistema como una caja, la segunda abre la distribución offline-first, la tercera agrega la gobernanza de tokens con login y biblioteca de prompts.
+Cada lienzo se lee igual: el guion numerado va en la columna izquierda y se sigue de arriba a abajo mientras se señalan las cajas. Los peores casos aparecen en rojo, junto al componente que los ataja, con su código `P1` a `P34`.
+
+Para sustentar **por qué** está diseñado así, y no solo qué hace, el Top Down Design crece en tres iteraciones acumulativas: la primera plantea el sistema como una caja, la segunda abre la distribución offline-first, la tercera agrega la gobernanza de tokens con login y biblioteca de prompts. Ninguna reemplaza a la anterior.
 
 ## Decisión central
 
