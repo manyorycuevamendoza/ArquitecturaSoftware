@@ -14,11 +14,19 @@
 
 ## Trazabilidad de pain points críticos
 
+Cada requisito declara su usuario responsable: la persona cuya necesidad lo
+justifica, no el componente que lo implementa. El desglose completo está en
+[../Requirements/Functional.md](../Requirements/Functional.md).
+
 | Persona | Pain point | Requisitos que responden |
 | --- | --- | --- |
-| Rosa | Una descarga reinicia o no puede enviar una solicitud durante un corte. | `FR-DIS-03/04/05/06`, `FR-AI-01/02/03/05/06` |
-| Diego | Un corte deja el material incompleto o inaccesible. | `FR-DIS-04/05`, `NFR-NET-01/02`, `NFR-AVL-01` |
-| Valeria | Debe saber qué versión llegó y probar ahorro, no solo estimarlo. | `FR-DIS-01/02/05/06`, `FR-AI-07/08`, `NFR-COST-01` |
+| Rosa | Una descarga reinicia, la activación queda a medias, o la sincronización le quita la red durante la clase. | `FR-DIS-02/03/07/10`, `NFR-NET-01/03`, `NFR-INT-03` |
+| Rosa | Pide material a la IA y pierde el tiempo o el control del gasto. | `FR-AI-01/03/11/12`, `NFR-USA-01` |
+| Diego | Un corte deja el material incompleto, inaccesible, o pierde las semanas sin señal. | `FR-DIS-04/05/09`, `NFR-NET-02`, `NFR-INT-01`, `NFR-AVL-01`, `NFR-PER-01` |
+| Diego | Su avance se pierde o se registra dos veces. | `FR-DIS-06/08` |
+| Valeria | Debe saber qué versión llegó a cada escuela y auditar el orden real de los hechos. | `FR-DIS-01/08`, `NFR-INT-02`, `NFR-AUD-01/02` |
+| Valeria | Debe probar el ahorro, no estimarlo, y poder reproducir el número. | `FR-AI-02/04..10`, `NFR-COST-01..04` |
+| Administrador regional | Dimensiona y supervisa el nodo sin viajar a la escuela. | `FR-DIS-11`, `NFR-CAP-01/02` |
 
 ## Evidencia de la meta de 40%
 
