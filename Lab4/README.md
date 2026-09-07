@@ -13,7 +13,7 @@ RemoteSchooly distribuye educación semanal a pueblos remotos del Perú y contro
 | Personas | [2-Personas/](2-Personas/) |
 | Requerimientos funcionales | [3-Requerimientos/Functional.md](3-Requerimientos/Functional.md) |
 | Requerimientos no funcionales | [3-Requerimientos/NonFunctional.md](3-Requerimientos/NonFunctional.md) |
-| Especificación completa | [5-Especificacion/SPEC-TEMPLATE.md](5-Especificacion/SPEC-TEMPLATE.md) |
+| Especificación completa SPEC | [5-Especificacion/SPEC-TEMPLATE.md](5-Especificacion/SPEC-TEMPLATE.md) |
 | Evaluación de requisitos EVAL | [5-Especificacion/Results.md](5-Especificacion/Results.md) |
 | Diseño R.E.D.A.L.E. y happy paths | [4-Arquitectura/Architecture.md](4-Arquitectura/Architecture.md) |
 | **Diagramas y enlaces de Excalidraw** | [Diagrams/](Diagrams/README.md) |
