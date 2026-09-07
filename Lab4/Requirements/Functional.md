@@ -2,8 +2,8 @@
 
 Cada requisito nace de un punto de decisión resuelto en
 [../Diagrams/Contexto/00-contexto-diagrama.md](../Diagrams/Contexto/00-contexto-diagrama.md) y se
-dibuja en los lienzos de [../Diagrams/Problema1/](../Diagrams/Problema1/README.md)
-y [../Diagrams/Problema2/](../Diagrams/Problema2/README.md). La columna **Usuario responsable** dice de quién nace el requisito: qué persona
+dibuja en los lienzos de [../Diagrams/Contexto/Problema1/](../Diagrams/Contexto/Problema1/README.md)
+y [../Diagrams/Contexto/Problema2/](../Diagrams/Contexto/Problema2/README.md). La columna **Usuario responsable** dice de quién nace el requisito: qué persona
 tiene la necesidad que lo justifica. Un requisito sin usuario detrás no es un
 requisito, es una decisión técnica buscando excusa. La columna **PD** dice en qué
 punto de decisión se resolvió.

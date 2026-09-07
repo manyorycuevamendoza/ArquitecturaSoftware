@@ -85,12 +85,12 @@ Cuando el paso 1 y 2 ya están hechos y solo falta dibujar:
 ```
 Ya tengo los casos enumerados en [ARCHIVO].
 
-Armame los diagramas siguiendo la misma estructura de Lab4/Diagrams/Problema1:
+Armame los diagramas siguiendo la misma estructura de Lab4/Diagrams/Contexto/Problema1:
 guion numerado en la columna izquierda, tres iteraciones acumulativas por
 lienzo, fondo transparente y color solo en el borde, leyenda de peores casos al
 pie, generado con un script de Python y verificado antes de dármelo.
 
-Reusá Lab4/Diagrams/Problema1/generadores/_lib.py.
+Reusá Lab4/Diagrams/Contexto/Problema1/generadores/_lib.py.
 
 Empezá escribiendo el guion, antes de dibujar nada.
 ```

@@ -17,8 +17,8 @@ RemoteSchooly distribuye educación semanal a pueblos remotos del Perú y contro
 | Evaluación de requisitos | [Spec/Results.md](Spec/Results.md) |
 | Diseño R.E.D.A.L.E. y happy paths | [Architecture.md](Architecture.md) |
 | **Diagramas y enlaces de Excalidraw** | [Diagrams/](Diagrams/README.md) |
-| Diagramas del problema 1: distribución, 36 casos | [Diagrams/Problema1/](Diagrams/Problema1/README.md) |
-| Diagrama del problema 2: gasto de tokens, 18 casos | [Diagrams/Problema2/](Diagrams/Problema2/README.md) |
+| Diagramas del problema 1: distribución, 36 casos | [Diagrams/Contexto/Problema1/](Diagrams/Contexto/Problema1/README.md) |
+| Diagrama del problema 2: gasto de tokens, 18 casos | [Diagrams/Contexto/Problema2/](Diagrams/Contexto/Problema2/README.md) |
 | Contexto: los 12 puntos de decisión y 34 peores casos | [Diagrams/Contexto/00-contexto-diagrama.md](Diagrams/Contexto/00-contexto-diagrama.md) |
 | Enumeración de casos del punto de decisión del AI Gateway | [Diagrams/Contexto/01-decision-ai-gateway.md](Diagrams/Contexto/01-decision-ai-gateway.md) |
 | Ejemplo de solicitud intermedia | [Examples/solicitud-ia.example.json](Examples/solicitud-ia.example.json) |
@@ -31,8 +31,8 @@ Los enlaces de Excalidraw y el índice completo están en [Diagrams/](Diagrams/R
 
 | Problema | Lienzo | Qué cuenta |
 | --- | --- | --- |
-| 1. Distribución con Internet intermitente | [Problema1/E-problema1-completo.excalidraw](Diagrams/Problema1/E-problema1-completo.excalidraw) | El recorrido entero de Valeria a Valeria, en diez escenas, con los 36 casos repartidos en el camino. |
-| 2. Gasto excesivo de tokens | [Problema2/problema2.excalidraw](Diagrams/Problema2/problema2.excalidraw) | Ocho escenas donde cada paso descarta una razón para llamar al modelo. La llamada es lo último que queda. |
+| 1. Distribución con Internet intermitente | [Problema1/E-problema1-completo.excalidraw](Diagrams/Contexto/Problema1/E-problema1-completo.excalidraw) | El recorrido entero de Valeria a Valeria, en diez escenas, con los 36 casos repartidos en el camino. |
+| 2. Gasto excesivo de tokens | [Problema2/problema2.excalidraw](Diagrams/Contexto/Problema2/problema2.excalidraw) | Ocho escenas donde cada paso descarta una razón para llamar al modelo. La llamada es lo último que queda. |
 
 **Para responder una pregunta puntual del problema 1**, cada bloque tiene su propio lienzo con guion y tres iteraciones acumulativas.
 

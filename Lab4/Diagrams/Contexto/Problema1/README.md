@@ -3,9 +3,9 @@
 Cinco lienzos. Cuatro cubren un bloque cada uno, el quinto los junta.
 
 Los 36 casos salen de aplicar el método de casos posibles
-([../../../Prompts/casos-posibles.md](../../../Prompts/casos-posibles.md)) a los
+([../../../../Prompts/casos-posibles.md](../../../../Prompts/casos-posibles.md)) a los
 ocho puntos de decisión. El detalle de cada cruce está en
-[../Contexto/00-contexto-diagrama.md](../Contexto/00-contexto-diagrama.md).
+[../00-contexto-diagrama.md](../00-contexto-diagrama.md).
 
 ## Los lienzos
 

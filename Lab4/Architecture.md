@@ -4,8 +4,8 @@ La arquitectura resuelve dos restricciones independientes: las escuelas tienen I
 
 Los lienzos vigentes y el índice de enlaces están en [Diagrams/](Diagrams/README.md).
 
-- [Diagrams/Problema1/](Diagrams/Problema1/README.md) resuelve la distribución con Internet intermitente: PD-1 a PD-8, 36 casos. Cinco lienzos, uno por bloque, más el recorrido completo. Sirve para explicar **qué ocurre** en la distribución.
-- [Diagrams/Problema2/](Diagrams/Problema2/README.md) resuelve la gobernanza del gasto en IA: PD-9 a PD-12, 18 casos, en un solo lienzo.
+- [Diagrams/Contexto/Problema1/](Diagrams/Contexto/Problema1/README.md) resuelve la distribución con Internet intermitente: PD-1 a PD-8, 36 casos. Cinco lienzos, uno por bloque, más el recorrido completo. Sirve para explicar **qué ocurre** en la distribución.
+- [Diagrams/Contexto/Problema2/](Diagrams/Contexto/Problema2/README.md) resuelve la gobernanza del gasto en IA: PD-9 a PD-12, 18 casos, en un solo lienzo.
 - [Diagrams/Contexto/02-topdown-remoteschooly-v2.excalidraw](Diagrams/Contexto/02-topdown-remoteschooly-v2.excalidraw) es el Top Down Design con tres iteraciones acumulativas. Sirve para sustentar **por qué está diseñado así**.
 
 Las versiones anteriores quedan en [Diagrams/Contexto/](Diagrams/Contexto/).

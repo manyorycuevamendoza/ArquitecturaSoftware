@@ -24,23 +24,31 @@ se acota el contexto, se busca en la caché y se presupuesta. La llamada es lo
 
 ---
 
-## Qué hay en cada carpeta
+## Qué hay dentro
 
-| Carpeta | Qué contiene |
+Todo lo demás vive en [Contexto/](Contexto/): los lienzos y el análisis del que
+salieron.
+
+```
+Diagrams/
+├── README.md          este archivo, con los enlaces de arriba
+└── Contexto/
+    ├── Problema1/     los cinco lienzos de la distribución
+    ├── Problema2/     el lienzo de la gobernanza de tokens
+    ├── 00-contexto-diagrama.md
+    ├── 01-decision-ai-gateway.md
+    └── los tres lienzos previos
+```
+
+| Ruta | Qué contiene |
 | --- | --- |
-| [Problema1/](Problema1/README.md) | Cinco lienzos: cuatro por bloque y uno con el recorrido completo. Los 36 casos de la distribución. |
-| [Problema2/](Problema2/README.md) | Un lienzo con las ocho escenas de la gobernanza de tokens y el cruce completo del Gateway. |
-| [Contexto/](Contexto/) | El análisis del que salen los diagramas, y las versiones anteriores. |
-
-### Contexto
-
-| Archivo | Qué es |
-| --- | --- |
-| [00-contexto-diagrama.md](Contexto/00-contexto-diagrama.md) | Documento vivo. Los 12 puntos de decisión con su cruce exhaustivo, el catálogo de 34 peores casos y las frases para el diagrama. Los lienzos se dibujan **desde** aquí, no al revés. |
-| [01-decision-ai-gateway.md](Contexto/01-decision-ai-gateway.md) | El cruce completo del AI Gateway: 16 filas y los 9 casos que sobreviven. |
-| [02-topdown-remoteschooly-v2.excalidraw](Contexto/02-topdown-remoteschooly-v2.excalidraw) | Top Down Design con tres iteraciones acumulativas. Sirve para sustentar por qué está diseñado así. |
-| [01-topdown-remoteschooly.excalidraw](Contexto/01-topdown-remoteschooly.excalidraw) | Primera versión del Top Down, resumida. Se conserva como registro. |
-| [03-arquitectura-remoteschooly.excalidraw](Contexto/03-arquitectura-remoteschooly.excalidraw) | Arquitectura por zonas con sus bases de datos y los peores casos sobre el componente que los ataja. |
+| [Contexto/Problema1/](Contexto/Problema1/README.md) | Cinco lienzos: cuatro por bloque y uno con el recorrido completo. Los 36 casos de la distribución. |
+| [Contexto/Problema2/](Contexto/Problema2/README.md) | Un lienzo con las ocho escenas de la gobernanza de tokens y el cruce completo del Gateway. |
+| [Contexto/00-contexto-diagrama.md](Contexto/00-contexto-diagrama.md) | Documento vivo. Los 12 puntos de decisión con su cruce exhaustivo, el catálogo de 34 peores casos y las frases para el diagrama. Los lienzos se dibujan **desde** aquí, no al revés. |
+| [Contexto/01-decision-ai-gateway.md](Contexto/01-decision-ai-gateway.md) | El cruce completo del AI Gateway: 16 filas y los 9 casos que sobreviven. |
+| [Contexto/02-topdown-remoteschooly-v2.excalidraw](Contexto/02-topdown-remoteschooly-v2.excalidraw) | Top Down Design con tres iteraciones acumulativas. Sirve para sustentar por qué está diseñado así. |
+| [Contexto/01-topdown-remoteschooly.excalidraw](Contexto/01-topdown-remoteschooly.excalidraw) | Primera versión del Top Down, resumida. Se conserva como registro. |
+| [Contexto/03-arquitectura-remoteschooly.excalidraw](Contexto/03-arquitectura-remoteschooly.excalidraw) | Arquitectura por zonas con sus bases de datos y los peores casos sobre el componente que los ataja. |
 
 ---
 
@@ -67,7 +75,7 @@ Todos siguen la misma estructura:
 - Monoespaciada: identificadores, tablas de cruce y órdenes de operación.
 
 La paleta y las figuras compuestas están en
-[Problema1/generadores/\_lib.py](Problema1/generadores/_lib.py). Cambiar un color
+[Contexto/Problema1/generadores/\_lib.py](Contexto/Problema1/generadores/_lib.py). Cambiar un color
 ahí lo cambia en los seis lienzos a la vez.
 
 ---
@@ -78,11 +86,11 @@ Los lienzos se generan con código, no se dibujan a mano: así se verifican ante
 de abrirlos.
 
 ```bash
-cd Problema1/generadores && for d in B C D E; do python3 gen_$d.py; done
+cd Contexto/Problema1/generadores && for d in B C D E; do python3 gen_$d.py; done
 ```
 
 ```bash
-cd Problema2/generadores && python3 gen_problema2.py && python3 check.py
+cd Contexto/Problema2/generadores && python3 gen_problema2.py && python3 check.py
 ```
 
 Si se regenera un lienzo, hay que volver a subirlo a Excalidraw para que el
