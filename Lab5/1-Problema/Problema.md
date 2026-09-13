@@ -148,20 +148,20 @@ legibles por sí solas.
 
 | PD | Decisión | Responde a |
 | --- | --- | --- |
-| PD-1 | El LLM **propone**, el harness **ejecuta**. Ninguna herramienta se invoca desde la salida del modelo sin pasar por un validador que la autoriza. | Borrado de la base de datos |
+| PD-1 | El LLM **propone**, el harness **ejecuta**. Ninguna herramienta se invoca desde la salida del modelo sin pasar por el Orquestador de herramientas que la autoriza. | Borrado de la base de datos |
 | PD-2 | Toda herramienta se clasifica por riesgo: lectura, escritura acotada y destructiva. La clase decide el control, no el criterio del modelo. | Borrado de la base de datos |
-| PD-3 | Una acción destructiva exige simulación previa con alcance estimado, aprobación de una persona distinta de quien la pide y ejecución reversible. | Borrado de la base de datos |
+| PD-3 | Una acción destructiva exige vista previa de impacto, bloqueo hasta la aprobación del Incident Manager (distinto de quien la pide) y ejecución reversible. | Borrado de la base de datos |
 | PD-4 | Las acciones corren con la identidad y los privilegios del ingeniero, no con una credencial única del harness. El acceso por defecto es de solo lectura. | Borrado de la base de datos |
 | PD-5 | El texto del incidente es dato, nunca instrucción. Instrucción y contenido viajan separados y el contenido no puede ampliar permisos. | Borrado de la base de datos |
-| PD-6 | El estado de un incidente se responde contra el sistema de registro y se entrega con su versión y su marca de tiempo. | Estado desactualizado |
-| PD-7 | La caché y el índice de recuperación se invalidan por evento de cambio del incidente, no por vencimiento de un plazo. | Estado desactualizado |
+| PD-6 | El estado de un incidente se responde contra BD1 (estado) y se entrega siempre con la hora del dato. | Estado desactualizado |
+| PD-7 | BD1 se sincroniza como máximo cada 5 minutos; la caché de preguntas frecuentes se invalida cuando cambia el dato que la sustenta. | Estado desactualizado |
 | PD-8 | Sin evidencia recuperada no hay respuesta: el sistema se abstiene y deriva, en lugar de completar con lo que el modelo recuerde. | Respuestas erróneas |
-| PD-9 | Las preguntas frecuentes tienen respuesta canónica, generada una vez y reutilizada mientras su evidencia no cambie. Misma pregunta, misma respuesta. | Respuestas distintas |
-| PD-10 | "Aprender" es memoria curada de resoluciones aprobadas más un conjunto de evaluación versionado. No hay ajuste de pesos ni memoria de conversación cruda. | El LLM no aprende |
+| PD-9 | Las preguntas frecuentes tienen respuesta en caché, y varias respuestas del LLM se reducen a una por match determinístico. Misma pregunta, misma respuesta. | Respuestas distintas |
+| PD-10 | "Aprender" es ingesta, curación de conocimiento, eval set de respuestas conocidas y aprobación del cambio. No hay ajuste de pesos ni memoria de conversación cruda. | El LLM no aprende |
 | PD-11 | Cada clase de escalamiento tiene su propia cola y su propia capacidad reservada. Un pico de engineering no puede consumir la capacidad de customer. | Pico de la primera semana |
 | PD-12 | Toda dependencia tiene tiempo de espera, reintento acotado con espera creciente y cortacircuito. Un componente lento no se propaga como una caída general. | Pico / no responde |
 | PD-13 | Bajo saturación se degrada antes de fallar: respuesta con datos y plantilla, sin modelo. Si tampoco eso, se descarta explícitamente por prioridad. | Pico / no responde |
-| PD-14 | Ningún componente del camino crítico de lectura es único. Redundancia N+1 en inferencia y proxies, réplica con relevo automático en base de datos. | Tolerancia a fallos |
+| PD-14 | Ningún componente del camino crítico de lectura es único. Redundancia N+1 en LLM y orquestador; BD1 y BD2 con backup y relevo automático. | Tolerancia a fallos |
 | PD-15 | Todo lo que ocurre queda en un registro append-only: consulta, evidencia usada, versión de prompt y modelo, herramienta invocada, aprobación y resultado. | Auditoría de todo lo anterior |
 
 ## SPOF y componentes de alto riesgo del harness actual
@@ -171,12 +171,12 @@ datos / MCP Slack— tiene un punto único de falla en **cada** caja del dibujo.
 
 | Componente actual | Por qué es SPOF | Por qué es de alto riesgo | Cómo lo trata el diseño |
 | --- | --- | --- | --- |
-| API de entrada | Instancia única: si cae, Genius entero deja de responder. | Es también el único punto donde podría autenticarse, y hoy no clasifica ni prioriza nada. | PD-14: réplicas tras balanceador; PD-11: clasificación y prioridad en la entrada |
-| LLM local | Un solo servicio de inferencia sobre hardware limitado; si se satura o cae, no hay respuesta. | No determinista e influenciable por el texto que lee; hoy decide por sí mismo qué herramienta ejecutar. | PD-14 (N+1), PD-13 (degradar sin modelo), PD-1 y PD-5 (no decide ni obedece al contenido) |
-| MCP Base de Datos | Único proxy hacia el sistema de registro. | **El más peligroso de todos**: expone escritura y borrado con una credencial única, sin clasificación de riesgo ni aprobación. Es por donde se borró la base. | PD-2, PD-3, PD-4: clasificación, aprobación y privilegio mínimo por identidad |
-| Base de datos de incidentes | Instancia única: sin ella no hay estado que responder. | Un borrado no tenía reversión definida. | PD-14: réplica con relevo automático y recuperación a punto en el tiempo |
-| MCP Slack | Proxy único hacia un servicio externo que puede caer. | Puede exfiltrar detalle de incidentes a un canal equivocado si el modelo elige el destino. | PD-12: cortacircuito y encolado; PD-2: publicar es escritura, con destino validado |
-| Índice de recuperación | Si se reconstruye periódicamente, es la fuente del dato viejo. | Responder estado desde aquí es la causa directa de "el incidente cerrado hace horas". | PD-6 y PD-7: el estado no se responde desde el índice; invalidación por evento |
+| API de entrada | Instancia única: si cae, Genius entero deja de responder. | Es también el único punto donde podría autenticarse, y hoy no clasifica ni prioriza nada. | Auth y rol por actor + Cola por prioridad (PD-11); réplicas N+1 (PD-14) |
+| LLM local | Un solo servicio de inferencia sobre hardware limitado; si se satura o cae, no hay respuesta. | No determinista e influenciable por el texto que lee; hoy decide por sí mismo qué herramienta ejecutar. | LLM N+1 (PD-14), Modo degradado (PD-13), Orquestador de herramientas y system prompts (PD-1, PD-5) |
+| MCP Base de Datos | Único proxy hacia el sistema de registro. | **El más peligroso de todos**: expone escritura y borrado con una credencial única, sin clasificación de riesgo ni aprobación. Es por donde se borró la base. | Orquestador, Vista previa de impacto, Bloqueo de escritura, Aprobación de la acción, Permisos del ingeniero (PD-2, PD-3, PD-4) |
+| Base de datos de incidentes | Instancia única: sin ella no hay estado que responder. | Un borrado no tenía reversión definida. | BD1 estado con backup anti SPOF; BD2 histórico con backup; Deshacer acción (PD-14, PD-3) |
+| MCP Slack | Proxy único hacia un servicio externo que puede caer. | Puede exfiltrar detalle de incidentes a un canal equivocado si el modelo elige el destino. | Notificación al ingeniero no bloqueante (PD-12); solo referencias, nunca detalle (PD-2) |
+| Histórico usado como fuente de estado | Si se reconstruye periódicamente, es la fuente del dato viejo. | Responder estado desde aquí es la causa directa de "el incidente cerrado hace horas". | Estado de incidencia lee BD1, no BD2; Respuesta con hora del dato (PD-6, PD-7) |
 
 Los tres tipos de escalamiento no son un detalle de dominio: son la razón por la
 que hay tres colas. Un *customer escalation* tiene un SLA de un día e impacto
