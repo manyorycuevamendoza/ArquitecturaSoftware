@@ -14,7 +14,7 @@ declaran para que sean discutibles y medibles.
 | --- | --- | --- | --- | --- |
 | NFR-AVL-01 | El camino de consulta tiene disponibilidad mensual ≥ 99.5%. | Una respuesta degradada marcada como tal cuenta como disponible; un error genérico o una respuesta fuera de su presupuesto de latencia, no. | Modo degradado | PD-13 |
 | NFR-AVL-02 | En la primera semana del mes, la clase `CUSTOMER` mantiene la misma disponibilidad que el resto del mes. | Con BD1 disponible, ninguna consulta de customer escalation crítica se rechaza por saturación; el descarte se aplica a ingeniería. | Cola por prioridad | PD-11 |
-| NFR-AVL-03 | Ningún componente del camino de consulta es una instancia única. | Apagar cualquier réplica no produce error visible; apagar todo el LLM degrada a respuestas sin modelo, pero no interrumpe. | LLM, Orquestador de herramientas, BD1 (backup anti SPOF) | PD-14 |
+| NFR-AVL-03 | Ningún componente del camino de consulta es una instancia única. | Apagar cualquier réplica no produce error visible; apagar todo el LLM degrada a respuestas sin modelo, pero no interrumpe. | LLM N+1, Orquestador de herramientas N+1, Cola por prioridad N+1, BD1 (réplica + failover) | PD-14 |
 | NFR-AVL-04 | La caída de un sistema externo degrada solo lo que depende de él. | Con Slack caído, consultar y aprobar siguen disponibles; con BD2 caído, el estado sigue respondiendo y las preguntas analíticas se abstienen. | Notificación al ingeniero, Abstención | PD-12 |
 
 ## Latencia y rendimiento
@@ -24,13 +24,13 @@ declaran para que sean discutibles y medibles.
 | NFR-PER-01 | Una consulta de estado o pregunta frecuente responde con p95 ≤ 2 s y p99 ≤ 4 s con 100 ingenieros activos. | Estas consultas no invocan al modelo, así que su latencia no depende de la saturación del LLM. | Estado de incidencia, Caché de preguntas frecuentes | PD-9 |
 | NFR-PER-02 | Una solicitud `CUSTOMER` crítica se admite a la cola en ≤ 5 s y su respuesta generada tiene p95 ≤ 15 s. | Se mide con la cola de `ENGINEERING` saturada. Es la meta de "tiempo real para decisiones críticas". | Cola por prioridad | PD-11 |
 | NFR-PER-03 | Una solicitud `ENGINEERING` responde con p95 ≤ 30 s. | Superado el presupuesto, la solicitud se degrada o se encola con aviso de posición y tiempo estimado. | Cola por prioridad, Modo degradado | PD-13 |
-| NFR-PER-04 | La respuesta por el camino degradado tiene p95 ≤ 1 s. | Con un cortacircuito abierto, la solicitud no espera el tiempo de espera de la dependencia caída. | Modo degradado | PD-12 |
+| NFR-PER-04 | La respuesta por el camino degradado tiene p95 ≤ 1 s. | Con un cortacircuito abierto, la solicitud no espera el tiempo de espera de la dependencia caída. | Circuit Breaker, Modo degradado | PD-12 |
 
 ## Capacidad
 
 | ID | Requerimiento | Verificación | Componente del diagrama | PD |
 | --- | --- | --- | --- | --- |
-| NFR-CAP-01 | El sistema sostiene ráfagas de 5 consultas/s con al menos 60% resueltas sin modelo. | El LLM se dimensiona N+1 para el 40% restante; con una réplica menos sigue cumpliendo `NFR-PER-02`. | Pregunta en lenguaje natural, LLM | PD-11 |
+| NFR-CAP-01 | El sistema sostiene ráfagas de 5 consultas/s con al menos 60% resueltas sin modelo. | El LLM se dimensiona N+1 para el 40% restante; con una réplica menos sigue cumpliendo `NFR-PER-02`. | Pregunta en lenguaje natural, Caché de preguntas frecuentes, LLM N+1 | PD-11 |
 | NFR-CAP-02 | El diseño absorbe 1.7× el volumen semanal promedio sin cambios; a 3× degrada por prioridad sin caer. | Ambos escenarios se ejecutan como prueba de carga antes del pico, no durante. | Cola por prioridad | PD-13 |
 | NFR-CAP-03 | Las colas son persistentes y aguantan 30 minutos de acumulación a carga de pico. | Al 80% de capacidad se alerta y se activa el descarte por prioridad. | Cola por prioridad, Métricas y dashboard | PD-13 |
 
@@ -39,7 +39,7 @@ declaran para que sean discutibles y medibles.
 | ID | Requerimiento | Verificación | Componente del diagrama | PD |
 | --- | --- | --- | --- | --- |
 | NFR-FRE-01 | El estado de una incidencia que responde Genius tiene como máximo 5 minutos de antigüedad y siempre declara la hora del dato. | Cerrar una incidencia y preguntar por ella pasado ese plazo no puede devolver "abierta". La respuesta muestra la hora de lectura de BD1. | Estado de incidencia, BD1, Respuesta con hora del dato | PD-6, PD-7 |
-| NFR-FRE-02 | Cuando el estado se sirve desde la réplica durante un relevo, el retraso se declara y no supera 30 s. | Superado ese umbral, la consulta se rechaza con motivo en lugar de entregar un dato viejo. | BD1 (backup anti SPOF), Respuesta con hora del dato | PD-6 |
+| NFR-FRE-02 | Cuando el estado se sirve desde la réplica durante un relevo, el retraso se declara y no supera 30 s. | Superado ese umbral, la consulta se rechaza con motivo en lugar de entregar un dato viejo. | BD1 (réplica + failover), Respuesta con hora del dato | PD-6 |
 
 ## Determinismo y calidad de la respuesta
 
@@ -63,7 +63,7 @@ declaran para que sean discutibles y medibles.
 | ID | Requerimiento | Verificación | Componente del diagrama | PD |
 | --- | --- | --- | --- | --- |
 | NFR-REC-01 | Una acción destructiva ejecutada por error se revierte en ≤ 60 minutos con pérdida de datos ≤ 5 minutos. | Se verifica en simulacro por periodo, midiendo el tiempo real. | Deshacer acción | PD-3 |
-| NFR-REC-02 | El relevo de BD1 o BD2 se completa en ≤ 2 minutos sin perder transacciones confirmadas. | Durante el relevo el estado se sirve desde la réplica bajo `NFR-FRE-02` y las escrituras se rechazan con motivo. | BD1 (backup anti SPOF), BD2 (backup) | PD-14 |
+| NFR-REC-02 | El relevo de BD1 o BD2 se completa en ≤ 2 minutos sin perder transacciones confirmadas. | Durante el relevo el estado se sirve desde la réplica bajo `NFR-FRE-02` y las escrituras se rechazan con motivo. | BD1 (réplica + failover), BD2 (réplica + failover) | PD-14 |
 
 ## Auditoría y observabilidad
 
@@ -71,7 +71,7 @@ declaran para que sean discutibles y medibles.
 | --- | --- | --- | --- | --- |
 | NFR-AUD-01 | El 100% de consultas y acciones queda en auditoría append-only, retenida 12 meses. | El harness no puede modificar ni borrar ese registro. El incidente del borrado se reconstruye solo con la auditoría. | Auditoría | PD-15 |
 | NFR-AUD-02 | El orden temporal de la auditoría lo da el reloj del servidor sincronizado por NTP. | Un desfase superior a 1 s se alerta. Ningún identificador depende del reloj para ser único. | Auditoría | PD-15 |
-| NFR-OBS-01 | Se miden por clase: latencia p95/p99, tasa de error, profundidad de cola, saturación del LLM, consultas sin modelo, abstenciones y acciones rechazadas. | La alerta se emite al 80% de cualquier umbral. | Métricas y dashboard | PD-12 |
+| NFR-OBS-01 | Se miden por clase: latencia p95/p99, tasa de error, profundidad de cola, saturación del LLM, consultas sin modelo, abstenciones, estado del Circuit Breaker y acciones rechazadas. | La alerta se emite al 80% de cualquier umbral. | Circuit Breaker, Métricas y dashboard | PD-12 |
 | NFR-OBS-02 | Cada solicitud tiene un `requestId` que atraviesa entrada, cola, LLM y herramientas. | El `requestId` nace en la entrada y no cambia si la solicitud se encola o se reintenta. | Auth y rol, Auditoría | PD-15 |
 
 ## Uso
