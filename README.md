@@ -11,3 +11,5 @@
 - [Lab 2](Lab2/)
 - [Lab 3](Lab3/)
 - [Lab 4 — RemoteSchooly](Lab4/)
+- [Lab 5 — Genius-x](Lab5/)
+- [Lab 6 — Lea$e (Reliability)](Lab6/)
