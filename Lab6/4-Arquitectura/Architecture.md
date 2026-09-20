@@ -1,11 +1,13 @@
-# Parte 1 — Arquitectura básica sin escalar
+# Arquitectura top-down y versión escalada con confiabilidad
 
-> **Entregable principal:**
-> [diagrama editable en Excalidraw](../Diagrams/parte1-arquitectura-basica.excalidraw).
+> **Entregables:**
+> [top-down editable en Excalidraw](../Diagrams/diagrama-top-down.excalidraw) y
+> [arquitectura escalada con reliability](../Diagrams/diagrama-reliability.excalidraw).
 > Los actores se identifican solo por su rol, según la indicación del docente.
-> El lienzo usa cuatro iteraciones top-down: contexto, registro, preaprobación
-> y ejecución. En las iteraciones detalladas muestra cada servicio, actor,
-> integración y acceso `READ/WRITE/UPDATE` a datos.
+> El lienzo usa cinco iteraciones top-down. Las primeras cuatro descubren
+> contexto, registro, preaprobación y ejecución. La quinta reúne todos los
+> servicios end-to-end sin escalar. El segundo lienzo aplica los mecanismos de
+> escalamiento y confiabilidad sobre esa vista completa.
 
 ## Decisión
 
@@ -141,10 +143,12 @@ flowchart TD
     Q --> R[Registrar conformidad]
 ```
 
-Las llamadas a SUNAT, historial crediticio, proveedor y correo se realizan de
-forma síncrona en esta versión. Cada operación que cambia un estado actualiza el
+En la línea base de las iteraciones 2–5, las llamadas a SUNAT, historial
+crediticio, proveedor y correo son síncronas. Cada operación que cambia un estado actualiza el
 expediente y agrega su auditoría dentro de una misma transacción local. Una vez
-confirmada esa transacción, el módulo de notificaciones envía el correo.
+confirmada esa transacción, el módulo de notificaciones envía el correo. La
+Iteración 5 solo consolida el flujo completo; outbox, broker y workers se
+incorporan después, en el diagrama de reliability.
 
 ## Datos principales
 
@@ -173,16 +177,16 @@ confirmada esa transacción, el módulo de notificaciones envía el correo.
 6. Cada cambio de estado se guarda junto con su evento de auditoría en una
    transacción de la base de datos.
 
-## Decisiones descartadas para esta parte
+## Decisiones de la línea base
 
 | Alternativa | Motivo para no usarla aún |
 | --- | --- |
 | Microservicios | El happy path comparte un expediente y no demuestra necesidad de despliegue o escalamiento independiente. |
 | Arquitectura orientada a eventos | La primera versión busca mostrar un flujo secuencial y una respuesta inmediata. |
 | Varias bases por dominio | Complican la consistencia de aprobación, contrato y orden sin aportar valor al ejercicio individual. |
-| Procesamiento por colas | Es un mecanismo que debe evaluarse en la Parte 3 para desacoplar tareas y tolerar indisponibilidad. |
+| Procesamiento por colas | No forma parte de la línea base top-down; se agrega recién en la arquitectura de reliability. |
 
-## Límites deliberados de la versión sin escalar
+## Límites deliberados de las iteraciones 1–5
 
 | Límite | Consecuencia |
 | --- | --- |
@@ -195,9 +199,58 @@ confirmada esa transacción, el módulo de notificaciones envía el correo.
 | Sin cola ni outbox | No se garantiza la entrega diferida de notificaciones u órdenes externas. |
 | Sin réplicas ni balanceador | No hay continuidad ante falla ni distribución de carga. |
 
-Estos límites no son propiedades deseadas de producción. Son la línea base
-que el equipo deberá transformar en la Parte 3 usando patrones de
-confiabilidad, después de consensuar la arquitectura grupal.
+Estos límites forman la línea base completa representada por la Iteración 5.
+
+## Iteración 5 — End-to-end consolidado, sin escalar
+
+La última iteración contiene el flujo completo, no solo el segmento de
+aprobaciones: `LoginService` → registro y validación → solicitud y
+preaprobación → aprobaciones → contrato → orden → entrega → conformidad o
+incidencia.
+
+La secuencia termina en una salida explícita tanto para `SÍ` como para `NO`.
+Cada transición de estado baja a un único flujo transversal:
+`StateTransitionService` → `AuditService` → `Leasing DB` → `COMMIT OK` →
+`NotificationService` → `Email API` → empresa cliente. Así se hace visible en
+qué momento se guarda, cuándo termina la transacción y cuándo se envía el
+correo. En esta iteración existe una instancia de aplicación, una base lógica y
+una sola `Email API`.
+
+## Arquitectura escalada con reliability
+
+El segundo diagrama toma el E2E consolidado como punto de partida. No es una
+sexta iteración del top-down: es la arquitectura de la Parte 3, donde se agregan
+capacidad, redundancia y tolerancia a fallas.
+
+| Riesgo de la línea base | Respuesta de la arquitectura escalada |
+| --- | --- |
+| Una instancia de aplicación | Load balancer y `App Instances N+1` stateless con health checks. |
+| Base de datos como SPOF | `Leasing DB Primary`, standby con failover, read replica y backups con PITR probado. |
+| Pérdida de notificaciones | Outbox en la misma transacción, broker persistente y workers N+1. |
+| Duplicación por reintentos | `IdempotencyService` conserva la identidad de la operación. |
+| Dependencias lentas o caídas | Timeout, retry acotado con exponential backoff y jitter, y circuit breaker. |
+| Una falla consume todos los recursos | Bulkheads separados para validaciones, proveedor y notificaciones. |
+| Auditoría separada del cambio | Estado, auditoría y outbox se confirman en el mismo commit. |
+| Almacenamiento documental único | `Document Store N+1` con versionado. |
+| Fallas invisibles | Métricas, logs, traces, liveness y readiness. |
+
+### Aplicación de las técnicas vistas
+
+| Técnica | Aplicación concreta |
+| --- | --- |
+| Health Endpoints | Cada réplica expone `/health/live` y `/health/ready`; el balanceador solo enruta a instancias `READY`. |
+| Load Balancing | Distribuye solicitudes entre instancias stateless N+1 y retira del pool las no saludables. |
+| Retries & Exponential Backoff | Reintentos limitados, con jitter, únicamente ante errores transitorios y operaciones seguras o idempotentes. |
+| Circuit Breaker | Tres circuitos independientes protegen SUNAT/crédito, proveedor y correo; pasan por `CLOSED`, `OPEN` y `HALF-OPEN`. |
+| Bulkheads & aislamiento de fallas | Cada grupo externo tiene su propio pool de hilos y conexiones; una caída del correo no agota los recursos de las validaciones. |
+| Degradación elegante | Una dependencia obligatoria caída deja el trámite `PENDIENTE`; nunca fabrica un rechazo ni activa una orden sin confirmación. |
+| Chaos Engineering | Experimentos controlados detienen una réplica, abren un circuito, pausan un broker o fuerzan el failover de la base. |
+
+La degradación preserva un estado honesto: si falla SUNAT o crédito, el registro
+queda pendiente; si falla el proveedor, la solicitud u orden no avanza; si
+falla el correo, el cambio de negocio permanece confirmado y la notificación
+queda en outbox/broker para reintento. Los experimentos de chaos se ejecutan
+con condiciones de aborto y se validan mediante SLO, alertas y runbooks.
 
 ## Evidencia esperada para validar la Parte 1
 

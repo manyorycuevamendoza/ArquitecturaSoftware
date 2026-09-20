@@ -12,7 +12,7 @@ Grupo 03
 | Jean Pier Angeles |
 | Gonzalo Rodriguez |
 
-## Parte 1 — Propuesta individual
+## Arquitectura top-down y confiabilidad
 
 Se eligió el happy path de **compra financiada con entrega conforme**. Una
 empresa con RUC activo y habido solicita insumos disponibles; Lea$e valida la
@@ -25,7 +25,9 @@ crean personas ficticias.
 
 ## Entregable principal
 
-[Abrir arquitectura básica en Excalidraw](Diagrams/parte1-arquitectura-basica.excalidraw)
+[Abrir arquitectura top-down en Excalidraw](Diagrams/diagrama-top-down.excalidraw)
+
+[Abrir arquitectura escalada con reliability en Excalidraw](Diagrams/diagrama-reliability.excalidraw)
 
 El lienzo presenta un diseño **top-down** en una sola vista:
 
@@ -36,6 +38,9 @@ El lienzo presenta un diseño **top-down** en una sola vista:
 - La Iteración 3 abre solicitud, disponibilidad, capacidad financiera,
   ranking y preaprobación.
 - La Iteración 4 abre aprobaciones, contrato, orden, entrega y conformidad.
+- La Iteración 5 consolida **todos los servicios end-to-end** en la línea base:
+  acceso, registro, validación, solicitud, preaprobación, aprobaciones,
+  contrato, orden, entrega, conformidad e incidencia. Todavía no escala.
 - Componentes como `LoginService`, `RegisterCompanyService`,
   `LeaseRequestService`, `ContractService` y `DeliveryService`.
 - Cada llamada a SUNAT, historial crediticio, proveedor y correo.
@@ -46,17 +51,21 @@ El lienzo presenta un diseño **top-down** en una sola vista:
   contrato definitivo → aceptación del cliente.
 - Las salidas cuando una validación o aprobación responde `NO`, incluida la
   apertura de una incidencia si la entrega no es conforme.
-- El límite de la Parte 1: una instancia, una base e integraciones síncronas,
-  todavía sin balanceador, réplicas, colas, reintentos, circuit breaker o
-  failover.
+- Las iteraciones 1–4 muestran el descubrimiento progresivo; la Iteración 5
+  reúne el diseño completo sin mezclar todavía los patrones de reliability.
+
+El segundo lienzo parte de esa Iteración 5 y agrega `Load Balancer`, instancias
+N+1, `Health Endpoints`, failover de datos, outbox, broker, workers,
+idempotencia, retries con exponential backoff, tres circuit breakers,
+bulkheads, degradación elegante, observabilidad y Chaos Engineering.
 
 ## Material de apoyo
 
 | Documento | Propósito |
 | --- | --- |
 | [Happy path](4-Arquitectura/HappyPath.md) | Explica los pasos, estados y cobertura del recorrido dibujado. |
-| [Arquitectura](4-Arquitectura/Architecture.md) | Sustenta los componentes y los límites de la propuesta sin escalar. |
-| [Generador del dibujo](Diagrams/generadores/gen_parte1.ps1) | Permite regenerar el archivo editable. |
+| [Arquitectura](4-Arquitectura/Architecture.md) | Sustenta la línea base y su evolución escalada. |
+| [Generador de los dibujos](Diagrams/generadores/gen_parte1.ps1) | Regenera ambos archivos editables. |
 
 ## Estructura
 
@@ -67,15 +76,18 @@ Lab6/
 │   ├── HappyPath.md
 │   └── Architecture.md
 └── Diagrams/
-    ├── parte1-arquitectura-basica.excalidraw
+    ├── diagrama-top-down.excalidraw
+    ├── diagrama-reliability.excalidraw
     └── generadores/
         ├── gen_parte1.ps1
         └── gen_parte1.source.ps1
 ```
 
-## Decisión base
+## Decisión arquitectónica
 
-La Parte 1 usa un **monolito modular** en una sola instancia, una base de datos
-relacional, almacenamiento privado de documentos e integraciones síncronas.
-Es la línea base que el grupo podrá consensuar en la Parte 2 y escalar con
-patrones de confiabilidad en la Parte 3.
+La línea base usa un **monolito modular** y una base relacional. La versión
+escalada conserva esos límites lógicos, pero ejecuta la aplicación en instancias
+stateless N+1 detrás de un balanceador, agrega primary/standby/read replica con
+failover y desacopla las notificaciones mediante outbox, broker y workers. Las
+dependencias externas quedan aisladas por bulkhead y protegidas por timeout,
+retry con exponential backoff y circuit breaker.
