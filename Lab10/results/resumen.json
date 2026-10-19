@@ -1,0 +1,36 @@
+[
+  {
+    "modo": "Baseline",
+    "rondas": 1000,
+    "rondas_con_servidor_lento": 259,
+    "p50_ms": 33.2,
+    "p95_ms": 1228.3,
+    "p99_ms": 1383.8,
+    "p99_9_ms": 1409.4,
+    "max_ms": 1415.5,
+    "promedio_ms": 227.6,
+    "subpeticiones_ejecutadas": 102000,
+    "subpeticiones_utiles": 102000,
+    "overhead_pct": 0.0,
+    "duplicadas": 0,
+    "robos": 0,
+    "leases_vencidos": 0
+  },
+  {
+    "modo": "Work stealing (propuesta)",
+    "rondas": 1000,
+    "rondas_con_servidor_lento": 259,
+    "p50_ms": 29.4,
+    "p95_ms": 33.5,
+    "p99_ms": 36.0,
+    "p99_9_ms": 37.5,
+    "max_ms": 38.0,
+    "promedio_ms": 29.9,
+    "subpeticiones_ejecutadas": 102286,
+    "subpeticiones_utiles": 102000,
+    "overhead_pct": 0.28,
+    "duplicadas": 286,
+    "robos": 5404,
+    "leases_vencidos": 286
+  }
+]
