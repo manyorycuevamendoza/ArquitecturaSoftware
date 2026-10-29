@@ -220,7 +220,6 @@ No hay datos reales aún, por lo que son **umbrales supuestos a validar con prue
 | Latencia p99 de decisión crítica | > 50 ms | Revisar el camino; mover más lógica al borde |
 | Uso de disco del log de auditoría | > 70 % | Ampliar/rotar a almacenamiento frío |
 | Crecimiento de sensores | > 100 por reactor o más reactores | Una partición y un controlador local por reactor nuevo |
-| Mensajes descartados | > 0 | Revisar capacidad y activar alarma |
 
 **Estrategia:**
 - **Escalado horizontal por reactor:** una partición del bus y un controlador local por reactor, de modo que agregar un reactor no afecta a los demás.
