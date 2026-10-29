@@ -134,7 +134,7 @@ arrow("a-vote-mca", "vote", "mca", [(912, 320), (912, 290), (1030, 290), (1030, 
 arrow("a-vote-mcb", "vote", "mcb", [(970, 370), (990, 370)], BLUE, dashed=True)
 arrow("a-hb", "mca", "mcb", [(1065, 260), (1065, 340)], PINK, "heartbeat", (1075, 290), dashed=True, both=True)
 arrow("a-emerg", "lc3", "mca", [(315, 480), (315, 505), (1150, 505), (1150, 215), (1140, 215)], RED,
-      "línea directa de emergencia (cada reactor)", (345, 482))
+      "línea directa · respaldo: solo alarmas críticas", (345, 482), dashed=True)
 
 # --- Migración -------------------------------------------------------------
 box("facade", 1200, 270, 130, 60, "Facade", "#2f9e44", "#ebfbee")

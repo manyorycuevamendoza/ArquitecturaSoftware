@@ -34,17 +34,27 @@ flowchart TB
     S3["100 sensores"] --> LC3["Controlador local R3<br/>(piloto lib. eventos)"]
   end
 
-  LC1 -->|buffer local si cae el bus| BUS
-  LC2 --> BUS
-  LC3 --> BUS
+  LC1 -->|alerta| QA1
+  LC1 -->|lecturas| QT1
+  LC2 -->|alerta| QA2
+  LC2 -->|lecturas| QT2
+  LC3 -->|alerta| QA3
+  LC3 -->|lecturas| QT3
 
-  subgraph MSG["Mensajería (HA, particionada por reactor)"]
-    BUS["Message Bus A (activo)<br/>particiones: R1 · R2 · R3"]
-    BUSB["Message Bus B (réplica)"]
-    BUS <-.replicación.-> BUSB
+  subgraph BUS["Message Bus A (activo) — un carril por reactor y tipo"]
+    QA1["Alertas R1"]
+    QA2["Alertas R2"]
+    QA3["Alertas R3"]
+    QT1["Telemetría R1"]
+    QT2["Telemetría R2"]
+    QT3["Telemetría R3"]
   end
+  BUSB["Message Bus B (réplica)"]
+  BUS <-.replicación.-> BUSB
 
-  BUS --> VOTE["Validación de sensores<br/>timeout + votación + outliers"]
+  QA1 & QA2 & QA3 -->|prioridad, lector dedicado| MCA
+  QT1 & QT2 & QT3 --> VOTE["Validación de sensores<br/>timeout + votación + outliers"]
+  LC3 -.->|línea directa de emergencia<br/>respaldo: solo alarmas críticas| MCA
   VOTE --> MCA["Main Controller A<br/>(ACTIVO)"]
   VOTE --> MCB["Main Controller B<br/>(PASIVO)"]
   MCA <-.heartbeat / failover.-> MCB
@@ -78,7 +88,49 @@ flowchart TB
   CMD -.-> SIDE
 ```
 
-> Versión Excalidraw: [`Diagrams/chernobyl-arquitectura.excalidraw`](Diagrams/chernobyl-arquitectura.excalidraw) (generada con `Diagrams/generadores/gen_chernobyl.py`).
+> Versiones Excalidraw:
+> - [`Diagrams/chernobyl-arquitectura-v2.excalidraw`](Diagrams/chernobyl-arquitectura-v2.excalidraw): más nodos y menos texto, con el bus por carriles (generada con `Diagrams/generadores/gen_chernobyl_v2.py`).
+> - [`Diagrams/chernobyl-arquitectura.excalidraw`](Diagrams/chernobyl-arquitectura.excalidraw): v1 con explicación dentro del diagrama (generada con `Diagrams/generadores/gen_chernobyl.py`).
+
+## 3.1 ¿Cómo llega primero lo urgente? (bus por carriles)
+
+**Problema (head-of-line blocking):** con una cola única, una alerta del Reactor 3 quedaría detrás de miles de lecturas normales de R1 y R2.
+
+```
+❌ [R1][R1][R2][R1][R2]......[R3 ¡recalentándose!] → Main Controller
+```
+
+**Solución en 4 capas:**
+
+| Capa | Qué resuelve | Cómo |
+|---|---|---|
+| 1. Decisión en el borde | La protección no depende del bus | El controlador local enfría solo, en milisegundos |
+| 2. Partición por reactor | R3 no hace fila detrás de R1 y R2 | Un carril y un consumidor por reactor, en paralelo |
+| 3. Carriles de prioridad | Una alerta no espera entre lecturas normales | El controlador local clasifica: lo que supera el umbral va a **Alertas Rn**, el resto a **Telemetría Rn**; el MC tiene un lector dedicado a alertas |
+| 4. Descarte de telemetría vieja | Sobrecarga | Se procesa la última lectura de cada sensor; **las alertas nunca se descartan** |
+
+**Ejemplo (cola de R1 y R2 con 5.000 mensajes):**
+
+| Tiempo | Qué pasa |
+|---|---|
+| +0 ms | Sensores R3 marcan 395 °C (umbral 380 °C) |
+| +5 ms | Ctrl local R3 enfría solo |
+| +6 ms | Publica en el carril **Alertas R3**, que está vacío |
+| +10 ms | El lector de alertas del MC la recibe sin esperar a R1 ni R2 |
+| +15 ms | El MC decide a nivel global y el panel muestra la alarma |
+
+### Línea directa de emergencia (respaldo)
+
+Es un canal **independiente del bus**, solo para alarmas críticas. No reemplaza al bus:
+
+| | Bus | Línea directa |
+|---|---|---|
+| Transporta | Todo: 6.000 msg/s, alertas, eventos del legacy | Solo alarmas críticas |
+| Consumidores | Votación, MC A/B, panel, auditoría | Main Controller |
+| Si el receptor cae | Los mensajes esperan en la cola | El mensaje se pierde |
+| Función | Camino normal | Respaldo (defensa en profundidad) |
+
+El controlador local envía cada alarma crítica **por ambos caminos**; el MC descarta el duplicado por ID. Si cae el bus, la alarma llega igual por la línea directa. Si caen los dos, el reactor ya está protegido por su controlador local.
 
 ## 4. Requisito → tema → solución
 
@@ -101,7 +153,7 @@ flowchart TB
 | SPOF | Impacto si falla | Mitigación |
 |---|---|---|
 | Main Controller | Sin decisiones globales en los 3 reactores | Activo/pasivo con heartbeat; si ambos caen, controladores locales en modo seguro |
-| Message Bus | Sin datos hacia el central | Réplica B + buffer local en cada controlador local |
+| Message Bus | Sin datos hacia el central | Réplica B + buffer local en cada controlador local + línea directa de emergencia para alarmas críticas |
 | Controlador local | Reactor sin protección autónoma | Par redundante por reactor + protección física/hardware independiente (último recurso) |
 | Strangler/Facade | Panel y comandos sin ruta | Dos instancias; los controladores locales no dependen de él |
 | BD de auditoría | Pérdida de trazabilidad | Replicación; los eventos se encolan en el sidecar hasta poder escribir |
@@ -117,7 +169,8 @@ flowchart TB
 | **Sensor con valor absurdo** | Desvío fuerte frente a la mediana del reactor | Se excluye (outlier), no dispara apagado; alerta de revisión |
 | **Se cae el Main Controller A** | Heartbeat perdido | B asume en segundos; comandos pendientes se reconcilian con el log |
 | **Caen A y B** | Ambos sin heartbeat | Controladores locales siguen en modo seguro con reglas locales; alarma máxima |
-| **Se cae el bus** | Falla de publicación | Buffer local en el borde; reenvío al volver; la protección local no se ve afectada |
+| **Se cae el bus** | Falla de publicación | Buffer local en el borde; reenvío al volver; alarmas críticas por la línea directa; la protección local no se ve afectada |
+| **Alerta de R3 mientras R1 y R2 saturan el bus** | Lag de la cola de telemetría | La alerta va por el carril **Alertas R3** con lector dedicado; no espera a la telemetría |
 | **Nuevo y legacy discrepan** | Comparador | No se ejecuta acción automática; manda el legacy; alerta al operador |
 | **La librería nueva falla** | Métricas de latencia/errores | Se apaga el feature flag y se vuelve a la implementación anterior |
 | **Falla la BD de auditoría** | Error de escritura | Cola en el sidecar; la operación continúa pero con alarma de auditoría degradada |
@@ -159,7 +212,10 @@ No hay datos reales aún, por lo que son **umbrales supuestos a validar con prue
 
 | Criterio | Umbral hipotético | Acción |
 |---|---|---|
-| Lag de la cola de un reactor | > 100 ms sostenido por 1 min | Agregar un consumidor a esa partición |
+| Lag del carril de **alertas** | > 10 ms | Alarma crítica + más lectores dedicados |
+| Alertas descartadas | > 0 | Nunca debería pasar: alarma máxima |
+| Lag del carril de **telemetría** de un reactor | > 100 ms sostenido por 1 min | Agregar un consumidor a esa partición |
+| Telemetría descartada | > 5 % | Revisar capacidad |
 | CPU de consumidores | > 70 % por 5 min | Escalar horizontalmente |
 | Latencia p99 de decisión crítica | > 50 ms | Revisar el camino; mover más lógica al borde |
 | Uso de disco del log de auditoría | > 70 % | Ampliar/rotar a almacenamiento frío |
