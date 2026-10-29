@@ -53,7 +53,8 @@ flowchart TB
   BUS <-.replicación.-> BUSB
 
   QA1 & QA2 & QA3 -->|prioridad, lector dedicado| MCA
-  QT1 & QT2 & QT3 --> VOTE["Validación de sensores<br/>timeout + votación + outliers"]
+  QT1 & QT2 & QT3 --> VTO["Timeout<br/>sensor caído"] --> VANOM["Detector de anomalías<br/>outliers"] --> VOTE["Votación<br/>(mediana)"]
+  VANOM -.->|sensor excluido| MANT["Aviso de mantenimiento"]
   LC3 -.->|línea directa de emergencia<br/>respaldo: solo alarmas críticas| MCA
   VOTE --> MCA["Main Controller A<br/>(ACTIVO)"]
   VOTE --> MCB["Main Controller B<br/>(PASIVO)"]
@@ -189,16 +190,25 @@ El controlador local envía cada alarma crítica **por ambos caminos**; el MC de
 
 **Rollback:** el feature flag por reactor devuelve el control al legacy de inmediato.
 
-## 8. Piloto de la librería de eventos (Branch by Abstraction)
+## 8. Piloto de la librería de eventos (Sidecar + Branch by Abstraction)
+
+La librería nueva **no se integra dentro del controlador local**: se enchufa en un **sidecar de eventos** que corre junto a cada controlador. El controlador siempre publica a su sidecar (por localhost) y **no cambia**; el sidecar es quien usa una librería u otra para publicar en el bus. El sidecar también hace de **buffer** si el bus cae.
 
 ```mermaid
 flowchart LR
-  C["Controlador / Main Controller"] --> A["EventTransport (abstracción)"]
-  A -->|flag = off| OLD["Implementación actual"]
-  A -->|flag = on| NEW["Librería nueva"]
+  LC1["Ctrl local R1"] --> SC1["Sidecar R1<br/>buffer · lib actual"] --> BUS["Bus"]
+  LC2["Ctrl local R2"] --> SC2["Sidecar R2<br/>buffer · lib actual"] --> BUS
+  LC3["Ctrl local R3"] --> SC3["Sidecar R3<br/>buffer · lib NUEVA"] --> BUS
+  FLAG["Flag lib_nueva = R3"] -.-> SC3
+  SC3 -.-> MET["Métricas p99<br/>actual vs nueva"]
 ```
 
-- Se activa **solo en el Reactor 3** (piloto) con el flag `usar_libreria_nueva`.
+**Por qué un sidecar:**
+- El controlador local es crítico: no se toca su código para probar una librería.
+- El cambio de librería queda aislado en un proceso aparte; si falla, se reinicia o se cambia el sidecar sin afectar la protección del reactor.
+- Dentro del sidecar se aplica **Branch by Abstraction**: una interfaz `EventTransport` con la implementación actual y la nueva, elegida por feature flag.
+
+- Se activa **solo en el Reactor 3** (piloto) con el flag `lib_nueva`.
 - Se mide latencia p50/p95/p99 contra la implementación actual con el mismo tráfico.
 - **Criterio de éxito:** p99 menor sin pérdida de mensajes durante un periodo acordado.
 - **Rollback:** apagar el flag, sin redeploy.

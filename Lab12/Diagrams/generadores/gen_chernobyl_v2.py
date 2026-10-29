@@ -84,7 +84,7 @@ text(40, 20, "SAVE CHERNOBYL — ARQUITECTURA v2", 28)
 text(40, 62, "— flujo principal    - - - respaldo / asíncrono", 15, "#868e96")
 
 zone("edge", 40, 140, 520, 360, "BORDE", GREEN, "#f4fcf5")
-zone("pilot", 220, 520, 370, 190, "PILOTO", ORANGE, "#fff9f0", dashed=True)
+zone("pilot", 220, 560, 370, 150, "PILOTO LIB NUEVA", ORANGE, "#fff9f0", dashed=True)
 zone("core", 580, 140, 580, 375, "BUS + CONTROL HA", BLUE, "#f8fbff")
 zone("mig", 1180, 140, 790, 200, "MIGRACIÓN", "#2f9e44", "#f6fff7")
 zone("leg", 1570, 350, 400, 220, "LEGACY", RED, "#fff8f8", dashed=True)
@@ -95,16 +95,20 @@ for i, y in enumerate((180, 300, 420)):
     n = i + 1
     box(f"s{n}", 60, y, 140, 60, f"Sensores R{n}", GREEN, "#ebfbee")
     box(f"lc{n}", 240, y, 150, 60, f"Ctrl local R{n}", GREEN, "#d3f9d8")
-    box(f"buf{n}", 410, y, 110, 60, "Buffer", GREEN, "#ebfbee", 15)
+    if n == 3:
+        box(f"buf{n}", 410, y, 110, 60, "Sidecar R3\nbuffer\nlib NUEVA", ORANGE, "#ffec99", 13, dashed=True)
+    else:
+        box(f"buf{n}", 410, y, 110, 60, f"Sidecar R{n}\nbuffer\nlib actual", GREEN, "#ebfbee", 13)
     arrow(f"a-s{n}", f"s{n}", f"lc{n}", [(200, y + 30), (240, y + 30)], GREEN)
     arrow(f"a-b{n}", f"lc{n}", f"buf{n}", [(390, y + 30), (410, y + 30)], GREEN)
 
 # --- Piloto ----------------------------------------------------------------
-box("et", 240, 580, 150, 60, "EventTransport", ORANGE, "#fff4e6", 15)
-box("libold", 440, 560, 130, 50, "Lib actual", ORANGE, "#fff4e6", 15)
-box("libnew", 440, 640, 130, 50, "Lib nueva", ORANGE, "#ffec99", 15, dashed=True)
-arrow("a-et-old", "et", "libold", [(390, 600), (415, 600), (415, 585), (440, 585)], ORANGE)
-arrow("a-et-new", "et", "libnew", [(390, 620), (415, 620), (415, 665), (440, 665)], ORANGE, dashed=True)
+# El ctrl local no cambia: publica a su sidecar; el sidecar elige la librería por flag
+box("pflag", 240, 600, 140, 55, "Flag lib_nueva\nsolo R3", ORANGE, "#fff4e6", 14, dashed=True)
+box("pmet", 430, 600, 140, 55, "Métricas p99\nactual vs nueva", ORANGE, "#fff4e6", 14)
+arrow("a-pflag", "pflag", "buf3", [(310, 600), (310, 540), (450, 540), (450, 480)], ORANGE, dashed=True)
+arrow("a-pmet", "buf3", "pmet", [(500, 480), (500, 600)], ORANGE, dashed=True)
+text(235, 665, "rollback: apagar flag → vuelve a lib actual", 13, ORANGE)
 
 # --- Control HA ------------------------------------------------------------
 # Bus A: un carril (cola) por reactor y por tipo de mensaje, no una cola única
@@ -115,9 +119,14 @@ for i in range(3):
     box(f"qa{n}", 605, 205 + i * 35, 220, 28, f"Alertas R{n}", RED, "#ffe3e3", 13)
     box(f"qt{n}", 605, 315 + i * 35, 220, 28, f"Telemetría R{n}", BLUE, "#d0ebff", 13)
 box("busb", 595, 445, 240, 50, "Bus B (réplica)", BLUE, "#e7f5ff", 15, dashed=True)
-box("vote", 855, 320, 115, 60, "Votación", BLUE, "#e7f5ff", 15)
-box("mca", 990, 200, 150, 60, "MC A\nactivo", BLUE, "#d0ebff", 15)
-box("mcb", 990, 340, 150, 60, "MC B\npasivo", BLUE, "#e7f5ff", 15, dashed=True)
+box("vto", 850, 300, 125, 45, "Timeout\nsensor caído", BLUE, "#e7f5ff", 13)
+box("vanom", 850, 355, 125, 45, "Detector de\nanomalías", BLUE, "#e7f5ff", 13)
+box("vote", 850, 410, 125, 45, "Votación\n(mediana)", BLUE, "#d0ebff", 13)
+arrow("a-vto-anom", "vto", "vanom", [(912, 345), (912, 355)], BLUE)
+arrow("a-anom-vote", "vanom", "vote", [(912, 400), (912, 410)], BLUE)
+text(850, 462, "sensor excluido\n+ aviso mantenimiento", 12, PINK)
+box("mca", 1005, 200, 130, 60, "MC A\nactivo", BLUE, "#d0ebff", 15)
+box("mcb", 1005, 340, 130, 60, "MC B\npasivo", BLUE, "#e7f5ff", 15, dashed=True)
 
 # El ctrl local clasifica: lo que supera el umbral va al carril de alertas
 for n, y in ((1, 210), (2, 330), (3, 450)):
@@ -128,13 +137,13 @@ for n, y in ((1, 210), (2, 330), (3, 450)):
           [(520, y + 10), (jt, y + 10), (jt, 329 + (n - 1) * 35), (605, 329 + (n - 1) * 35)], BLUE)
 text(395, 150, "ctrl local clasifica: alerta | telemetría", 13, RED)
 arrow("a-bus-rep", "busa", "busb", [(715, 425), (715, 445)], BLUE, dashed=True, both=True)
-arrow("a-qa-mca", "busa", "mca", [(835, 240), (990, 240)], RED, "prioridad", (870, 218))
-arrow("a-qt-vote", "busa", "vote", [(835, 350), (855, 350)], BLUE)
-arrow("a-vote-mca", "vote", "mca", [(912, 320), (912, 290), (1030, 290), (1030, 260)], BLUE)
-arrow("a-vote-mcb", "vote", "mcb", [(970, 370), (990, 370)], BLUE, dashed=True)
-arrow("a-hb", "mca", "mcb", [(1065, 260), (1065, 340)], PINK, "heartbeat", (1075, 290), dashed=True, both=True)
-arrow("a-emerg", "lc3", "mca", [(315, 480), (315, 505), (1150, 505), (1150, 215), (1140, 215)], RED,
-      "línea directa · respaldo: solo alarmas críticas", (345, 482), dashed=True)
+arrow("a-qa-mca", "busa", "mca", [(835, 240), (1005, 240)], RED, "prioridad", (870, 218))
+arrow("a-qt-vote", "busa", "vto", [(835, 322), (850, 322)], BLUE)
+arrow("a-vote-mca", "vote", "mca", [(975, 432), (990, 432), (990, 290), (1040, 290), (1040, 260)], BLUE)
+arrow("a-vote-mcb", "vote", "mcb", [(990, 370), (1005, 370)], BLUE, dashed=True)
+arrow("a-hb", "mca", "mcb", [(1100, 260), (1100, 340)], PINK, "heartbeat", (1040, 310), dashed=True, both=True)
+arrow("a-emerg", "lc3", "mca", [(315, 480), (315, 505), (1150, 505), (1150, 215), (1135, 215)], RED,
+      "línea directa · respaldo: solo alarmas críticas", (330, 510), dashed=True)
 
 # --- Migración -------------------------------------------------------------
 box("facade", 1200, 270, 130, 60, "Facade", "#2f9e44", "#ebfbee")
@@ -144,7 +153,7 @@ box("new", 1590, 180, 150, 60, "Lógica nueva", "#2f9e44", "#ebfbee", 15)
 box("cmp", 1800, 180, 150, 60, "Comparador", ORANGE, "#fff4e6", 15)
 box("panel", 2000, 180, 130, 60, "Panel", PURPLE, "#e5dbff")
 
-arrow("a-mca-fac", "mca", "facade", [(1140, 230), (1170, 230), (1170, 300), (1200, 300)], "#2f9e44")
+arrow("a-mca-fac", "mca", "facade", [(1135, 230), (1170, 230), (1170, 300), (1200, 300)], "#2f9e44")
 arrow("a-fac-str", "facade", "strangler", [(1330, 300), (1390, 300)], "#2f9e44")
 arrow("a-flag-str", "flags", "strangler", [(1330, 430), (1460, 430), (1460, 330)], ORANGE, dashed=True)
 arrow("a-str-new", "strangler", "new", [(1530, 290), (1560, 290), (1560, 210), (1590, 210)], "#2f9e44",
