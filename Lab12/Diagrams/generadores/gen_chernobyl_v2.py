@@ -177,6 +177,37 @@ arrow("a-panel-side", "panel", "side", [(2065, 240), (2065, 690), (1950, 690)], 
 arrow("a-side-mon", "side", "mon", [(1800, 690), (1740, 690)], PURPLE)
 arrow("a-side-audit", "side", "audit", [(1875, 720), (1875, 770)], PURPLE)
 
+# --- Criterios hipotéticos de escalabilidad (texto) ------------------------
+zone("scale", 2200, 140, 600, 710, "CRITERIOS HIPOTÉTICOS DE ESCALABILIDAD", "#495057", "#f8f9fa")
+text(2220, 180, "\n".join([
+    "Sin datos reales aún: umbrales supuestos a validar.",
+    "",
+    "CARGA BASE",
+    "3 reactores × 100 sensores × 20 Hz = 6.000 msg/s",
+    "≈ 2.000 msg/s por reactor · ~1,2 MB/s (200 B/msg)",
+    "",
+    "CUÁNDO ESCALAR",
+    "• Lag carril alertas > 10 ms → + lectores dedicados",
+    "• Alertas descartadas > 0 → alarma máxima",
+    "• Lag telemetría > 100 ms por 1 min → + consumidor",
+    "• CPU consumidores > 70 % por 5 min → escalar horizontal",
+    "• p99 decisión crítica > 50 ms → mover lógica al borde",
+    "• Telemetría descartada > 5 % → revisar capacidad",
+    "• Audit log > 70 % disco → rotar a almacenamiento frío",
+    "",
+    "CÓMO CRECE",
+    "• + sensores → más particiones del carril telemetría",
+    "• + reactor → nuevo carril (alertas + telemetría)",
+    "  + controlador local; no afecta a los demás",
+    "• + operadores → más réplicas del panel",
+    "",
+    "CÓMO SE VALIDAN",
+    "• Pruebas de carga a 2× y 5× la carga base",
+    "• Revisar umbrales tras 2–4 semanas de datos reales",
+    "",
+    "Lo crítico escala con el borde, no con el central.",
+]), 15)
+
 doc = {"type": "excalidraw", "version": 2, "source": "https://excalidraw.com",
        "elements": E,
        "appState": {"gridSize": None, "viewBackgroundColor": "#ffffff"},
