@@ -78,7 +78,7 @@ flowchart TB
   CMD -.-> SIDE
 ```
 
-> El diagrama también existe en Excalidraw en `Diagrams/`.
+> Versión Excalidraw: [`Diagrams/chernobyl-arquitectura.excalidraw`](Diagrams/chernobyl-arquitectura.excalidraw) (generada con `Diagrams/generadores/gen_chernobyl.py`).
 
 ## 4. Requisito → tema → solución
 
